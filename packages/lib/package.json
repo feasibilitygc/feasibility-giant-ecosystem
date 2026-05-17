@@ -1,0 +1,15 @@
+{
+  "name": "@fg/lib",
+  "version": "0.1.0",
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "dependencies": {
+    "@heroui/system": "^2.4.28"
+  },
+  "devDependencies": {
+    "typescript": "5.7.3"
+  }
+}

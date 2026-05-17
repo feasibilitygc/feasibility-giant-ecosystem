@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@fg/ui": ["packages/ui/src"],
+      "@fg/design-system": ["packages/design-system/src"],
+      "@fg/db": ["packages/db/src"],
+      "@fg/lib": ["packages/lib/src"],
+      "@fg/types": ["packages/types/src"]
+    },
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "target": "ESNext",
+    "jsx": "react-jsx",
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "noUncheckedIndexedAccess": true,
+    "declaration": true,
+    "declarationMap": true,
+    "incremental": true
+  },
+  "exclude": ["node_modules"]
+}

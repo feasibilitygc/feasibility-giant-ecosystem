@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Feasibility3D | Advanced Engineering & Environmental Simulation Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blue: #007BFF;
+  --blue-light: #3B9EFF;
+  --blue-dark: #0055C4;
+  --orange: #FF6B00;
+  --orange-light: #FF9233;
+  --steel: #4A4A4A;
+  --bg: #030608;
+  --bg2: #050A10;
+  --surface: rgba(0,123,255,0.05);
+  --border: rgba(0,123,255,0.18);
+  --text: #EDF4FF;
+  --muted: rgba(237,244,255,0.45);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 52px;display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(20px);background:rgba(3,6,8,0.9);border-bottom:1px solid var(--border);}
+.logo{display:flex;align-items:center;gap:12px;text-decoration:none;}
+.logo-icon{width:38px;height:38px;}
+.logo-text{font-family:'Rajdhani',sans-serif;font-size:17px;font-weight:700;color:var(--text);letter-spacing:0.03em;}
+.logo-text span{color:var(--orange);}
+.nav-links{display:flex;align-items:center;gap:32px;list-style:none;}
+.nav-links a{text-decoration:none;color:var(--muted);font-size:13px;font-weight:500;letter-spacing:0.04em;transition:color 0.2s;}
+.nav-links a:hover{color:var(--text);}
+.nav-demo{background:linear-gradient(135deg,var(--blue),var(--blue-dark));color:#fff !important;padding:9px 22px;border-radius:6px;font-weight:600 !important;transition:opacity 0.2s !important;border:1px solid rgba(0,123,255,0.4) !important;}
+.nav-demo:hover{opacity:0.85 !important;}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 40px 60px;position:relative;overflow:hidden;}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% -5%,rgba(0,123,255,0.18) 0%,transparent 60%),radial-gradient(ellipse 40% 40% at 90% 70%,rgba(255,107,0,0.08) 0%,transparent 50%),var(--bg);}
+/* Animated engineering grid */
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(0,123,255,0.06) 1px,transparent 1px),linear-gradient(90deg,rgba(0,123,255,0.06) 1px,transparent 1px);background-size:40px 40px;mask-image:radial-gradient(ellipse 90% 80% at 50% 0%,black 30%,transparent 75%);}
+/* Blueprint corner marks */
+.corner{position:absolute;width:20px;height:20px;border-color:rgba(0,123,255,0.3);border-style:solid;}
+.corner-tl{top:100px;left:60px;border-width:1px 0 0 1px;}
+.corner-tr{top:100px;right:60px;border-width:1px 1px 0 0;}
+.corner-bl{bottom:60px;left:60px;border-width:0 0 1px 1px;}
+.corner-br{bottom:60px;right:60px;border-width:0 1px 1px 0;}
+/* Scan line */
+.hero::before{content:'';position:absolute;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(0,123,255,0.5),transparent);animation:scan 5s linear infinite;pointer-events:none;}
+@keyframes scan{0%{top:-1px;}100%{top:100%;}}
+
+.eyebrow{display:inline-flex;align-items:center;gap:10px;background:rgba(0,123,255,0.1);border:1px solid rgba(0,123,255,0.3);padding:6px 16px;border-radius:4px;font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:var(--blue-light);margin-bottom:28px;position:relative;z-index:1;}
+.eyebrow-blink{width:6px;height:6px;border-radius:1px;background:var(--orange);animation:blink 1s infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
+
+h1{font-family:'Rajdhani',sans-serif;font-size:clamp(48px,9vw,110px);font-weight:700;line-height:0.92;letter-spacing:-0.01em;position:relative;z-index:1;margin-bottom:12px;}
+.h1-white{color:#fff;display:block;}
+.h1-blue{background:linear-gradient(135deg,var(--blue-light) 0%,#60BFFF 50%,var(--blue) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;display:block;}
+.h1-tag{display:block;font-size:clamp(14px,2vw,18px);font-weight:400;letter-spacing:0.3em;color:var(--orange);text-transform:uppercase;margin-top:8px;margin-bottom:20px;}
+.hero-sub{font-size:16px;font-weight:300;font-style:italic;color:var(--muted);max-width:600px;line-height:1.7;position:relative;z-index:1;margin-bottom:40px;}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;position:relative;z-index:1;margin-bottom:60px;}
+.btn-blue{background:linear-gradient(135deg,var(--blue),var(--blue-dark));color:#fff;padding:14px 30px;border-radius:6px;font-size:14px;font-weight:600;text-decoration:none;letter-spacing:0.05em;transition:all 0.3s;border:1px solid rgba(0,123,255,0.4);}
+.btn-blue:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(0,123,255,0.4);}
+.btn-orange{background:transparent;color:var(--orange);padding:14px 30px;border-radius:6px;font-size:14px;font-weight:600;text-decoration:none;letter-spacing:0.05em;border:1px solid rgba(255,107,0,0.3);transition:all 0.3s;}
+.btn-orange:hover{background:rgba(255,107,0,0.08);border-color:rgba(255,107,0,0.5);}
+
+/* TECH SPECS STRIP */
+.specs-strip{display:flex;gap:0;border:1px solid var(--border);border-radius:8px;overflow:hidden;position:relative;z-index:1;}
+.spec-item{flex:1;padding:16px 20px;border-right:1px solid var(--border);background:rgba(0,123,255,0.04);}
+.spec-item:last-child{border-right:none;}
+.spec-label{font-size:9px;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
+.spec-val{font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:600;color:var(--text);}
+
+/* SECTIONS */
+.sec{padding:100px 60px;}
+.sec-eyebrow{display:inline-flex;align-items:center;gap:10px;font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--blue-light);margin-bottom:16px;}
+.sec-eyebrow::before{content:'';width:24px;height:1px;background:var(--blue);}
+.sec-title{font-family:'Rajdhani',sans-serif;font-size:clamp(34px,5.5vw,60px);font-weight:700;line-height:1;margin-bottom:18px;letter-spacing:0.01em;}
+.sec-desc{font-size:15px;color:var(--muted);line-height:1.75;max-width:540px;font-weight:300;}
+
+/* SOLUTIONS */
+.solutions-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:2px;background:rgba(0,123,255,0.06);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-top:60px;}
+.sol-card{background:var(--bg);padding:44px 38px;transition:background 0.3s;position:relative;overflow:hidden;}
+.sol-card::after{content:'';position:absolute;top:0;right:0;width:60px;height:60px;background:radial-gradient(circle,rgba(0,123,255,0.12) 0%,transparent 70%);opacity:0;transition:opacity 0.3s;}
+.sol-card:hover{background:rgba(0,123,255,0.03);}
+.sol-card:hover::after{opacity:1;}
+.sol-card:nth-child(even){border-left:1px solid rgba(0,123,255,0.08);}
+.sol-card:nth-child(n+3){border-top:1px solid rgba(0,123,255,0.08);}
+.sol-num{font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.2em;color:rgba(0,123,255,0.4);margin-bottom:14px;}
+.sol-icon{font-size:32px;margin-bottom:16px;}
+.sol-title{font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;margin-bottom:12px;letter-spacing:0.02em;}
+.sol-desc{font-size:13px;color:var(--muted);line-height:1.65;margin-bottom:18px;}
+.sol-points{display:flex;flex-direction:column;gap:6px;}
+.sol-pt{font-size:12px;color:rgba(237,244,255,0.5);display:flex;align-items:center;gap:8px;}
+.sol-pt::before{content:'›';color:var(--blue);font-size:14px;font-weight:700;}
+
+/* COMPARISON TABLE */
+.comp-table{width:100%;border-collapse:collapse;margin-top:50px;}
+.comp-table th{text-align:left;padding:14px 20px;font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid rgba(0,123,255,0.12);}
+.comp-table td{padding:16px 20px;font-size:13px;border-bottom:1px solid rgba(255,255,255,0.03);}
+.comp-table tr:hover td{background:rgba(0,123,255,0.03);}
+.comp-old{color:rgba(237,244,255,0.35);}
+.comp-new{color:var(--blue-light);font-weight:600;}
+.comp-icon-old{color:#EF4444;}
+.comp-icon-new{color:#4ADE80;}
+
+/* TECH PAGE */
+.tech-layout{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start;}
+.tech-stack-list{display:flex;flex-direction:column;gap:12px;}
+.tech-stack-item{display:flex;gap:16px;align-items:center;padding:16px 20px;border-radius:8px;border:1px solid rgba(0,123,255,0.1);background:rgba(0,123,255,0.03);transition:all 0.3s;}
+.tech-stack-item:hover{border-color:rgba(0,123,255,0.25);}
+.ts-icon{width:40px;height:40px;border-radius:8px;background:rgba(0,123,255,0.12);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.ts-name{font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;}
+.ts-desc{font-size:11px;color:var(--muted);margin-top:2px;}
+
+.arch-visual{background:rgba(0,123,255,0.04);border:1px solid var(--border);border-radius:16px;padding:30px;}
+.arch-layer{margin-bottom:16px;}
+.arch-layer-label{font-family:'Rajdhani',sans-serif;font-size:10px;font-weight:700;letter-spacing:0.2em;color:var(--muted);text-transform:uppercase;margin-bottom:8px;}
+.arch-modules{display:flex;gap:6px;flex-wrap:wrap;}
+.arch-mod{padding:6px 14px;border-radius:4px;font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:600;letter-spacing:0.05em;}
+.arch-mod.compute{background:rgba(0,123,255,0.12);border:1px solid rgba(0,123,255,0.25);color:var(--blue-light);}
+.arch-mod.gis{background:rgba(255,107,0,0.1);border:1px solid rgba(255,107,0,0.2);color:var(--orange);}
+.arch-mod.ml{background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.2);color:#4ADE80;}
+.arch-mod.data{background:rgba(168,85,247,0.1);border:1px solid rgba(168,85,247,0.2);color:#C084FC;}
+.arch-connector{width:1px;height:16px;background:rgba(0,123,255,0.2);margin:0 0 0 20px;}
+
+/* INDUSTRIES */
+.industries-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:50px;}
+.industry-card{padding:24px 20px;border-radius:10px;border:1px solid rgba(0,123,255,0.1);background:rgba(0,123,255,0.03);transition:all 0.3s;text-align:center;}
+.industry-card:hover{border-color:rgba(0,123,255,0.3);background:rgba(0,123,255,0.07);}
+.ind-icon{font-size:28px;margin-bottom:12px;}
+.ind-name{font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;letter-spacing:0.04em;margin-bottom:4px;}
+.ind-desc{font-size:11px;color:var(--muted);line-height:1.5;}
+
+/* LICENSING */
+.lic-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:50px;}
+.lic-card{padding:28px 22px;border-radius:10px;border:1px solid rgba(0,123,255,0.1);background:rgba(0,123,255,0.03);transition:all 0.3s;}
+.lic-card:hover{border-color:rgba(0,123,255,0.25);}
+.lic-card.featured{background:rgba(0,123,255,0.08);border-color:rgba(0,123,255,0.3);}
+.lic-type{font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--blue-light);margin-bottom:12px;}
+.lic-name{font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;margin-bottom:8px;}
+.lic-desc{font-size:12px;color:var(--muted);line-height:1.55;margin-bottom:16px;}
+.lic-features{display:flex;flex-direction:column;gap:6px;margin-bottom:20px;}
+.lic-feat{font-size:11px;color:var(--muted);display:flex;gap:8px;align-items:center;}
+.lic-feat::before{content:'▹';color:var(--blue);font-size:10px;}
+.lic-btn{display:block;text-align:center;padding:10px;border-radius:6px;font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;text-decoration:none;transition:all 0.3s;border:1px solid rgba(0,123,255,0.3);color:var(--blue-light);}
+.lic-btn:hover{background:rgba(0,123,255,0.12);}
+.lic-btn.primary{background:var(--blue);color:#fff;border-color:var(--blue);}
+.lic-btn.primary:hover{background:var(--blue-dark);}
+
+/* CTA */
+.cta-sec{padding:80px 60px;text-align:center;background:linear-gradient(135deg,rgba(0,55,124,0.2) 0%,rgba(255,107,0,0.05) 100%);border-top:1px solid var(--border);border-bottom:1px solid var(--border);position:relative;overflow:hidden;}
+.cta-sec::before{content:'FEASIBILITY 3D';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Rajdhani',sans-serif;font-size:200px;font-weight:700;color:rgba(0,123,255,0.04);white-space:nowrap;pointer-events:none;letter-spacing:-0.05em;}
+.cta-sec h2{font-family:'Rajdhani',sans-serif;font-size:clamp(36px,6vw,64px);font-weight:700;margin-bottom:16px;position:relative;z-index:1;letter-spacing:0.02em;}
+.cta-sec h2 span{color:var(--orange);}
+.cta-sec p{font-size:15px;color:var(--muted);max-width:480px;margin:0 auto 36px;line-height:1.7;position:relative;z-index:1;}
+.cta-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;position:relative;z-index:1;}
+
+/* LEAD FORM */
+.lead-form{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:700px;margin:40px auto 0;}
+.lead-input{padding:12px 16px;background:rgba(0,123,255,0.06);border:1px solid rgba(0,123,255,0.2);border-radius:6px;color:var(--text);font-family:'Barlow',sans-serif;font-size:13px;outline:none;transition:border-color 0.2s;}
+.lead-input::placeholder{color:var(--muted);}
+.lead-input:focus{border-color:rgba(0,123,255,0.5);}
+.lead-submit{grid-column:span 3;background:var(--blue);color:#fff;padding:13px;border-radius:6px;font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;border:none;cursor:pointer;transition:background 0.2s;}
+.lead-submit:hover{background:var(--blue-dark);}
+
+/* FOOTER */
+footer{padding:50px 60px 30px;border-top:1px solid rgba(0,123,255,0.08);}
+.footer-flex{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:24px;margin-bottom:30px;}
+.footer-links{display:flex;gap:28px;}
+.footer-links a{text-decoration:none;color:var(--muted);font-size:13px;transition:color 0.2s;}
+.footer-links a:hover{color:var(--text);}
+.footer-bottom{font-size:12px;color:rgba(237,244,255,0.2);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;border-top:1px solid rgba(0,123,255,0.06);padding-top:24px;}
+
+.fade-up{opacity:0;transform:translateY(24px);transition:opacity 0.65s,transform 0.65s;}
+.fade-up.vis{opacity:1;transform:translateY(0);}
+
+@media(max-width:1024px){
+  nav{padding:14px 20px;} .nav-links{display:none;}
+  .sec{padding:60px 20px;}
+  .solutions-grid{grid-template-columns:1fr;}
+  .tech-layout{grid-template-columns:1fr;}
+  .industries-grid,.lic-grid{grid-template-columns:repeat(2,1fr);}
+  .lead-form{grid-template-columns:1fr;}
+  .lead-submit{grid-column:span 1;}
+  .corner{display:none;}
+  footer{padding:40px 20px 24px;}
+  .footer-flex{flex-direction:column;align-items:flex-start;}
+  .specs-strip{flex-wrap:wrap;}
+  .spec-item{flex:0 0 50%;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="logo">
+    <svg class="logo-icon" viewBox="0 0 100 100" fill="none">
+      <path d="M15 65 L50 50 L85 65" stroke="rgba(0,123,255,0.3)" stroke-width="1.5" fill="none"/>
+      <path d="M15 65 L15 40 M85 65 L85 40 M15 40 L50 25 L85 40" stroke="rgba(0,123,255,0.15)" stroke-width="1.5" fill="none"/>
+      <path d="M68 32 A24 24 0 1 0 68 68" stroke="#007BFF" stroke-width="11" stroke-linecap="round" fill="none"/>
+      <path d="M46 64 L68 42 L68 56 M68 42 L56 42" stroke="url(#noa)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <defs><linearGradient id="noa" x1="46" y1="64" x2="68" y2="42" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#E8681A"/><stop offset="100%" stop-color="#FFA500"/></linearGradient></defs>
+    </svg>
+    <span class="logo-text">Feasibility<span>3D</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#solutions">Solutions</a></li>
+    <li><a href="#technology">Technology</a></li>
+    <li><a href="#industries">Industries</a></li>
+    <li><a href="#licensing">Licensing</a></li>
+    <li><a href="#demo" class="nav-demo">Request Demo</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="corner corner-tl"></div>
+  <div class="corner corner-tr"></div>
+  <div class="corner corner-bl"></div>
+  <div class="corner corner-br"></div>
+
+  <div class="eyebrow"><span class="eyebrow-blink"></span>Enterprise · Oil & Gas · Engineering</div>
+  <h1>
+    <span class="h1-white">Engineering</span>
+    <span class="h1-blue">Intelligence</span>
+    <span class="h1-tag">Environmental Precision · Investment Confidence</span>
+  </h1>
+  <p class="hero-sub">
+    Advanced desktop software for oil & gas design, reservoir modeling, spill quantification, and economic feasibility — purpose-built for global energy infrastructure.
+  </p>
+  <div class="hero-btns">
+    <a href="#demo" class="btn-blue">Request Enterprise Demo</a>
+    <a href="#solutions" class="btn-orange">Download Brochure</a>
+  </div>
+
+  <div class="specs-strip">
+    <div class="spec-item">
+      <div class="spec-label">Engine</div>
+      <div class="spec-val">C++ / Python Hybrid</div>
+    </div>
+    <div class="spec-item">
+      <div class="spec-label">Computation</div>
+      <div class="spec-val">Multi-Threaded HPC</div>
+    </div>
+    <div class="spec-item">
+      <div class="spec-label">Visualization</div>
+      <div class="spec-val">GIS + 3D Rendering</div>
+    </div>
+    <div class="spec-item">
+      <div class="spec-label">AI Layer</div>
+      <div class="spec-val">ML Anomaly Detection</div>
+    </div>
+    <div class="spec-item">
+      <div class="spec-label">Export</div>
+      <div class="spec-val">PDF / XLSX / CAD</div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="sec fade-up" style="background:rgba(0,123,255,0.02);border-top:1px solid rgba(0,123,255,0.06);border-bottom:1px solid rgba(0,123,255,0.06);">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;">
+    <div>
+      <div class="sec-eyebrow">About Feasibility3D</div>
+      <h2 class="sec-title">One Unified<br>Engineering Platform</h2>
+      <p class="sec-desc">Feasibility3D integrates advanced modeling, simulation, spill quantification, environmental impact assessment, and economic feasibility analysis into one unified desktop system — replacing fragmented workflows with precision intelligence.</p>
+      <div style="margin-top:32px;display:flex;flex-direction:column;gap:12px;">
+        <div style="display:flex;gap:10px;align-items:center;font-size:13px;color:var(--muted);">
+          <span style="color:var(--blue);font-size:16px;">▹</span> AI-assisted anomaly detection
+        </div>
+        <div style="display:flex;gap:10px;align-items:center;font-size:13px;color:var(--muted);">
+          <span style="color:var(--blue);font-size:16px;">▹</span> Secure local data architecture
+        </div>
+        <div style="display:flex;gap:10px;align-items:center;font-size:13px;color:var(--muted);">
+          <span style="color:var(--blue);font-size:16px;">▹</span> High-performance computational engine
+        </div>
+        <div style="display:flex;gap:10px;align-items:center;font-size:13px;color:var(--muted);">
+          <span style="color:var(--blue);font-size:16px;">▹</span> Regulatory compliance report generation
+        </div>
+      </div>
+    </div>
+    <!-- Comparison -->
+    <div>
+      <div style="font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.2em;color:var(--muted);text-transform:uppercase;margin-bottom:16px;">Industry Comparison</div>
+      <table class="comp-table">
+        <tr><th>Challenge</th><th>Traditional Tools</th><th>Feasibility3D</th></tr>
+        <tr>
+          <td style="color:var(--text);font-size:13px;">Workflow</td>
+          <td class="comp-old">Fragmented software</td>
+          <td class="comp-new">Unified ecosystem</td>
+        </tr>
+        <tr>
+          <td style="color:var(--text);font-size:13px;">Spill Estimation</td>
+          <td class="comp-old">Manual calculation</td>
+          <td class="comp-new">Automated precision</td>
+        </tr>
+        <tr>
+          <td style="color:var(--text);font-size:13px;">Feasibility</td>
+          <td class="comp-old">Static models</td>
+          <td class="comp-new">Dynamic simulation</td>
+        </tr>
+        <tr>
+          <td style="color:var(--text);font-size:13px;">Decision Cycles</td>
+          <td class="comp-old">Days/weeks delayed</td>
+          <td class="comp-new">Real-time intelligence</td>
+        </tr>
+        <tr>
+          <td style="color:var(--text);font-size:13px;">GIS Integration</td>
+          <td class="comp-old comp-icon-old">✗ External tool</td>
+          <td class="comp-new comp-icon-new">✓ Built-in engine</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- SOLUTIONS -->
+<section id="solutions" class="sec fade-up">
+  <div class="sec-eyebrow">Core Solutions</div>
+  <h2 class="sec-title">Four Integrated<br>Engineering Modules</h2>
+  <p class="sec-desc">Each module is a complete professional tool — together they form the most comprehensive oil & gas platform available.</p>
+  <div class="solutions-grid">
+    <div class="sol-card">
+      <div class="sol-num">MODULE 01</div>
+      <div class="sol-icon">⚙️</div>
+      <h3 class="sol-title">Engineering Design & Modeling</h3>
+      <p class="sol-desc">Complete facility layout, pipeline system modeling, reservoir design, and structural integrity analysis in one integrated environment.</p>
+      <div class="sol-points">
+        <div class="sol-pt">Pipeline & reservoir system modeling</div>
+        <div class="sol-pt">Facility layout simulation</div>
+        <div class="sol-pt">Structural integrity analysis</div>
+        <div class="sol-pt">Asset lifecycle modeling</div>
+      </div>
+    </div>
+    <div class="sol-card">
+      <div class="sol-num">MODULE 02</div>
+      <div class="sol-icon">🛢️</div>
+      <h3 class="sol-title">Spill Detection & Quantification</h3>
+      <p class="sol-desc">The platform's core highlight feature. Real-time spill volume estimation with GIS mapping, leak source identification, and regulatory reporting outputs.</p>
+      <div class="sol-points">
+        <div class="sol-pt">Real-time spill volume estimation</div>
+        <div class="sol-pt">Surface & subsurface plume modeling</div>
+        <div class="sol-pt">Remote sensing data integration</div>
+        <div class="sol-pt">GIS-based spill mapping & source ID</div>
+      </div>
+    </div>
+    <div class="sol-card">
+      <div class="sol-num">MODULE 03</div>
+      <div class="sol-icon">🌊</div>
+      <h3 class="sol-title">Simulation & Scenario Analysis</h3>
+      <p class="sol-desc">Flow dynamics, pressure modeling, environmental dispersion, and Monte Carlo risk analysis for comprehensive scenario evaluation.</p>
+      <div class="sol-points">
+        <div class="sol-pt">Fluid flow & pressure modeling (Navier-Stokes)</div>
+        <div class="sol-pt">Environmental dispersion modeling</div>
+        <div class="sol-pt">Monte Carlo stochastic simulations</div>
+        <div class="sol-pt">Sensitivity & uncertainty analysis</div>
+      </div>
+    </div>
+    <div class="sol-card">
+      <div class="sol-num">MODULE 04</div>
+      <div class="sol-icon">📈</div>
+      <h3 class="sol-title">Economic Feasibility Engine</h3>
+      <p class="sol-desc">Risk-adjusted investment modeling with CAPEX/OPEX breakdowns, NPV/IRR calculations, and multi-scenario valuation for confident decision-making.</p>
+      <div class="sol-points">
+        <div class="sol-pt">CAPEX & OPEX detailed modeling</div>
+        <div class="sol-pt">NPV, IRR & ROI calculations</div>
+        <div class="sol-pt">Multi-scenario valuation engine</div>
+        <div class="sol-pt">Risk-adjusted investment modeling</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TECHNOLOGY -->
+<section id="technology" class="sec fade-up" style="background:rgba(0,123,255,0.02);border-top:1px solid rgba(0,123,255,0.06);border-bottom:1px solid rgba(0,123,255,0.06);">
+  <div class="tech-layout">
+    <div>
+      <div class="sec-eyebrow">Technology Architecture</div>
+      <h2 class="sec-title">Built For<br>High-Performance<br>Computation</h2>
+      <p class="sec-desc">Feasibility3D's computational core is engineered for large datasets, real-time simulation, and 3D visualization with parallel processing optimization.</p>
+      <div class="tech-stack-list" style="margin-top:32px;">
+        <div class="tech-stack-item">
+          <div class="ts-icon">⚡</div>
+          <div><div class="ts-name">C++ / Python Hybrid Engine</div><div class="ts-desc">High-performance computation with machine learning integration</div></div>
+        </div>
+        <div class="tech-stack-item">
+          <div class="ts-icon">🗺️</div>
+          <div><div class="ts-name">Integrated GIS Engine</div><div class="ts-desc">Native geospatial data processing, satellite data integration</div></div>
+        </div>
+        <div class="tech-stack-item">
+          <div class="ts-icon">🤖</div>
+          <div><div class="ts-name">ML Anomaly Detection</div><div class="ts-desc">AI-powered pattern recognition for spill and failure prediction</div></div>
+        </div>
+        <div class="tech-stack-item">
+          <div class="ts-icon">🔐</div>
+          <div><div class="ts-name">Encrypted Local Database</div><div class="ts-desc">Role-based access with secure data isolation framework</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="arch-visual">
+        <div style="font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.2em;color:var(--muted);text-transform:uppercase;margin-bottom:24px;">System Architecture</div>
+        <div class="arch-layer">
+          <div class="arch-layer-label">Visualization Layer</div>
+          <div class="arch-modules">
+            <div class="arch-mod compute">3D Render Engine</div>
+            <div class="arch-mod gis">GIS Viewer</div>
+            <div class="arch-mod data">Report Gen</div>
+          </div>
+        </div>
+        <div class="arch-connector"></div>
+        <div class="arch-layer">
+          <div class="arch-layer-label">Simulation Core</div>
+          <div class="arch-modules">
+            <div class="arch-mod compute">Flow Dynamics</div>
+            <div class="arch-mod compute">Pressure Model</div>
+            <div class="arch-mod ml">Monte Carlo</div>
+          </div>
+        </div>
+        <div class="arch-connector"></div>
+        <div class="arch-layer">
+          <div class="arch-layer-label">Spill Engine</div>
+          <div class="arch-modules">
+            <div class="arch-mod gis">Plume Model</div>
+            <div class="arch-mod ml">Leak Detection AI</div>
+            <div class="arch-mod gis">Volume Est.</div>
+          </div>
+        </div>
+        <div class="arch-connector"></div>
+        <div class="arch-layer">
+          <div class="arch-layer-label">Financial Engine</div>
+          <div class="arch-modules">
+            <div class="arch-mod data">CAPEX/OPEX</div>
+            <div class="arch-mod data">NPV/IRR</div>
+            <div class="arch-mod ml">Risk Model</div>
+          </div>
+        </div>
+        <div class="arch-connector"></div>
+        <div class="arch-layer">
+          <div class="arch-layer-label">Data Layer</div>
+          <div class="arch-modules">
+            <div class="arch-mod compute">Encrypted Local DB</div>
+            <div class="arch-mod ml">RBAC</div>
+            <div class="arch-mod gis">Satellite API</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INDUSTRIES -->
+<section id="industries" class="sec fade-up">
+  <div class="sec-eyebrow">Industries Served</div>
+  <h2 class="sec-title">Built For The<br>Global Energy Sector</h2>
+  <div class="industries-grid">
+    <div class="industry-card"><div class="ind-icon">🛢️</div><div class="ind-name">Oil & Gas Operators</div><div class="ind-desc">Offshore & onshore production modeling and spill response</div></div>
+    <div class="industry-card"><div class="ind-icon">🏗️</div><div class="ind-name">EPC Contractors</div><div class="ind-desc">Engineering procurement and construction simulation workflows</div></div>
+    <div class="industry-card"><div class="ind-icon">🚇</div><div class="ind-name">Pipeline Companies</div><div class="ind-desc">Pipeline rupture simulation and integrity analysis</div></div>
+    <div class="industry-card"><div class="ind-icon">🌿</div><div class="ind-name">Environmental Agencies</div><div class="ind-desc">Regulatory impact studies and damage quantification</div></div>
+    <div class="industry-card"><div class="ind-icon">⚓</div><div class="ind-name">Offshore Operators</div><div class="ind-desc">Platform spill analysis and subsea modeling</div></div>
+    <div class="industry-card"><div class="ind-icon">💼</div><div class="ind-name">Energy Consultants</div><div class="ind-desc">Investment feasibility and project valuation</div></div>
+    <div class="industry-card"><div class="ind-icon">⚖️</div><div class="ind-name">Regulatory Bodies</div><div class="ind-desc">Compliance auditing and environmental certification</div></div>
+    <div class="industry-card"><div class="ind-icon">🎓</div><div class="ind-name">Universities & Research</div><div class="ind-desc">Academic simulation and energy research programs</div></div>
+  </div>
+</section>
+
+<!-- LICENSING -->
+<section id="licensing" class="sec fade-up" style="background:rgba(0,123,255,0.02);border-top:1px solid rgba(0,123,255,0.06);">
+  <div class="sec-eyebrow">Licensing</div>
+  <h2 class="sec-title">Enterprise Software<br>Licensing Plans</h2>
+  <div class="lic-grid">
+    <div class="lic-card">
+      <div class="lic-type">Academic</div>
+      <div class="lic-name">Research License</div>
+      <div class="lic-desc">For universities, research institutes, and academic programs.</div>
+      <div class="lic-features">
+        <div class="lic-feat">Full Core Modules</div>
+        <div class="lic-feat">Limited Commercial Use</div>
+        <div class="lic-feat">Technical Support</div>
+        <div class="lic-feat">Training Resources</div>
+      </div>
+      <a href="mailto:info@feasibilitygiants.com" class="lic-btn">Contact Us</a>
+    </div>
+    <div class="lic-card featured">
+      <div class="lic-type">Enterprise</div>
+      <div class="lic-name">Annual License</div>
+      <div class="lic-desc">For EPC firms, operators, and energy consultants.</div>
+      <div class="lic-features">
+        <div class="lic-feat">All 4 Core Modules</div>
+        <div class="lic-feat">GIS Integration</div>
+        <div class="lic-feat">Priority Support</div>
+        <div class="lic-feat">Updates Included</div>
+      </div>
+      <a href="mailto:info@feasibilitygiants.com" class="lic-btn primary">Get License</a>
+    </div>
+    <div class="lic-card">
+      <div class="lic-type">Government</div>
+      <div class="lic-name">Gov. License</div>
+      <div class="lic-desc">For regulatory bodies and government agencies.</div>
+      <div class="lic-features">
+        <div class="lic-feat">Compliance Modules</div>
+        <div class="lic-feat">Audit Export Suite</div>
+        <div class="lic-feat">Dedicated Account</div>
+        <div class="lic-feat">Data Sovereignty</div>
+      </div>
+      <a href="mailto:info@feasibilitygiants.com" class="lic-btn">Contact Us</a>
+    </div>
+    <div class="lic-card">
+      <div class="lic-type">Add-Ons</div>
+      <div class="lic-name">Modules</div>
+      <div class="lic-desc">Extend any license with premium capability modules.</div>
+      <div class="lic-features">
+        <div class="lic-feat">Advanced GIS Module</div>
+        <div class="lic-feat">AI Prediction Suite</div>
+        <div class="lic-feat">Regulatory Reports</div>
+        <div class="lic-feat">Cloud Hybrid (Future)</div>
+      </div>
+      <a href="mailto:info@feasibilitygiants.com" class="lic-btn">Inquire</a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA / DEMO -->
+<section id="demo" class="cta-sec fade-up">
+  <h2>Transform Energy Decisions<br>with <span>Precision Intelligence</span></h2>
+  <p>Schedule an enterprise demo with our engineering team and see Feasibility3D in action on your specific use case.</p>
+  <div class="cta-btns">
+    <a href="mailto:info@feasibilitygiants.com" class="btn-blue">Schedule Enterprise Demo</a>
+    <a href="mailto:info@feasibilitygiants.com" class="btn-orange">Contact Sales →</a>
+  </div>
+  <form class="lead-form" onsubmit="return false;">
+    <input class="lead-input" type="text" placeholder="Full Name">
+    <input class="lead-input" type="text" placeholder="Organisation">
+    <input class="lead-input" type="text" placeholder="Industry / Role">
+    <input class="lead-input" type="email" placeholder="Email Address">
+    <input class="lead-input" type="text" placeholder="Country">
+    <input class="lead-input" type="text" placeholder="Project Type">
+    <button class="lead-submit">Submit Demo Request</button>
+  </form>
+</section>
+
+<footer>
+  <div class="footer-flex">
+    <a href="#" class="logo">
+      <svg width="32" height="32" viewBox="0 0 100 100" fill="none">
+        <path d="M68 32 A24 24 0 1 0 68 68" stroke="#007BFF" stroke-width="11" stroke-linecap="round" fill="none"/>
+        <path d="M46 64 L68 42 L68 56 M68 42 L56 42" stroke="url(#foa2)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <defs><linearGradient id="foa2" x1="46" y1="64" x2="68" y2="42" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#E8681A"/><stop offset="100%" stop-color="#FFA500"/></linearGradient></defs>
+      </svg>
+      <span class="logo-text">Feasibility<span>3D</span></span>
+    </a>
+    <div class="footer-links">
+      <a href="#">Security & Compliance</a>
+      <a href="#">Technical Resources</a>
+      <a href="mailto:info@feasibilitygiants.com">Support</a>
+      <a href="mailto:info@feasibilitygiants.com">Sales</a>
+      <a href="https://feasibilitygiants.com">← Feasibility Giant</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Feasibility Giant Company Ltd · RC: 1939172 · Prof. Bunakiye R. Japheth, CEO</span>
+    <span>info@feasibilitygiants.com · +234 806 132 4564</span>
+  </div>
+</footer>
+
+<script>
+const obs=new IntersectionObserver(e=>e.forEach(el=>{if(el.isIntersecting)el.target.classList.add('vis');}),{threshold:0.08});
+document.querySelectorAll('.fade-up').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>

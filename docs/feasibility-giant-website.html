@@ -1,0 +1,1692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Feasibility Giant Company | Engineering Africa's Digital Infrastructure</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0A1F44;
+    --blue: #1A4F8B;
+    --green: #1FAF5A;
+    --gold: #C9A227;
+    --orange: #E8681A;
+    --bg: #F4F6F9;
+    --dark-bg: #070E1C;
+    --text: #2B2B2B;
+    --light: #F9FAFB;
+    --glass: rgba(255,255,255,0.06);
+    --glass-border: rgba(255,255,255,0.12);
+    --finder-primary: #1FAF5A;
+    --finder-secondary: #0E8A4F;
+    --finance-primary: #C9A227;
+    --finance-secondary: #1A4F8B;
+    --threed-primary: #007BFF;
+    --threed-secondary: #E8681A;
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--dark-bg);
+    color: var(--light);
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 18px 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    background: rgba(7,14,28,0.75);
+    border-bottom: 1px solid var(--glass-border);
+    transition: all 0.3s ease;
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    text-decoration: none;
+  }
+
+  .nav-logo-img {
+    width: 44px;
+    height: 44px;
+    object-fit: contain;
+  }
+
+  .nav-logo-text {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 15px;
+    color: var(--light);
+    letter-spacing: 0.02em;
+    line-height: 1.2;
+  }
+
+  .nav-logo-text span {
+    display: block;
+    font-weight: 400;
+    font-size: 10px;
+    color: rgba(255,255,255,0.45);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 36px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    text-decoration: none;
+    color: rgba(255,255,255,0.65);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: #fff; }
+
+  .nav-cta {
+    background: linear-gradient(135deg, var(--blue), var(--green));
+    color: #fff !important;
+    padding: 9px 22px;
+    border-radius: 6px;
+    font-weight: 600 !important;
+    letter-spacing: 0.02em !important;
+    transition: opacity 0.2s !important;
+  }
+
+  .nav-cta:hover { opacity: 0.85; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 120px 40px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background: 
+      radial-gradient(ellipse 80% 60% at 50% 0%, rgba(26,79,139,0.35) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 40% at 80% 60%, rgba(31,175,90,0.15) 0%, transparent 50%),
+      radial-gradient(ellipse 40% 30% at 10% 80%, rgba(201,162,39,0.1) 0%, transparent 50%),
+      var(--dark-bg);
+  }
+
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image: 
+      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 100% 100% at 50% 0%, black 30%, transparent 80%);
+  }
+
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(26,79,139,0.25);
+    border: 1px solid rgba(26,79,139,0.5);
+    padding: 6px 16px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 28px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-eyebrow::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  .hero h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(56px, 10vw, 130px);
+    line-height: 0.92;
+    letter-spacing: 0.01em;
+    position: relative;
+    z-index: 1;
+    margin-bottom: 28px;
+  }
+
+  .hero h1 .line1 { display: block; color: #fff; }
+  .hero h1 .line2 { 
+    display: block;
+    background: linear-gradient(135deg, var(--gold) 0%, var(--orange) 50%, var(--green) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    font-size: 16px;
+    font-weight: 300;
+    color: rgba(255,255,255,0.55);
+    max-width: 560px;
+    line-height: 1.7;
+    position: relative;
+    z-index: 1;
+    margin-bottom: 44px;
+  }
+
+  .hero-btns {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--blue) 0%, #0E3D75 100%);
+    color: #fff;
+    padding: 14px 32px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    border: 1px solid rgba(255,255,255,0.15);
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-primary::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .btn-primary:hover::before { opacity: 1; }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(26,79,139,0.5); }
+
+  .btn-ghost {
+    background: transparent;
+    color: rgba(255,255,255,0.75);
+    padding: 14px 32px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    border: 1px solid rgba(255,255,255,0.15);
+    transition: all 0.3s;
+  }
+
+  .btn-ghost:hover {
+    background: rgba(255,255,255,0.06);
+    color: #fff;
+    border-color: rgba(255,255,255,0.3);
+  }
+
+  /* ── STATS STRIP ── */
+  .stats-strip {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    margin-top: 80px;
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    padding: 32px 0;
+    width: 100%;
+    max-width: 900px;
+  }
+
+  .stat-item {
+    flex: 1;
+    text-align: center;
+    padding: 0 30px;
+    border-right: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .stat-item:last-child { border-right: none; }
+
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 42px;
+    letter-spacing: 0.02em;
+    background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.6) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .stat-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.35);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* ── SECTION COMMON ── */
+  section { position: relative; z-index: 1; }
+
+  .section-pad { padding: 100px 60px; }
+
+  .section-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--green);
+    margin-bottom: 18px;
+  }
+
+  .section-eyebrow::before {
+    content: '';
+    width: 24px;
+    height: 1px;
+    background: var(--green);
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(32px, 5vw, 52px);
+    line-height: 1.1;
+    margin-bottom: 20px;
+  }
+
+  .section-desc {
+    font-size: 15px;
+    font-weight: 300;
+    color: rgba(255,255,255,0.5);
+    max-width: 520px;
+    line-height: 1.8;
+  }
+
+  /* ── PRODUCTS SECTION ── */
+  .products-section {
+    padding: 100px 60px;
+    background: rgba(255,255,255,0.015);
+  }
+
+  .products-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 60px;
+    gap: 40px;
+  }
+
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .product-card {
+    background: var(--dark-bg);
+    padding: 50px 40px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    cursor: pointer;
+  }
+
+  .product-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+
+  /* Finder card */
+  .product-card.finder::before {
+    background: radial-gradient(ellipse 80% 80% at 50% 0%, rgba(31,175,90,0.15) 0%, transparent 70%);
+  }
+
+  /* Finance card */
+  .product-card.finance::before {
+    background: radial-gradient(ellipse 80% 80% at 50% 0%, rgba(201,162,39,0.15) 0%, transparent 70%);
+  }
+
+  /* 3D card */
+  .product-card.threed::before {
+    background: radial-gradient(ellipse 80% 80% at 50% 0%, rgba(0,123,255,0.15) 0%, transparent 70%);
+  }
+
+  .product-card:hover::before { opacity: 1; }
+
+  .product-card:hover {
+    transform: translateY(-4px);
+  }
+
+  .product-logo {
+    width: 72px;
+    height: 72px;
+    object-fit: contain;
+    margin-bottom: 28px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .product-tag {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 100px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .finder .product-tag { background: rgba(31,175,90,0.15); color: var(--green); border: 1px solid rgba(31,175,90,0.3); }
+  .finance .product-tag { background: rgba(201,162,39,0.15); color: var(--gold); border: 1px solid rgba(201,162,39,0.3); }
+  .threed .product-tag { background: rgba(0,123,255,0.15); color: #60A5FA; border: 1px solid rgba(0,123,255,0.3); }
+
+  .product-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 22px;
+    margin-bottom: 14px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .product-desc {
+    font-size: 13px;
+    font-weight: 300;
+    color: rgba(255,255,255,0.45);
+    line-height: 1.7;
+    margin-bottom: 28px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .product-features {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 36px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .product-features li {
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .product-features li::before {
+    content: '';
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .finder .product-features li::before { background: var(--green); }
+  .finance .product-features li::before { background: var(--gold); }
+  .threed .product-features li::before { background: #60A5FA; }
+
+  .product-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: gap 0.2s;
+    position: relative;
+    z-index: 1;
+  }
+
+  .finder .product-link { color: var(--green); }
+  .finance .product-link { color: var(--gold); }
+  .threed .product-link { color: #60A5FA; }
+
+  .product-card:hover .product-link { gap: 14px; }
+
+  .product-number {
+    position: absolute;
+    top: 40px;
+    right: 40px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 80px;
+    line-height: 1;
+    color: rgba(255,255,255,0.04);
+    z-index: 0;
+    transition: color 0.4s;
+  }
+
+  .product-card:hover .product-number { color: rgba(255,255,255,0.07); }
+
+  /* ── ABOUT / WHAT WE DO ── */
+  .about-section {
+    padding: 120px 60px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 100px;
+    align-items: center;
+  }
+
+  .about-visual {
+    position: relative;
+    height: 500px;
+  }
+
+  .about-card {
+    position: absolute;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 24px 28px;
+    backdrop-filter: blur(10px);
+  }
+
+  .about-card-main {
+    width: 100%;
+    top: 0;
+    left: 0;
+    background: linear-gradient(135deg, rgba(26,79,139,0.2), rgba(10,31,68,0.4));
+    border-color: rgba(26,79,139,0.3);
+  }
+
+  .about-card-stat1 {
+    width: 200px;
+    bottom: 80px;
+    left: -20px;
+    animation: float1 4s ease-in-out infinite;
+  }
+
+  .about-card-stat2 {
+    width: 180px;
+    top: 140px;
+    right: -20px;
+    animation: float2 5s ease-in-out infinite;
+  }
+
+  @keyframes float1 {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+  }
+
+  @keyframes float2 {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(8px); }
+  }
+
+  .about-services {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin-top: 40px;
+  }
+
+  .service-item {
+    display: flex;
+    gap: 18px;
+    align-items: flex-start;
+    padding: 22px 26px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.06);
+    transition: all 0.3s;
+  }
+
+  .service-item:hover {
+    background: rgba(255,255,255,0.03);
+    border-color: rgba(255,255,255,0.1);
+  }
+
+  .service-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+
+  .service-icon.blue { background: rgba(26,79,139,0.2); }
+  .service-icon.green { background: rgba(31,175,90,0.15); }
+  .service-icon.gold { background: rgba(201,162,39,0.15); }
+
+  .service-text h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .service-text p {
+    font-size: 12px;
+    color: rgba(255,255,255,0.4);
+    line-height: 1.6;
+  }
+
+  /* ── TECHNOLOGY SECTION ── */
+  .tech-section {
+    padding: 100px 60px;
+    background: linear-gradient(180deg, rgba(26,79,139,0.08) 0%, transparent 100%);
+    border-top: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .tech-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px;
+    overflow: hidden;
+    margin-top: 60px;
+  }
+
+  .tech-item {
+    background: var(--dark-bg);
+    padding: 36px 28px;
+    transition: background 0.3s;
+  }
+
+  .tech-item:hover { background: rgba(255,255,255,0.03); }
+
+  .tech-item-icon {
+    font-size: 26px;
+    margin-bottom: 14px;
+  }
+
+  .tech-item h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .tech-item p {
+    font-size: 12px;
+    color: rgba(255,255,255,0.35);
+    line-height: 1.6;
+  }
+
+  /* ── TRUST / COMPLIANCE ── */
+  .trust-section {
+    padding: 100px 60px;
+    text-align: center;
+  }
+
+  .compliance-badges {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 50px;
+    margin-bottom: 70px;
+  }
+
+  .badge {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 24px;
+    border-radius: 100px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.03);
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.6);
+    transition: all 0.3s;
+  }
+
+  .badge:hover {
+    border-color: rgba(255,255,255,0.2);
+    color: #fff;
+    background: rgba(255,255,255,0.06);
+  }
+
+  .badge-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+
+  .badge-dot.green { background: var(--green); }
+  .badge-dot.gold { background: var(--gold); }
+  .badge-dot.blue { background: var(--blue); }
+  .badge-dot.orange { background: var(--orange); }
+
+  /* ── CTA SECTION ── */
+  .cta-section {
+    padding: 100px 60px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-inner {
+    background: linear-gradient(135deg, 
+      rgba(26,79,139,0.3) 0%, 
+      rgba(10,31,68,0.5) 40%,
+      rgba(31,175,90,0.15) 100%
+    );
+    border: 1px solid rgba(26,79,139,0.4);
+    border-radius: 24px;
+    padding: 80px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-inner::before {
+    content: '';
+    position: absolute;
+    top: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 300px;
+    background: radial-gradient(ellipse, rgba(26,79,139,0.3) 0%, transparent 70%);
+  }
+
+  .cta-inner h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(40px, 6vw, 72px);
+    line-height: 1;
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cta-inner p {
+    font-size: 15px;
+    color: rgba(255,255,255,0.5);
+    max-width: 480px;
+    margin: 0 auto 40px;
+    position: relative;
+    z-index: 1;
+    line-height: 1.7;
+  }
+
+  .cta-btns {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 60px 60px 40px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 60px;
+    margin-bottom: 60px;
+  }
+
+  .footer-brand p {
+    font-size: 13px;
+    color: rgba(255,255,255,0.35);
+    line-height: 1.7;
+    margin-top: 18px;
+    margin-bottom: 24px;
+    max-width: 280px;
+  }
+
+  .footer-social {
+    display: flex;
+    gap: 10px;
+  }
+
+  .social-link {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: rgba(255,255,255,0.5);
+    font-size: 14px;
+    transition: all 0.2s;
+  }
+
+  .social-link:hover {
+    border-color: rgba(255,255,255,0.3);
+    color: #fff;
+    background: rgba(255,255,255,0.06);
+  }
+
+  .footer-col h5 {
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 18px;
+  }
+
+  .footer-col ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .footer-col ul a {
+    text-decoration: none;
+    color: rgba(255,255,255,0.5);
+    font-size: 13px;
+    transition: color 0.2s;
+  }
+
+  .footer-col ul a:hover { color: #fff; }
+
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 30px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .footer-bottom p {
+    font-size: 12px;
+    color: rgba(255,255,255,0.25);
+  }
+
+  .footer-rc {
+    font-size: 11px;
+    color: rgba(255,255,255,0.2);
+    letter-spacing: 0.05em;
+  }
+
+  /* ── SCROLL ANIMATIONS ── */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .fade-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── LOGO SHOWCASE ── */
+  .logo-showcase {
+    padding: 60px;
+    border-top: 1px solid rgba(255,255,255,0.04);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .logo-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.2);
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  .logo-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 60px;
+    flex-wrap: wrap;
+  }
+
+  .logo-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    opacity: 0.5;
+    transition: opacity 0.3s;
+  }
+
+  .logo-item:hover { opacity: 1; }
+
+  .logo-item img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    filter: saturate(0.7);
+    transition: filter 0.3s;
+  }
+
+  .logo-item:hover img { filter: saturate(1); }
+
+  .logo-item span {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+  }
+
+  /* ── FEATURE MARQUEE ── */
+  .marquee-strip {
+    overflow: hidden;
+    border-top: 1px solid rgba(255,255,255,0.04);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    padding: 16px 0;
+    background: rgba(255,255,255,0.015);
+  }
+
+  .marquee-inner {
+    display: flex;
+    gap: 0;
+    animation: marquee 30s linear infinite;
+    white-space: nowrap;
+  }
+
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  .marquee-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    padding: 0 30px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+  }
+
+  .marquee-dot {
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--gold);
+  }
+
+  /* ── CONTACT STRIP ── */
+  .contact-strip {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+  }
+
+  .contact-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.4);
+  }
+
+  .contact-item span:first-child { font-size: 16px; }
+
+  /* Decorative lines */
+  .deco-line {
+    position: absolute;
+    left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(26,79,139,0.4), rgba(31,175,90,0.2), transparent);
+  }
+
+  /* Card glow */
+  .card-glow {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    filter: blur(60px);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.5s;
+  }
+
+  .product-card:hover .card-glow { opacity: 1; }
+  .finder .card-glow { background: var(--green); bottom: -100px; right: -100px; }
+  .finance .card-glow { background: var(--gold); bottom: -100px; right: -100px; }
+  .threed .card-glow { background: #007BFF; bottom: -100px; right: -100px; }
+
+  /* RC badge */
+  .rc-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    background: rgba(201,162,39,0.1);
+    border: 1px solid rgba(201,162,39,0.25);
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--gold);
+    letter-spacing: 0.08em;
+    margin-top: 8px;
+  }
+
+  @media (max-width: 1024px) {
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    .section-pad, .products-section, .about-section, .tech-section, .trust-section, .cta-section { padding: 60px 24px; }
+    .products-grid { grid-template-columns: 1fr; }
+    .about-section { grid-template-columns: 1fr; gap: 50px; }
+    .about-visual { height: 300px; }
+    .tech-grid { grid-template-columns: repeat(2, 1fr); }
+    .footer-grid { grid-template-columns: 1fr 1fr; gap: 40px; }
+    .hero h1 { font-size: clamp(48px, 12vw, 80px); }
+    .stats-strip { flex-wrap: wrap; }
+    .stat-item { flex: 0 0 50%; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.06); padding: 20px; }
+    .logo-showcase { padding: 40px 24px; }
+    .logo-row { gap: 30px; }
+    footer { padding: 40px 24px 30px; }
+    .footer-bottom { flex-direction: column; gap: 10px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<nav>
+  <a href="#" class="nav-logo">
+    <!-- Company logo (circle+arrow without wordmark) -->
+    <svg class="nav-logo-img" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="50" cy="50" r="48" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+      <!-- Blue C shape -->
+      <path d="M 72 28 A 30 30 0 1 0 72 72" stroke="#1A6BC8" stroke-width="14" stroke-linecap="round" fill="none"/>
+      <!-- Gold arrow -->
+      <path d="M 42 66 L 72 36 L 72 55 M 72 36 L 53 36" stroke="url(#arrowGrad)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <defs>
+        <linearGradient id="arrowGrad" x1="42" y1="66" x2="72" y2="36" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#E8681A"/>
+          <stop offset="100%" stop-color="#F0A500"/>
+        </linearGradient>
+      </defs>
+    </svg>
+    <div class="nav-logo-text">
+      Feasibility Giant
+      <span>RC: 1939172</span>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#products">Products</a></li>
+    <li><a href="#technology">Technology</a></li>
+    <li><a href="#compliance">Compliance</a></li>
+    <li><a href="#contact" class="nav-cta">Contact Us</a></li>
+  </ul>
+</nav>
+
+<!-- MARQUEE -->
+<div class="marquee-strip" style="margin-top:73px;">
+  <div class="marquee-inner">
+    <!-- repeated for seamless loop -->
+    <span class="marquee-item"><span class="marquee-dot"></span>FeasibilityFinder</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>FeasibilityFinance</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Feasibility3D</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Oil & Gas Modeling</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>NIN Identity Verification</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Cooperative SaaS</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Spill Quantification</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Digital Infrastructure</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Enterprise Software</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Yenagoa · Bayelsa State</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>FeasibilityFinder</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>FeasibilityFinance</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Feasibility3D</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Oil & Gas Modeling</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>NIN Identity Verification</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Cooperative SaaS</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Spill Quantification</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Digital Infrastructure</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Enterprise Software</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Yenagoa · Bayelsa State</span>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+
+  <div class="hero-eyebrow">
+    Feasibility Giant Company · RC 1939172
+  </div>
+
+  <h1>
+    <span class="line1">Engineering Africa's</span>
+    <span class="line2">Digital Infrastructure</span>
+  </h1>
+
+  <p class="hero-sub">
+    Building secure, scalable platforms across identity verification, cooperative finance, and oil & gas simulation — from Nigeria to the world.
+  </p>
+
+  <div class="hero-btns">
+    <a href="#products" class="btn-primary">Explore Our Products</a>
+    <a href="#contact" class="btn-ghost">Partner With Us →</a>
+  </div>
+
+  <div class="stats-strip">
+    <div class="stat-item">
+      <div class="stat-num">3</div>
+      <div class="stat-label">Product Platforms</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">RC</div>
+      <div class="stat-label">1939172 · CAC Reg.</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">3+</div>
+      <div class="stat-label">Industries Served</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">NG</div>
+      <div class="stat-label">Indigenous Innovation</div>
+    </div>
+  </div>
+</section>
+
+<!-- LOGO SHOWCASE -->
+<div class="logo-showcase">
+  <div class="logo-label">Our Product Suite</div>
+  <div class="logo-row">
+    <!-- FeasibilityFinder Logo — Green/Blue/Teal theme -->
+    <div class="logo-item">
+      <svg width="60" height="60" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Signal rings -->
+        <path d="M 30 50 A 20 20 0 0 1 70 50" stroke="rgba(31,175,90,0.3)" stroke-width="2" fill="none"/>
+        <path d="M 20 50 A 30 30 0 0 1 80 50" stroke="rgba(31,175,90,0.2)" stroke-width="2" fill="none"/>
+        <!-- Blue C -->
+        <path d="M 68 32 A 24 24 0 1 0 68 68" stroke="#1A6BC8" stroke-width="11" stroke-linecap="round" fill="none"/>
+        <!-- Green arrow -->
+        <path d="M 46 64 L 68 42 L 68 56 M 68 42 L 56 42" stroke="url(#finderArrow)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <defs>
+          <linearGradient id="finderArrow" x1="46" y1="64" x2="68" y2="42" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#0E8A4F"/>
+            <stop offset="100%" stop-color="#1FAF5A"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <span>FeasibilityFinder</span>
+    </div>
+
+    <!-- FeasibilityFinance Logo — Navy/Gold theme -->
+    <div class="logo-item">
+      <svg width="60" height="60" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Network dots -->
+        <circle cx="20" cy="30" r="4" fill="rgba(201,162,39,0.5)"/>
+        <circle cx="80" cy="30" r="4" fill="rgba(201,162,39,0.5)"/>
+        <circle cx="20" cy="70" r="4" fill="rgba(26,79,139,0.6)"/>
+        <circle cx="80" cy="70" r="4" fill="rgba(201,162,39,0.5)"/>
+        <path d="M20 30 Q50 20 80 30" stroke="rgba(201,162,39,0.25)" stroke-width="1.5" fill="none"/>
+        <path d="M20 70 Q50 80 80 70" stroke="rgba(26,79,139,0.3)" stroke-width="1.5" fill="none"/>
+        <!-- Navy C -->
+        <path d="M 68 32 A 24 24 0 1 0 68 68" stroke="#0A1F44" stroke-width="11" stroke-linecap="round" fill="none"/>
+        <!-- Gold arrow -->
+        <path d="M 46 64 L 68 42 L 68 56 M 68 42 L 56 42" stroke="url(#financeArrow)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <defs>
+          <linearGradient id="financeArrow" x1="46" y1="64" x2="68" y2="42" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#E8681A"/>
+            <stop offset="100%" stop-color="#C9A227"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <span>FeasibilityFinance</span>
+    </div>
+
+    <!-- Main Company Logo -->
+    <div class="logo-item" style="opacity:1;">
+      <svg width="72" height="72" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="50" cy="50" r="48" fill="none" stroke="rgba(26,79,139,0.2)" stroke-width="1"/>
+        <path d="M 72 28 A 30 30 0 1 0 72 72" stroke="#1A6BC8" stroke-width="13" stroke-linecap="round" fill="none"/>
+        <path d="M 42 66 L 72 36 L 72 54 M 72 36 L 54 36" stroke="url(#mainArrow)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <defs>
+          <linearGradient id="mainArrow" x1="42" y1="66" x2="72" y2="36" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#E8681A"/>
+            <stop offset="100%" stop-color="#F0A500"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <span style="color:rgba(255,255,255,0.7);">Feasibility Giant</span>
+    </div>
+
+    <!-- Feasibility3D Logo — Blue/Orange theme -->
+    <div class="logo-item">
+      <svg width="60" height="60" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Grid lines -->
+        <path d="M 15 65 L 50 50 L 85 65" stroke="rgba(0,123,255,0.25)" stroke-width="1.5" fill="none"/>
+        <path d="M 15 65 L 15 40 M 85 65 L 85 40 M 15 40 L 50 25 L 85 40" stroke="rgba(0,123,255,0.15)" stroke-width="1.5" fill="none"/>
+        <!-- Blue C -->
+        <path d="M 68 32 A 24 24 0 1 0 68 68" stroke="#007BFF" stroke-width="11" stroke-linecap="round" fill="none"/>
+        <!-- Orange arrow -->
+        <path d="M 46 64 L 68 42 L 68 56 M 68 42 L 56 42" stroke="url(#threedArrow)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <defs>
+          <linearGradient id="threedArrow" x1="46" y1="64" x2="68" y2="42" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#E8681A"/>
+            <stop offset="100%" stop-color="#FFA500"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <span>Feasibility3D</span>
+    </div>
+  </div>
+</div>
+
+<!-- PRODUCTS SECTION -->
+<section id="products" class="products-section">
+  <div class="products-header fade-up">
+    <div>
+      <div class="section-eyebrow">Product Ecosystem</div>
+      <h2 class="section-title">Three Platforms.<br>One Vision.</h2>
+    </div>
+    <p class="section-desc">From caller identity verification to cooperative finance management and oil & gas simulation — engineered for Africa, built for the world.</p>
+  </div>
+
+  <div class="products-grid">
+    <!-- FeasibilityFinder -->
+    <a href="finder.feasibilitygiants.com" class="product-card finder fade-up">
+      <div class="card-glow"></div>
+      <span class="product-number">01</span>
+      <!-- Finder Logo inline -->
+      <svg class="product-logo" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M 30 50 A 20 20 0 0 1 70 50" stroke="rgba(31,175,90,0.35)" stroke-width="2" fill="none"/>
+        <path d="M 20 50 A 30 30 0 0 1 80 50" stroke="rgba(31,175,90,0.2)" stroke-width="2" fill="none"/>
+        <path d="M 68 32 A 24 24 0 1 0 68 68" stroke="#1A6BC8" stroke-width="11" stroke-linecap="round" fill="none"/>
+        <path d="M 46 64 L 68 42 L 68 56 M 68 42 L 56 42" stroke="url(#fla)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <defs><linearGradient id="fla" x1="46" y1="64" x2="68" y2="42" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#0E8A4F"/><stop offset="100%" stop-color="#1FAF5A"/></linearGradient></defs>
+      </svg>
+      <span class="product-tag">Mobile App</span>
+      <h3 class="product-name">FeasibilityFinder</h3>
+      <p class="product-desc">Nigeria's indigenous caller identity & location intelligence platform — powered by NIN integration for verified communication and national security.</p>
+      <ul class="product-features">
+        <li>Verified Caller Identity via NIN</li>
+        <li>Real-Time Location Intelligence</li>
+        <li>Fraud Alert System</li>
+        <li>Enterprise Dashboard</li>
+        <li>NDPR Compliant</li>
+      </ul>
+      <span class="product-link">
+        Explore Finder 
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </span>
+    </a>
+
+    <!-- FeasibilityFinance -->
+    <a href="finance.feasibilitygiants.com" class="product-card finance fade-up" style="transition-delay:0.1s">
+      <div class="card-glow"></div>
+      <span class="product-number">02</span>
+      <!-- Finance Logo inline -->
+      <svg class="product-logo" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="20" cy="30" r="4" fill="rgba(201,162,39,0.5)"/>
+        <circle cx="80" cy="30" r="4" fill="rgba(201,162,39,0.5)"/>
+        <circle cx="20" cy="70" r="4" fill="rgba(26,79,139,0.5)"/>
+        <circle cx="80" cy="70" r="4" fill="rgba(201,162,39,0.5)"/>
+        <path d="M20 30 Q50 20 80 30" stroke="rgba(201,162,39,0.2)" stroke-width="1.5" fill="none"/>
+        <path d="M 68 32 A 24 24 0 1 0 68 68" stroke="#0A1F44" stroke-width="11" stroke-linecap="round" fill="none"/>
+        <path d="M 46 64 L 68 42 L 68 56 M 68 42 L 56 42" stroke="url(#ffa)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <defs><linearGradient id="ffa" x1="46" y1="64" x2="68" y2="42" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#E8681A"/><stop offset="100%" stop-color="#C9A227"/></linearGradient></defs>
+      </svg>
+      <span class="product-tag">SaaS Platform</span>
+      <h3 class="product-name">FeasibilityFinance</h3>
+      <p class="product-desc">A global web platform digitalizing multipurpose cooperative societies — automating savings, loans, contributions, and governance for communities worldwide.</p>
+      <ul class="product-features">
+        <li>Multi-Tenant Cooperative Management</li>
+        <li>Automated Loan Workflows</li>
+        <li>Real-Time Financial Dashboards</li>
+        <li>Dividend Distribution Engine</li>
+        <li>GDPR & Global Compliance</li>
+      </ul>
+      <span class="product-link">
+        Explore Finance
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </span>
+    </a>
+
+    <!-- Feasibility3D -->
+    <a href="3d.feasibilitygiants.com" class="product-card threed fade-up" style="transition-delay:0.2s">
+      <div class="card-glow"></div>
+      <span class="product-number">03</span>
+      <!-- 3D Logo inline -->
+      <svg class="product-logo" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M 15 65 L 50 50 L 85 65" stroke="rgba(0,123,255,0.3)" stroke-width="1.5" fill="none"/>
+        <path d="M 15 65 L 15 40 M 85 65 L 85 40 M 15 40 L 50 25 L 85 40" stroke="rgba(0,123,255,0.15)" stroke-width="1.5" fill="none"/>
+        <path d="M 68 32 A 24 24 0 1 0 68 68" stroke="#007BFF" stroke-width="11" stroke-linecap="round" fill="none"/>
+        <path d="M 46 64 L 68 42 L 68 56 M 68 42 L 56 42" stroke="url(#t3a)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <defs><linearGradient id="t3a" x1="46" y1="64" x2="68" y2="42" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#E8681A"/><stop offset="100%" stop-color="#FFA500"/></linearGradient></defs>
+      </svg>
+      <span class="product-tag">Enterprise Desktop</span>
+      <h3 class="product-name">Feasibility3D</h3>
+      <p class="product-desc">Advanced engineering simulation platform for the global oil & gas industry — integrating spill quantification, reservoir modeling, and economic feasibility analysis.</p>
+      <ul class="product-features">
+        <li>Spill Detection & Quantification</li>
+        <li>Reservoir & Flow Simulation</li>
+        <li>GIS & Satellite Data Integration</li>
+        <li>CAPEX/NPV/IRR Modeling</li>
+        <li>AI-Assisted Anomaly Detection</li>
+      </ul>
+      <span class="product-link">
+        Explore 3D
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </span>
+    </a>
+  </div>
+</section>
+
+<!-- ABOUT / SERVICES SECTION -->
+<section id="about" class="about-section">
+  <div class="fade-up">
+    <div class="section-eyebrow">About The Company</div>
+    <h2 class="section-title">Feasibility &<br>Software Consultants</h2>
+    <p class="section-desc">Feasibility Giant Company Ltd is an indigenous Nigerian technology firm building world-class digital infrastructure across identity, finance, and engineering simulation sectors.</p>
+    <div class="contact-strip" style="margin-top:20px;margin-bottom:0;">
+      <div class="contact-item"><span>📍</span><span>Unit 3, TIC Site, Amarata, Yenagoa, Bayelsa</span></div>
+      <div class="contact-item"><span>✉️</span><span>info@feasibilitygiants.com</span></div>
+      <div class="contact-item"><span>📞</span><span>+234 806 132 4564</span></div>
+    </div>
+    <div class="rc-badge">RC: 1939172 · CAC Registered</div>
+    <div class="about-services">
+      <div class="service-item">
+        <div class="service-icon blue">💡</div>
+        <div class="service-text">
+          <h4>Software Development</h4>
+          <p>Building enterprise-grade platforms for mobile, web, and desktop environments using modern technology stacks.</p>
+        </div>
+      </div>
+      <div class="service-item">
+        <div class="service-icon green">🔬</div>
+        <div class="service-text">
+          <h4>Research & Innovation</h4>
+          <p>Pioneering indigenous technological solutions tailored to African infrastructure challenges with global standards.</p>
+        </div>
+      </div>
+      <div class="service-item">
+        <div class="service-icon gold">🎓</div>
+        <div class="service-text">
+          <h4>ICT Training</h4>
+          <p>Equipping teams and institutions with the digital skills needed to operate at the frontier of technology.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="about-visual fade-up" style="transition-delay:0.15s;">
+    <!-- Main visual card -->
+    <div class="about-card about-card-main">
+      <div style="font-size:11px;color:rgba(255,255,255,0.3);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:20px;">Platform Overview</div>
+      <div style="display:flex;gap:10px;margin-bottom:20px;">
+        <!-- Mini logos -->
+        <div style="flex:1;background:rgba(31,175,90,0.1);border:1px solid rgba(31,175,90,0.2);border-radius:10px;padding:16px;text-align:center;">
+          <div style="font-size:20px;margin-bottom:6px;">📱</div>
+          <div style="font-size:10px;font-weight:600;color:var(--green);">FINDER</div>
+          <div style="font-size:9px;color:rgba(255,255,255,0.3);margin-top:2px;">Mobile</div>
+        </div>
+        <div style="flex:1;background:rgba(201,162,39,0.1);border:1px solid rgba(201,162,39,0.2);border-radius:10px;padding:16px;text-align:center;">
+          <div style="font-size:20px;margin-bottom:6px;">🏦</div>
+          <div style="font-size:10px;font-weight:600;color:var(--gold);">FINANCE</div>
+          <div style="font-size:9px;color:rgba(255,255,255,0.3);margin-top:2px;">SaaS</div>
+        </div>
+        <div style="flex:1;background:rgba(0,123,255,0.1);border:1px solid rgba(0,123,255,0.2);border-radius:10px;padding:16px;text-align:center;">
+          <div style="font-size:20px;margin-bottom:6px;">⚙️</div>
+          <div style="font-size:10px;font-weight:600;color:#60A5FA;">3D</div>
+          <div style="font-size:9px;color:rgba(255,255,255,0.3);margin-top:2px;">Desktop</div>
+        </div>
+      </div>
+      <!-- Tech Stack pills -->
+      <div style="display:flex;flex-wrap:wrap;gap:6px;">
+        <span style="padding:4px 10px;background:rgba(255,255,255,0.05);border-radius:100px;font-size:10px;color:rgba(255,255,255,0.4);">Next.js</span>
+        <span style="padding:4px 10px;background:rgba(255,255,255,0.05);border-radius:100px;font-size:10px;color:rgba(255,255,255,0.4);">React Native</span>
+        <span style="padding:4px 10px;background:rgba(255,255,255,0.05);border-radius:100px;font-size:10px;color:rgba(255,255,255,0.4);">NestJS</span>
+        <span style="padding:4px 10px;background:rgba(255,255,255,0.05);border-radius:100px;font-size:10px;color:rgba(255,255,255,0.4);">PostgreSQL</span>
+        <span style="padding:4px 10px;background:rgba(255,255,255,0.05);border-radius:100px;font-size:10px;color:rgba(255,255,255,0.4);">AWS</span>
+        <span style="padding:4px 10px;background:rgba(255,255,255,0.05);border-radius:100px;font-size:10px;color:rgba(255,255,255,0.4);">Cloudflare</span>
+      </div>
+    </div>
+
+    <!-- Floating stat cards -->
+    <div class="about-card about-card-stat1">
+      <div style="font-size:10px;color:rgba(255,255,255,0.3);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.1em;">Industries</div>
+      <div style="font-family:'Bebas Neue';font-size:28px;line-height:1;">Telecom<br><span style="color:var(--gold);">Finance</span><br>Oil & Gas</div>
+    </div>
+
+    <div class="about-card about-card-stat2">
+      <div style="font-size:10px;color:rgba(255,255,255,0.3);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.1em;">Status</div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div style="width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;"></div>
+        <span style="font-size:12px;font-weight:600;">Active Development</span>
+      </div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.35);margin-top:6px;">Prof. Bunakiye R. Japheth<br>CEO / Group President</div>
+    </div>
+  </div>
+</section>
+
+<!-- TECHNOLOGY SECTION -->
+<section id="technology" class="tech-section">
+  <div class="fade-up" style="max-width:600px;">
+    <div class="section-eyebrow">Technology</div>
+    <h2 class="section-title">World-Class<br>Engineering Stack</h2>
+  </div>
+
+  <div class="tech-grid fade-up" style="transition-delay:0.1s;">
+    <div class="tech-item">
+      <div class="tech-item-icon">⚛️</div>
+      <h4>Frontend</h4>
+      <p>Next.js, React Native, TailwindCSS, Framer Motion for responsive, performant interfaces.</p>
+    </div>
+    <div class="tech-item">
+      <div class="tech-item-icon">🖥️</div>
+      <h4>Backend</h4>
+      <p>NestJS microservices architecture, RESTful APIs, Python simulation engines.</p>
+    </div>
+    <div class="tech-item">
+      <div class="tech-item-icon">🗄️</div>
+      <h4>Database</h4>
+      <p>PostgreSQL for financial data, Redis for sessions, MongoDB for analytics logs.</p>
+    </div>
+    <div class="tech-item">
+      <div class="tech-item-icon">☁️</div>
+      <h4>Infrastructure</h4>
+      <p>AWS hosting, Cloudflare DNS & security, Docker containers, CI/CD with GitHub Actions.</p>
+    </div>
+    <div class="tech-item">
+      <div class="tech-item-icon">🔐</div>
+      <h4>Security</h4>
+      <p>AES-256 encryption, JWT auth, Role-Based Access Control, Multi-Factor Authentication.</p>
+    </div>
+    <div class="tech-item">
+      <div class="tech-item-icon">🌐</div>
+      <h4>Architecture</h4>
+      <p>Microservices + Micro-frontends with API Gateway and SSO across all platforms.</p>
+    </div>
+    <div class="tech-item">
+      <div class="tech-item-icon">🤖</div>
+      <h4>AI / ML</h4>
+      <p>Machine learning modules for anomaly detection, predictive analytics, and risk modeling.</p>
+    </div>
+    <div class="tech-item">
+      <div class="tech-item-icon">🗺️</div>
+      <h4>GIS Engine</h4>
+      <p>Integrated geospatial data processing for location intelligence and spill mapping.</p>
+    </div>
+  </div>
+</section>
+
+<!-- DOMAIN ARCHITECTURE -->
+<section style="padding:80px 60px;">
+  <div class="fade-up" style="text-align:center;margin-bottom:50px;">
+    <div class="section-eyebrow">Platform Architecture</div>
+    <h2 class="section-title">Unified Subdomain Ecosystem</h2>
+  </div>
+  <div class="fade-up" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;max-width:1000px;margin:0 auto;">
+    <div style="background:rgba(31,175,90,0.06);border:1px solid rgba(31,175,90,0.2);border-radius:12px;padding:20px 22px;">
+      <div style="font-size:10px;font-weight:700;color:var(--green);letter-spacing:0.1em;margin-bottom:8px;">MOBILE APP</div>
+      <div style="font-family:'Syne';font-weight:700;font-size:13px;margin-bottom:4px;">finder.feasibilitygiants.com</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.3);">Caller Identity Platform</div>
+    </div>
+    <div style="background:rgba(201,162,39,0.06);border:1px solid rgba(201,162,39,0.2);border-radius:12px;padding:20px 22px;">
+      <div style="font-size:10px;font-weight:700;color:var(--gold);letter-spacing:0.1em;margin-bottom:8px;">SAAS</div>
+      <div style="font-family:'Syne';font-weight:700;font-size:13px;margin-bottom:4px;">finance.feasibilitygiants.com</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.3);">Cooperative Finance Platform</div>
+    </div>
+    <div style="background:rgba(0,123,255,0.06);border:1px solid rgba(0,123,255,0.2);border-radius:12px;padding:20px 22px;">
+      <div style="font-size:10px;font-weight:700;color:#60A5FA;letter-spacing:0.1em;margin-bottom:8px;">ENTERPRISE</div>
+      <div style="font-family:'Syne';font-weight:700;font-size:13px;margin-bottom:4px;">3d.feasibilitygiants.com</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.3);">Engineering Simulation</div>
+    </div>
+    <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:20px 22px;">
+      <div style="font-size:10px;font-weight:700;color:rgba(255,255,255,0.4);letter-spacing:0.1em;margin-bottom:8px;">AUTH</div>
+      <div style="font-family:'Syne';font-weight:700;font-size:13px;margin-bottom:4px;">auth.feasibilitygiants.com</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.3);">SSO & Identity</div>
+    </div>
+    <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:20px 22px;">
+      <div style="font-size:10px;font-weight:700;color:rgba(255,255,255,0.4);letter-spacing:0.1em;margin-bottom:8px;">API</div>
+      <div style="font-family:'Syne';font-weight:700;font-size:13px;margin-bottom:4px;">api.feasibilitygiants.com</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.3);">API Gateway</div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPLIANCE / TRUST SECTION -->
+<section id="compliance" class="trust-section">
+  <div class="fade-up">
+    <div class="section-eyebrow" style="justify-content:center;">Trust & Compliance</div>
+    <h2 class="section-title">Built to Regulatory Standards</h2>
+    <p class="section-desc" style="margin:0 auto 0;">Our platforms are engineered with security, privacy, and regulatory compliance at their core — not as an afterthought.</p>
+  </div>
+  <div class="compliance-badges fade-up" style="transition-delay:0.1s;">
+    <div class="badge"><span class="badge-dot green"></span>NDPR Compliant</div>
+    <div class="badge"><span class="badge-dot gold"></span>CAC Registered · RC 1939172</div>
+    <div class="badge"><span class="badge-dot blue"></span>NIN Framework Integration</div>
+    <div class="badge"><span class="badge-dot green"></span>AES-256 Encryption</div>
+    <div class="badge"><span class="badge-dot orange"></span>GDPR Ready</div>
+    <div class="badge"><span class="badge-dot blue"></span>NCC Aligned</div>
+    <div class="badge"><span class="badge-dot gold"></span>Audit-Ready Outputs</div>
+    <div class="badge"><span class="badge-dot green"></span>Role-Based Access Control</div>
+  </div>
+  <!-- Three compliance pillars -->
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:rgba(255,255,255,0.04);border-radius:16px;overflow:hidden;max-width:900px;margin:0 auto;" class="fade-up">
+    <div style="padding:40px 32px;background:var(--dark-bg);text-align:left;">
+      <div style="font-size:28px;margin-bottom:16px;">🛡️</div>
+      <h4 style="font-family:'Syne';font-size:15px;font-weight:700;margin-bottom:8px;">Identity Security</h4>
+      <p style="font-size:12px;color:rgba(255,255,255,0.4);line-height:1.6;">FeasibilityFinder is designed in full alignment with NIMC and NCC standards for NIN integration and lawful data processing.</p>
+    </div>
+    <div style="padding:40px 32px;background:var(--dark-bg);text-align:left;border-left:1px solid rgba(255,255,255,0.04);border-right:1px solid rgba(255,255,255,0.04);">
+      <div style="font-size:28px;margin-bottom:16px;">⚖️</div>
+      <h4 style="font-family:'Syne';font-size:15px;font-weight:700;margin-bottom:8px;">Financial Compliance</h4>
+      <p style="font-size:12px;color:rgba(255,255,255,0.4);line-height:1.6;">FeasibilityFinance supports cooperative regulatory frameworks across Nigeria and international jurisdictions with full audit trails.</p>
+    </div>
+    <div style="padding:40px 32px;background:var(--dark-bg);text-align:left;">
+      <div style="font-size:28px;margin-bottom:16px;">🌍</div>
+      <h4 style="font-family:'Syne';font-size:15px;font-weight:700;margin-bottom:8px;">Environmental Standards</h4>
+      <p style="font-size:12px;color:rgba(255,255,255,0.4);line-height:1.6;">Feasibility3D is engineered to produce regulatory-grade environmental impact assessments aligned with DPR and ISO standards.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA SECTION -->
+<section class="cta-section fade-up" id="contact">
+  <div class="cta-inner">
+    <h2>Build with<br>Feasibility Giant</h2>
+    <p>Whether you're an enterprise, a cooperative society, a government agency, or a developer — we have a platform for you.</p>
+    <div class="cta-btns">
+      <a href="mailto:info@feasibilitygiants.com" class="btn-primary">Contact Us Now</a>
+      <a href="#products" class="btn-ghost">View All Products →</a>
+    </div>
+    <div class="contact-strip" style="justify-content:center;margin-top:40px;">
+      <div class="contact-item"><span>✉️</span><span>info@feasibilitygiants.com</span></div>
+      <div class="contact-item"><span>📞</span><span>+234 806 132 4564</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="#" class="nav-logo" style="text-decoration:none;">
+        <svg width="40" height="40" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M 72 28 A 30 30 0 1 0 72 72" stroke="#1A6BC8" stroke-width="13" stroke-linecap="round" fill="none"/>
+          <path d="M 42 66 L 72 36 L 72 54 M 72 36 L 54 36" stroke="url(#footerArrow)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <defs><linearGradient id="footerArrow" x1="42" y1="66" x2="72" y2="36" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#E8681A"/><stop offset="100%" stop-color="#F0A500"/></linearGradient></defs>
+        </svg>
+        <div class="nav-logo-text">
+          Feasibility Giant Company
+          <span>Feasibility & Software Consultants</span>
+        </div>
+      </a>
+      <p>Engineering Africa's Digital Infrastructure. Indigenous innovation for global impact — from Bayelsa to the world.</p>
+      <div class="footer-social">
+        <a href="#" class="social-link">in</a>
+        <a href="#" class="social-link">X</a>
+        <a href="#" class="social-link">▶</a>
+        <a href="#" class="social-link">f</a>
+        <a href="#" class="social-link">📸</a>
+      </div>
+    </div>
+
+    <div class="footer-col">
+      <h5>Products</h5>
+      <ul>
+        <li><a href="#">FeasibilityFinder</a></li>
+        <li><a href="#">FeasibilityFinance</a></li>
+        <li><a href="#">Feasibility3D</a></li>
+        <li><a href="#">API Gateway</a></li>
+        <li><a href="#">Auth System</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h5>Company</h5>
+      <ul>
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Research & Innovation</a></li>
+        <li><a href="#">ICT Training</a></li>
+        <li><a href="#">Partnerships</a></li>
+        <li><a href="#">Careers</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h5>Contact</h5>
+      <ul>
+        <li><a href="mailto:info@feasibilitygiants.com">info@feasibilitygiants.com</a></li>
+        <li><a href="tel:+2348061324564">+234 806 132 4564</a></li>
+        <li><a href="#">Unit 3, TIC Site</a></li>
+        <li><a href="#">Gabriel Okara Street</a></li>
+        <li><a href="#">Yenagoa, Bayelsa State</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>© 2026 Feasibility Giant Company Ltd. All rights reserved.</p>
+    <p class="footer-rc">RC: 1939172 · Feasibility & Software Consultants · @feasibilitygc</p>
+  </div>
+</footer>
+
+<script>
+  // Intersection Observer for fade-up animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  // Nav scroll effect
+  window.addEventListener('scroll', () => {
+    const nav = document.querySelector('nav');
+    if (window.scrollY > 50) {
+      nav.style.background = 'rgba(7,14,28,0.95)';
+    } else {
+      nav.style.background = 'rgba(7,14,28,0.75)';
+    }
+  });
+
+  // Smooth counter animation for stats
+  const countUp = (el, target, suffix = '') => {
+    let count = 0;
+    const increment = target / 50;
+    const timer = setInterval(() => {
+      count += increment;
+      if (count >= target) {
+        el.textContent = target + suffix;
+        clearInterval(timer);
+      } else {
+        el.textContent = Math.floor(count) + suffix;
+      }
+    }, 30);
+  };
+
+  // Product card mouse glow effect
+  document.querySelectorAll('.product-card').forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      card.style.setProperty('--mouse-x', x + 'px');
+      card.style.setProperty('--mouse-y', y + 'px');
+    });
+  });
+</script>
+</body>
+</html>

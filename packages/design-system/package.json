@@ -1,0 +1,24 @@
+{
+  "name": "@fg/design-system",
+  "version": "0.1.0",
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "dependencies": {
+    "@heroui/button": "*",
+    "@heroui/card": "*",
+    "@heroui/chip": "*",
+    "@heroui/divider": "*",
+    "@heroui/link": "*",
+    "@heroui/navbar": "*",
+    "@heroui/react": "^3.0.3",
+    "@heroui/system": "^2.4.28",
+    "tailwind-variants": "^0.3.1"
+  },
+  "devDependencies": {
+    "tailwindcss": "^4.2.0",
+    "typescript": "5.7.3"
+  }
+}

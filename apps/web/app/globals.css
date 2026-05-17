@@ -1,0 +1,82 @@
+@import "tailwindcss";
+@import "@heroui/styles";
+@source "../../../packages/ui/src/**/*.{ts,tsx}";
+@source "../../../packages/design-system/src/**/*.{ts,tsx,css}";
+
+
+@theme {
+  --font-bebas: var(--font-bebas);
+  --font-syne: var(--font-syne);
+  --font-dm-sans: var(--font-dm-sans);
+  --font-jetbrains: var(--font-jetbrains);
+  
+  --color-navy: var(--fg-navy);
+  --color-blue: var(--fg-blue);
+  --color-green: var(--fg-green);
+  --color-gold: var(--fg-gold);
+  --color-orange: var(--fg-orange);
+  --color-dark-bg: var(--fg-dark-bg);
+}
+
+body {
+  background: var(--fg-dark-bg);
+  color: #fff;
+  min-height: 100vh;
+  position: relative;
+  font-family: var(--font-dm-sans), sans-serif;
+}
+
+/* ── NOISE OVERLAY ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 50;
+  opacity: 0.4;
+}
+
+/* ── UTILITIES ── */
+@layer utilities {
+  .hero-grid {
+    background-image: 
+      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 100% 100% at 50% 0%, black 30%, transparent 80%);
+  }
+
+  .text-gradient {
+    background: linear-gradient(135deg, var(--fg-gold) 0%, var(--fg-orange) 50%, var(--fg-green) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  @keyframes fl1 {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-14px); }
+  }
+
+  @keyframes fl2 {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(10px); }
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.75); }
+  }
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}

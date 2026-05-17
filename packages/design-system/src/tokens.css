@@ -1,0 +1,52 @@
+:root {
+  /* ── BRAND PALETTE ── */
+  --fg-navy: #0A1F44;
+  --fg-blue: #1A4F8B;
+  --fg-green: #1FAF5A;
+  --fg-green-dark: #0E8A4F;
+  --fg-gold: #C9A227;
+  --fg-gold-light: #E8C45A;
+  --fg-orange: #E8681A;
+  --fg-electric: #007BFF;
+  
+  /* ── BACKGROUNDS ── */
+  --fg-dark-bg: #070E1C;
+  --fg-light-bg: #F4F6F9;
+  --fg-surface: #0D1525;
+  --fg-glass: rgba(255, 255, 255, 0.06);
+  --fg-glass-border: rgba(255, 255, 255, 0.12);
+  
+  /* ── PRODUCT COLORS ── */
+  --fg-finder-primary: #1FAF5A;
+  --fg-finance-primary: #C9A227;
+  --fg-threed-primary: #007BFF;
+
+  /* ── TYPOGRAPHY SCALE ── */
+  --fg-display-2xl: clamp(4rem, 10vw, 8rem);
+  --fg-display-xl: clamp(3rem, 7vw, 5rem);
+  --fg-display-lg: 3.75rem;
+  --fg-display-md: 3rem;
+  --fg-display-sm: 2.25rem;
+  
+  /* ── SPACING ── */
+  --fg-space-1: 4px;
+  --fg-space-2: 8px;
+  --fg-space-3: 12px;
+  --fg-space-4: 16px;
+  --fg-space-6: 24px;
+  --fg-space-10: 40px;
+  --fg-space-20: 80px;
+
+  /* ── RADIUS ── */
+  --fg-radius-sm: 6px;
+  --fg-radius-md: 10px;
+  --fg-radius-lg: 16px;
+  --fg-radius-xl: 20px;
+  --fg-radius-full: 9999px;
+
+  /* ── SEMANTIC ── */
+  --fg-success: var(--fg-green);
+  --fg-warning: var(--fg-gold);
+  --fg-error: #EF4444;
+  --fg-info: var(--fg-electric);
+}

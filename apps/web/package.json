@@ -1,0 +1,42 @@
+{
+  "name": "@fg/web",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@fg/design-system": "*",
+    "@fg/ui": "*",
+    "@heroui/button": "^2.2.32",
+    "@heroui/card": "^2.2.28",
+    "@heroui/chip": "^2.2.25",
+    "@heroui/divider": "^2.2.24",
+    "@heroui/link": "^2.2.26",
+    "@heroui/navbar": "^2.2.30",
+    "@heroui/react": "^3.0.4",
+    "@heroui/styles": "^3.0.4",
+    "@heroui/system": "^2.4.28",
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.38.0",
+    "lucide-react": "^0.468.0",
+    "next": "15.1.0",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
+    "tailwind-merge": "^3.5.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.2.0",
+    "@types/node": "^22",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "postcss": "^8.5",
+    "tailwindcss": "^4.2.0",
+    "typescript": "5.7.3"
+  }
+}
