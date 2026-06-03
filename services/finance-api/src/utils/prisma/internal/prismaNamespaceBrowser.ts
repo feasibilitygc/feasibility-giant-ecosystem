@@ -75,7 +75,8 @@ export const ModelName = {
   Session: 'Session',
   Transaction: 'Transaction',
   SystemSettings: 'SystemSettings',
-  SystemSettingsHistory: 'SystemSettingsHistory'
+  SystemSettingsHistory: 'SystemSettingsHistory',
+  Cooperative: 'Cooperative'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -102,7 +103,8 @@ export const UserScalarFieldEnum = {
   isActive: 'isActive',
   isMember: 'isMember',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  cooperativeId: 'cooperativeId'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -205,7 +207,8 @@ export const BiodataScalarFieldEnum = {
   isDeleted: 'isDeleted',
   membershipStatus: 'membershipStatus',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  cooperativeId: 'cooperativeId'
 } as const
 
 export type BiodataScalarFieldEnum = (typeof BiodataScalarFieldEnum)[keyof typeof BiodataScalarFieldEnum]
@@ -239,7 +242,8 @@ export const SavingsScalarFieldEnum = {
   isProcessed: 'isProcessed',
   status: 'status',
   description: 'description',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  cooperativeId: 'cooperativeId'
 } as const
 
 export type SavingsScalarFieldEnum = (typeof SavingsScalarFieldEnum)[keyof typeof SavingsScalarFieldEnum]
@@ -288,7 +292,8 @@ export const SharesScalarFieldEnum = {
   year: 'year',
   status: 'status',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  cooperativeId: 'cooperativeId'
 } as const
 
 export type SharesScalarFieldEnum = (typeof SharesScalarFieldEnum)[keyof typeof SharesScalarFieldEnum]
@@ -315,6 +320,7 @@ export const LoanScalarFieldEnum = {
   memberId: 'memberId',
   erpId: 'erpId',
   loanTypeId: 'loanTypeId',
+  cooperativeId: 'cooperativeId',
   principalAmount: 'principalAmount',
   interestAmount: 'interestAmount',
   totalAmount: 'totalAmount',
@@ -418,6 +424,7 @@ export const RequestScalarFieldEnum = {
   loanId: 'loanId',
   savingsId: 'savingsId',
   biodataId: 'biodataId',
+  cooperativeId: 'cooperativeId',
   personalSavingsId: 'personalSavingsId',
   notes: 'notes',
   createdAt: 'createdAt',
@@ -495,6 +502,7 @@ export const TransactionScalarFieldEnum = {
   initiatedBy: 'initiatedBy',
   approvedBy: 'approvedBy',
   requestId: 'requestId',
+  cooperativeId: 'cooperativeId',
   loanId: 'loanId',
   savingsId: 'savingsId',
   sharesId: 'sharesId',
@@ -533,6 +541,20 @@ export const SystemSettingsHistoryScalarFieldEnum = {
 } as const
 
 export type SystemSettingsHistoryScalarFieldEnum = (typeof SystemSettingsHistoryScalarFieldEnum)[keyof typeof SystemSettingsHistoryScalarFieldEnum]
+
+
+export const CooperativeScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  subdomain: 'subdomain',
+  customDomain: 'customDomain',
+  themeConfig: 'themeConfig',
+  systemSettings: 'systemSettings',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CooperativeScalarFieldEnum = (typeof CooperativeScalarFieldEnum)[keyof typeof CooperativeScalarFieldEnum]
 
 
 export const SortOrder = {

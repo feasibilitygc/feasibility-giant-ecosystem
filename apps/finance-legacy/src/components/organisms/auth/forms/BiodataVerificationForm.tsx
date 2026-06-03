@@ -8,18 +8,35 @@ import {
   Button,
   Alert,
   CircularProgress,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  FormHelperText,
+  Typography,
+  Skeleton,
 } from '@mui/material';
 import { AuthApiService } from '@/lib/api/services/authService';
+import { useCooperatives } from '@/lib/hooks/cooperative/useCooperatives';
+
 const authApi = new AuthApiService();
 
 interface BiodataVerificationFormProps {
   onStepComplete: () => void;
+  /** Pre-selected cooperative ID (e.g. injected by the tenant context on a subdomain) */
+  preselectedCooperativeId?: string;
 }
 
-export default function BiodataVerificationForm({ onStepComplete }: BiodataVerificationFormProps) {
-  const [step, setStep] = useState<'verify' | 'validate'>('verify');
+export default function BiodataVerificationForm({
+  onStepComplete,
+  preselectedCooperativeId,
+}: BiodataVerificationFormProps) {
+  const [step, setStep] = useState<'select-coop' | 'verify' | 'validate'>(
+    preselectedCooperativeId ? 'verify' : 'select-coop'
+  );
+  const [selectedCoopId, setSelectedCoopId] = useState(preselectedCooperativeId ?? '');
+  const [coopError, setCoopError] = useState('');
   const [formData, setFormData] = useState({
-    // erpId: '',
     phoneNumber: '',
     verificationCode: '',
   });
@@ -27,17 +44,27 @@ export default function BiodataVerificationForm({ onStepComplete }: BiodataVerif
   const [error, setError] = useState('');
   const router = useRouter();
 
+  const { data: cooperatives, isLoading: coopsLoading, isError: coopsError } = useCooperatives();
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
     setError('');
   };
 
+  const handleCoopNext = () => {
+    if (!selectedCoopId) {
+      setCoopError('Please select your cooperative before continuing.');
+      return;
+    }
+    setCoopError('');
+    setStep('verify');
+  };
+
   const handleVerify = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError('');
-
     try {
       await authApi.verifyBiodata(formData.phoneNumber);
       setStep('validate');
@@ -52,11 +79,13 @@ export default function BiodataVerificationForm({ onStepComplete }: BiodataVerif
     e.preventDefault();
     setLoading(true);
     setError('');
-
     try {
       await authApi.validateOTP(formData.verificationCode);
+      // Store selected cooperative for downstream account linking
+      if (selectedCoopId) {
+        sessionStorage.setItem('selected_cooperative_id', selectedCoopId);
+      }
       onStepComplete();
-    //   router.push('/register?erpId=' + formData.erpId);
     } catch (err: any) {
       setError(err.response?.data?.message || 'Invalid verification code.');
     } finally {
@@ -64,6 +93,71 @@ export default function BiodataVerificationForm({ onStepComplete }: BiodataVerif
     }
   };
 
+  // ── Step 0: Cooperative Selection ──
+  if (step === 'select-coop') {
+    return (
+      <Box>
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+          Select the cooperative you belong to. Your account will be linked to it upon verification.
+        </Typography>
+
+        {coopsLoading && (
+          <>
+            <Skeleton variant="rounded" height={56} sx={{ mb: 1 }} />
+            <Skeleton variant="text" width="60%" />
+          </>
+        )}
+
+        {coopsError && (
+          <Alert severity="warning" sx={{ mb: 2 }}>
+            Could not load the cooperative list. Please refresh or try again later.
+          </Alert>
+        )}
+
+        {!coopsLoading && !coopsError && (
+          <FormControl fullWidth error={!!coopError} sx={{ mb: 2 }}>
+            <InputLabel id="coop-select-label">Your Cooperative *</InputLabel>
+            <Select
+              labelId="coop-select-label"
+              id="coop-select"
+              value={selectedCoopId}
+              label="Your Cooperative *"
+              onChange={(e) => {
+                setSelectedCoopId(e.target.value);
+                setCoopError('');
+              }}
+            >
+              {cooperatives?.map((coop) => (
+                <MenuItem key={coop.id} value={coop.id}>
+                  {coop.name}
+                </MenuItem>
+              ))}
+            </Select>
+            {coopError && <FormHelperText>{coopError}</FormHelperText>}
+          </FormControl>
+        )}
+
+        <Button
+          fullWidth
+          variant="contained"
+          onClick={handleCoopNext}
+          disabled={coopsLoading}
+          sx={{ mt: 1, mb: 2 }}
+        >
+          Continue
+        </Button>
+        <Button
+          fullWidth
+          variant="text"
+          onClick={() => router.push('/auth/login')}
+        >
+          Back to Login
+        </Button>
+      </Box>
+    );
+  }
+
+  // ── Step 2: OTP Validation ──
   if (step === 'validate') {
     return (
       <Box component="form" onSubmit={handleValidate} noValidate>
@@ -105,6 +199,7 @@ export default function BiodataVerificationForm({ onStepComplete }: BiodataVerif
     );
   }
 
+  // ── Step 1: Phone Number Entry ──
   return (
     <Box component="form" onSubmit={handleVerify} noValidate>
       {error && (
@@ -136,10 +231,13 @@ export default function BiodataVerificationForm({ onStepComplete }: BiodataVerif
       <Button
         fullWidth
         variant="text"
-        onClick={() => router.push('/auth/login')}
+        onClick={() => {
+          if (!preselectedCooperativeId) setStep('select-coop');
+          else router.push('/auth/login');
+        }}
         disabled={loading}
       >
-        Back to Login
+        Back
       </Button>
     </Box>
   );

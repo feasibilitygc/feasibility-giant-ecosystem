@@ -276,7 +276,7 @@ export class PersonalSavingsController {
     getMemberSummary = async (req: Request, res: Response, next: NextFunction) => {
         try {
             // Get erpId from params
-            const { erpId } = req.params;
+            const erpId = req.params.erpId as string;
             
             if (!erpId) {
                 throw new ApiError('ERP ID is required', 400);

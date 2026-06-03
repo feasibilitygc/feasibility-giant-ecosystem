@@ -8,6 +8,27 @@ async function main() {
   try {
     console.log('Starting database seeding...');
 
+    // Step 0: Seed Default Cooperative
+    console.log('\n🏢 Seeding default cooperative...');
+    await prisma.cooperative.upsert({
+      where: { id: '00000000-0000-0000-0000-000000000000' },
+      update: {},
+      create: {
+        id: '00000000-0000-0000-0000-000000000000',
+        name: 'Master Cooperative',
+        subdomain: 'app',
+        themeConfig: {
+          primary_color: '#1A4F8B',
+          secondary_color: '#1FAF5A',
+          logo_url: null
+        },
+        systemSettings: {
+          allow_self_registration: true,
+          require_mfa: false
+        }
+      }
+    });
+
     // Step 1: Seed Banks
     console.log('\n🏦 Seeding banks...');
     await bankSeeder.main();

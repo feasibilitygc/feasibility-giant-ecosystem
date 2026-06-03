@@ -73,8 +73,8 @@ export default function LoginPage() {
               }}
             >
               <Image
-                src="/coop-nest-logo-ico.svg" // Replace with your actual logo path
-                alt="CoopNest"
+                src="/ff-logo.svg"
+                alt="FeasibilityFinance"
                 width={180}
                 height={48}
                 style={{ height: 'auto' }}
@@ -97,7 +97,7 @@ export default function LoginPage() {
                 color="textSecondary"
                 sx={{ mt: 1 }}
               >
-                Sign in to your CoopNest account
+                Sign in to your FeasibilityFinance account
               </Typography>
             </Box>            
             <LoginForm initialError={error} />
@@ -105,7 +105,7 @@ export default function LoginPage() {
         </Card>
         
         <Typography variant="body2" color="textSecondary" sx={{ mt: 4, textAlign: 'center' }}>
-          &copy; {new Date().getFullYear()} CoopNest. All rights reserved.        </Typography>
+          &copy; {new Date().getFullYear()} FeasibilityFinance. All rights reserved.        </Typography>
       </Box>
     </Container>
   );

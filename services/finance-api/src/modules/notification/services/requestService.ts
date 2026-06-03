@@ -34,7 +34,7 @@ export class RequestService {
         case RequestType.SAVINGS_WITHDRAWAL:
           await this.validateSavingsWithdrawal(biodataId, details);
           break;
-        case RequestType.SHARE_WITHDRAWAL:
+        case 'SHARE_WITHDRAWAL' as any:
           await this.validateShareWithdrawal(biodataId, details);
           break;
       }
@@ -200,7 +200,7 @@ export class RequestService {
         // Handle post-approval actions based on request type
         if (status === RequestStatus.APPROVED) {
           switch (request.type) {
-            case RequestType.BIODATA_APPROVAL:
+            case 'BIODATA_APPROVAL' as any:
               if (!request.biodataId) {
                 throw new RequestError(
                   RequestErrorCodes.INVALID_REQUEST_TYPE,
@@ -219,7 +219,7 @@ export class RequestService {
             case RequestType.SAVINGS_WITHDRAWAL:
               await this.handleSavingsWithdrawal(tx, request);
               break;
-            case RequestType.SHARE_WITHDRAWAL:
+            case 'SHARE_WITHDRAWAL' as any:
               await this.handleShareWithdrawal(tx, request);
               break;
           }
@@ -252,13 +252,13 @@ export class RequestService {
           connect: { id: loanTypeId }
         },
         erpId: request.Biodata.erpId,
-        loanAmount,
-        loanTenure,
-        loanPurpose: purpose,
+        principalAmount: loanAmount,
+        interestAmount: 0,
+        totalAmount: loanAmount,
+        remainingBalance: loanAmount,
+        tenure: loanTenure,
+        purpose: purpose,
         status: 'APPROVED',
-        totalInterest: 0, // Set appropriate interest calculation
-        totalRepayableAmount: loanAmount,
-        remainingBalance: loanAmount
       }
     });
   }
@@ -269,6 +269,8 @@ export class RequestService {
       data: {
         initiatedBy: request.userId,
         amount: request.content.amount,
+        baseType: 'DEBIT',
+        balanceAfter: 0,
         transactionType: 'SAVINGS_WITHDRAWAL',
         status: 'COMPLETED',
         module: 'SAVINGS',
@@ -279,7 +281,7 @@ export class RequestService {
     // Get the latest savings record for the user
     const latestSavings = await tx.savings.findFirst({
       where: { 
-        biodataId: request.biodataId,
+        memberId: request.biodataId,
         status: 'ACTIVE'
       },
       orderBy: [
@@ -296,7 +298,7 @@ export class RequestService {
       );
     }
     
-    if (new Decimal(request.content.amount).gt(latestSavings.totalAmount)) {
+    if (new Decimal(request.content.amount).gt(latestSavings.balance)) {
       throw new RequestError(
         RequestErrorCodes.INSUFFICIENT_BALANCE,
         'Withdrawal amount exceeds available balance',
@@ -308,7 +310,7 @@ export class RequestService {
     await tx.savings.update({
       where: { id: latestSavings.id },
       data: {
-        totalAmount: {
+        balance: {
           decrement: request.content.amount
         }
       }
@@ -322,7 +324,7 @@ export class RequestService {
         id: request.content.sharesId
       },
       data: {
-        totalAmount: {
+        totalValue: {
           decrement: request.content.amount
         }
       }
@@ -332,7 +334,7 @@ export class RequestService {
     if (request.content.recipientBiodataId) {
       const recipientShares = await tx.shares.findFirst({
         where: {
-          biodataId: request.content.recipientBiodataId
+          memberId: request.content.recipientBiodataId
         }
       });
 
@@ -342,7 +344,7 @@ export class RequestService {
             id: recipientShares.id
           },
           data: {
-            totalAmount: {
+            totalValue: {
               increment: request.content.amount
             }
           }
@@ -355,6 +357,8 @@ export class RequestService {
       data: {
         initiatedBy: request.userId,
         amount: request.content.amount,
+        baseType: 'DEBIT',
+        balanceAfter: 0,
         transactionType: 'SHARES_LIQUIDATION',
         status: 'COMPLETED',
         module: 'SHARES',

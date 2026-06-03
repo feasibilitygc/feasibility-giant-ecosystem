@@ -10,7 +10,7 @@ export interface AuthRequest extends Request {
       isAdmin: boolean;
     }>;
     permissions?: string[];
-    approvalLevel?: number;
+    approvalLevel: number;
   };
   session?: {
     id: string;

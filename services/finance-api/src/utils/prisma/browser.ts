@@ -142,3 +142,8 @@ export type SystemSettings = Prisma.SystemSettingsModel
  * 
  */
 export type SystemSettingsHistory = Prisma.SystemSettingsHistoryModel
+/**
+ * Model Cooperative
+ * 
+ */
+export type Cooperative = Prisma.CooperativeModel

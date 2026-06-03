@@ -5,11 +5,10 @@ import { RequestError, RequestErrorCodes } from '../../request/errors/request.er
 import { prisma } from '@/prisma';
 import { AuthenticatedRequest } from '../../../types/express';
 
-import { prisma } from '@/prisma';
 const requestService = new RequestService();
 
 export class RequestController {
-  async createRequest(req: AuthenticatedRequest, res: Response) {
+  async createRequest(req: any, res: Response) {
     try {
       const { biodataId } = req.body;
       const userId = req.user?.userId;
@@ -88,7 +87,7 @@ export class RequestController {
     }
   }
 
-  async updateRequest(req: AuthenticatedRequest, res: Response) {
+  async updateRequest(req: any, res: Response) {
     try {
       const { id } = req.params;
       const adminId = req.user?.userId;
@@ -170,7 +169,7 @@ export class RequestController {
     }
   }
 
-  async getUserRequests(req: AuthenticatedRequest, res: Response) {
+  async getUserRequests(req: any, res: Response) {
     try {
       const userId = req.user?.userId;
       

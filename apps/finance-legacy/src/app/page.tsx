@@ -23,7 +23,10 @@ import {
   Fade,
   Slide,
   Paper,
+  CircularProgress,
 } from "@mui/material"
+import { useTenant } from "@/lib/api/contexts/TenantContext"
+
 import {
   Savings as SavingsIcon,
   AccountBalance as AccountBalanceIcon,
@@ -48,6 +51,64 @@ import {
 export default function Home() {
   const theme = useTheme()
   const [selectedLoanType, setSelectedLoanType] = useState(0)
+  const { tenant, loading } = useTenant()
+
+  const isMasterSaaS = !tenant || tenant.cooperative_id === "00000000-0000-0000-0000-000000000000"
+  const coopName = tenant?.name || "FeasibilityFinance"
+
+  // Setup dynamic content based on context
+  const content = {
+    chipText: isMasterSaaS ? "🚀 SaaS Platform for Cooperatives" : `🏆 Welcome to ${coopName}`,
+    heroTitle: isMasterSaaS ? "Digitize Your Cooperative Society" : "Your Financial Growth Partner",
+    heroSubtitle: isMasterSaaS
+      ? "Feasibility Finance helps credit unions, thrift associations, and multipurpose cooperative societies digitize savings, loans, dividend engines, and member onboarding. Launch your custom portal in minutes."
+      : `Join ${coopName}. Save smart, borrow easy, and grow your wealth with competitive rates, flexible savings programs, and community-driven loans.`,
+    heroBenefits: isMasterSaaS
+      ? [
+          "White-labeled portal with your custom subdomain",
+          "Automated dividend calculation and distribution",
+          "Flexible member contribution & savings plans",
+          "Comprehensive auditor and treasurer reporting",
+        ]
+      : [
+          "Loans up to 3x your savings balance",
+          "Competitive interest rates from 10% annually",
+          "Flexible repayment terms up to 36 months",
+          "Annual savings withdrawal options",
+        ],
+    heroPrimaryBtnText: isMasterSaaS ? "Register Your Cooperative" : `Join ${coopName} Today`,
+    heroPrimaryBtnLink: isMasterSaaS ? "/auth/register-cooperative" : "/auth/register",
+    heroSecondaryBtnText: isMasterSaaS ? "View Features" : "Member Login",
+    heroSecondaryBtnLink: isMasterSaaS ? "#features" : "/auth/login",
+    ctaTitle: isMasterSaaS ? "Ready to Digitize Your Cooperative?" : "Ready to Start Your Financial Journey?",
+    ctaSubtitle: isMasterSaaS
+      ? "Launch your custom white-labeled portal and start onboarding members in minutes."
+      : `Join thousands of members who have transformed their financial lives with ${coopName}`,
+    ctaPrimaryBtnText: isMasterSaaS ? "Create Cooperative Portal" : "Become a Member",
+    ctaPrimaryBtnLink: isMasterSaaS ? "/auth/register-cooperative" : "/auth/register",
+  }
+
+  if (loading) {
+    return (
+      <Box
+        sx={{
+          minHeight: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          bgcolor: "background.default",
+          gap: 2,
+        }}
+      >
+        <CircularProgress size={50} />
+        <Typography variant="h6" fontWeight="600" color="text.secondary">
+          Loading portal configurations...
+        </Typography>
+      </Box>
+    )
+  }
+
 
   const loanTypes = [
     {
@@ -168,7 +229,7 @@ export default function Home() {
               <Fade in timeout={1000}>
                 <Box>
                   <Chip
-                    label="🏆 Trusted by 1,500+ Members"
+                    label={content.chipText}
                     sx={{
                       mb: 3,
                       bgcolor: "rgba(255,255,255,0.9)",
@@ -189,7 +250,7 @@ export default function Home() {
                       lineHeight: 1.2,
                     }}
                   >
-                    Your Financial Growth Partner
+                    {content.heroTitle}
                   </Typography>
                   <Typography
                     variant="h5"
@@ -200,18 +261,12 @@ export default function Home() {
                       lineHeight: 1.6,
                     }}
                   >
-                    Join Nigeria's most trusted cooperative society. Save smart, borrow easy, and grow your wealth with
-                    competitive rates and flexible terms.
+                    {content.heroSubtitle}
                   </Typography>
 
                   {/* Key Benefits */}
                   <Stack spacing={2} sx={{ mb: 4 }}>
-                    {[
-                      "Loans up to 3x your savings balance",
-                      "Competitive interest rates from 10% annually",
-                      "Flexible repayment terms up to 36 months",
-                      "Annual savings withdrawal options",
-                    ].map((benefit, index) => (
+                    {content.heroBenefits.map((benefit, index) => (
                       <Box key={index} sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                         <CheckCircleIcon color="success" sx={{ fontSize: 20 }} />
                         <Typography variant="body1" color="text.secondary">
@@ -226,7 +281,7 @@ export default function Home() {
                       variant="contained"
                       size="large"
                       component={Link}
-                      href="/auth/register"
+                      href={content.heroPrimaryBtnLink}
                       endIcon={<ArrowForwardIcon />}
                       sx={{
                         px: 4,
@@ -244,13 +299,13 @@ export default function Home() {
                         transition: "all 0.3s ease",
                       }}
                     >
-                      Join Coop Nest Today
+                      {content.heroPrimaryBtnText}
                     </Button>
                     <Button
                       variant="outlined"
                       size="large"
                       component={Link}
-                      href="/auth/login"
+                      href={content.heroSecondaryBtnLink}
                       sx={{
                         px: 4,
                         py: 1.5,
@@ -267,7 +322,7 @@ export default function Home() {
                         transition: "all 0.3s ease",
                       }}
                     >
-                      Member Login
+                      {content.heroSecondaryBtnText}
                     </Button>
                   </Stack>
                 </Box>
@@ -289,8 +344,8 @@ export default function Home() {
                   }}
                 >
                   <Image
-                    src="/coop-nest-logo.svg?height=500&width=500"
-                    alt="CoopNest - Cooperative Financial Management"
+                    src="/ff-logo.svg?height=500&width=500"
+                    alt={`${coopName} - Cooperative Financial Management`}
                     fill
                     style={{ objectFit: "contain" }}
                   />
@@ -442,9 +497,9 @@ export default function Home() {
                     },
                   }}
                   component={Link}
-                  href="/auth/login"
+                  href={isMasterSaaS ? "/auth/register-cooperative" : "/auth/login"}
                 >
-                  Apply Now
+                  {isMasterSaaS ? "Get Started" : "Apply Now"}
                 </Button>
               </Card>
             </Grid>
@@ -534,9 +589,9 @@ export default function Home() {
                   startIcon={<CalculateIcon />}
                   sx={{ borderRadius: 2, textTransform: "none" }}
                   component={Link}
-                  href="/auth/login"
+                  href={isMasterSaaS ? "/auth/register-cooperative" : "/auth/login"}
                 >
-                  Calculate Your Potential
+                  {isMasterSaaS ? "Start Your Cooperative" : "Calculate Your Potential"}
                 </Button>
               </Card>
             </Grid>
@@ -548,7 +603,7 @@ export default function Home() {
       <Container maxWidth="lg" sx={{ py: 8 }}>
         <Box sx={{ textAlign: "center", mb: 6 }}>
           <Typography variant="h3" fontWeight="bold" gutterBottom>
-            Why Choose Coop Nest?
+            Why Choose FeasibilityFinance?
           </Typography>
           <Typography variant="h6" color="text.secondary">
             Experience the benefits of cooperative banking with modern technology
@@ -747,10 +802,10 @@ export default function Home() {
       >
         <Container maxWidth="md">
           <Typography variant="h3" fontWeight="bold" gutterBottom>
-            Ready to Start Your Financial Journey?
+            {content.ctaTitle}
           </Typography>
           <Typography variant="h6" sx={{ mb: 4, opacity: 0.9 }}>
-            Join thousands of members who have transformed their financial lives with Coop Nest
+            {content.ctaSubtitle}
           </Typography>
 
           <Stack direction={{ xs: "column", sm: "row" }} spacing={2} justifyContent="center">
@@ -758,7 +813,7 @@ export default function Home() {
               variant="contained"
               size="large"
               component={Link}
-              href="/auth/register"
+              href={content.ctaPrimaryBtnLink}
               sx={{
                 bgcolor: "white",
                 color: theme.palette.primary.main,
@@ -774,7 +829,7 @@ export default function Home() {
                 },
               }}
             >
-              Become a Member
+              {content.ctaPrimaryBtnText}
             </Button>
             <Button
               variant="outlined"
@@ -809,11 +864,12 @@ export default function Home() {
           <Grid container spacing={4}>
             <Grid size={{ xs: 12, md: 4 }}>
               <Typography variant="h5" fontWeight="bold" gutterBottom>
-                Coop Nest
+                {coopName}
               </Typography>
               <Typography variant="body2" color="grey.400" sx={{ mb: 3 }}>
-                Your trusted partner in financial growth and community development. Building stronger financial futures
-                together.
+                {isMasterSaaS 
+                  ? "The leading SaaS platform for cooperative societies, credit unions, and multipurpose thrift associations." 
+                  : "Your trusted partner in financial growth and community development. Building stronger financial futures together."}
               </Typography>
               <Stack direction="row" spacing={1}>
                 <IconButton sx={{ color: "white" }}>
@@ -874,13 +930,13 @@ export default function Home() {
               </Typography>
               <Stack spacing={1}>
                 <Typography variant="body2" color="grey.400">
-                  📍 Federal University, Otuoke, Bayelsa, Nigeria
+                  📍 {isMasterSaaS ? "SaaS HQ, Lagos, Nigeria" : "Federal University, Otuoke, Bayelsa, Nigeria"}
                 </Typography>
                 <Typography variant="body2" color="grey.400">
-                  📞 +234 (0) 000 000 0000
+                  📞 {isMasterSaaS ? "+234 (0) 111 222 3333" : "+234 (0) 000 000 0000"}
                 </Typography>
                 <Typography variant="body2" color="grey.400">
-                  ✉️ info@fuosmcsl.online
+                  ✉️ {isMasterSaaS ? "support@feasibilityfinance.com" : "info@fuosmcsl.online"}
                 </Typography>
               </Stack>
             </Grid>
@@ -890,7 +946,7 @@ export default function Home() {
 
           <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap" }}>
             <Typography variant="body2" color="grey.400">
-              © 2025 Coop Nest. All rights reserved.
+              © 2026 {coopName}. All rights reserved.
             </Typography>
             <Stack direction="row" spacing={3}>
               <Typography variant="body2" color="grey.400">

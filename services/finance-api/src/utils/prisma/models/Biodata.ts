@@ -49,6 +49,7 @@ export type BiodataMinAggregateOutputType = {
   membershipStatus: $Enums.MembershipStatus | null
   createdAt: Date | null
   updatedAt: Date | null
+  cooperativeId: string | null
 }
 
 export type BiodataMaxAggregateOutputType = {
@@ -76,6 +77,7 @@ export type BiodataMaxAggregateOutputType = {
   membershipStatus: $Enums.MembershipStatus | null
   createdAt: Date | null
   updatedAt: Date | null
+  cooperativeId: string | null
 }
 
 export type BiodataCountAggregateOutputType = {
@@ -103,6 +105,7 @@ export type BiodataCountAggregateOutputType = {
   membershipStatus: number
   createdAt: number
   updatedAt: number
+  cooperativeId: number
   _all: number
 }
 
@@ -132,6 +135,7 @@ export type BiodataMinAggregateInputType = {
   membershipStatus?: true
   createdAt?: true
   updatedAt?: true
+  cooperativeId?: true
 }
 
 export type BiodataMaxAggregateInputType = {
@@ -159,6 +163,7 @@ export type BiodataMaxAggregateInputType = {
   membershipStatus?: true
   createdAt?: true
   updatedAt?: true
+  cooperativeId?: true
 }
 
 export type BiodataCountAggregateInputType = {
@@ -186,6 +191,7 @@ export type BiodataCountAggregateInputType = {
   membershipStatus?: true
   createdAt?: true
   updatedAt?: true
+  cooperativeId?: true
   _all?: true
 }
 
@@ -286,6 +292,7 @@ export type BiodataGroupByOutputType = {
   membershipStatus: $Enums.MembershipStatus
   createdAt: Date
   updatedAt: Date
+  cooperativeId: string | null
   _count: BiodataCountAggregateOutputType | null
   _min: BiodataMinAggregateOutputType | null
   _max: BiodataMaxAggregateOutputType | null
@@ -334,8 +341,10 @@ export type BiodataWhereInput = {
   membershipStatus?: Prisma.EnumMembershipStatusFilter<"Biodata"> | $Enums.MembershipStatus
   createdAt?: Prisma.DateTimeFilter<"Biodata"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Biodata"> | Date | string
+  cooperativeId?: Prisma.UuidNullableFilter<"Biodata"> | string | null
   accountInfo?: Prisma.AccountInfoListRelationFilter
   users?: Prisma.UserListRelationFilter
+  cooperative?: Prisma.XOR<Prisma.CooperativeNullableScalarRelationFilter, Prisma.CooperativeWhereInput> | null
   savings?: Prisma.SavingsListRelationFilter
   shares?: Prisma.SharesListRelationFilter
   loans?: Prisma.LoanListRelationFilter
@@ -368,8 +377,10 @@ export type BiodataOrderByWithRelationInput = {
   membershipStatus?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  cooperativeId?: Prisma.SortOrderInput | Prisma.SortOrder
   accountInfo?: Prisma.AccountInfoOrderByRelationAggregateInput
   users?: Prisma.UserOrderByRelationAggregateInput
+  cooperative?: Prisma.CooperativeOrderByWithRelationInput
   savings?: Prisma.SavingsOrderByRelationAggregateInput
   shares?: Prisma.SharesOrderByRelationAggregateInput
   loans?: Prisma.LoanOrderByRelationAggregateInput
@@ -406,8 +417,10 @@ export type BiodataWhereUniqueInput = Prisma.AtLeast<{
   membershipStatus?: Prisma.EnumMembershipStatusFilter<"Biodata"> | $Enums.MembershipStatus
   createdAt?: Prisma.DateTimeFilter<"Biodata"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Biodata"> | Date | string
+  cooperativeId?: Prisma.UuidNullableFilter<"Biodata"> | string | null
   accountInfo?: Prisma.AccountInfoListRelationFilter
   users?: Prisma.UserListRelationFilter
+  cooperative?: Prisma.XOR<Prisma.CooperativeNullableScalarRelationFilter, Prisma.CooperativeWhereInput> | null
   savings?: Prisma.SavingsListRelationFilter
   shares?: Prisma.SharesListRelationFilter
   loans?: Prisma.LoanListRelationFilter
@@ -440,6 +453,7 @@ export type BiodataOrderByWithAggregationInput = {
   membershipStatus?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  cooperativeId?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.BiodataCountOrderByAggregateInput
   _max?: Prisma.BiodataMaxOrderByAggregateInput
   _min?: Prisma.BiodataMinOrderByAggregateInput
@@ -473,6 +487,7 @@ export type BiodataScalarWhereWithAggregatesInput = {
   membershipStatus?: Prisma.EnumMembershipStatusWithAggregatesFilter<"Biodata"> | $Enums.MembershipStatus
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Biodata"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Biodata"> | Date | string
+  cooperativeId?: Prisma.UuidNullableWithAggregatesFilter<"Biodata"> | string | null
 }
 
 export type BiodataCreateInput = {
@@ -502,6 +517,7 @@ export type BiodataCreateInput = {
   updatedAt?: Date | string
   accountInfo?: Prisma.AccountInfoCreateNestedManyWithoutBiodataInput
   users?: Prisma.UserCreateNestedManyWithoutBiodataInput
+  cooperative?: Prisma.CooperativeCreateNestedOneWithoutBiodataInput
   savings?: Prisma.SavingsCreateNestedManyWithoutMemberInput
   shares?: Prisma.SharesCreateNestedManyWithoutMemberInput
   loans?: Prisma.LoanCreateNestedManyWithoutMemberInput
@@ -534,6 +550,7 @@ export type BiodataUncheckedCreateInput = {
   membershipStatus?: $Enums.MembershipStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  cooperativeId?: string | null
   accountInfo?: Prisma.AccountInfoUncheckedCreateNestedManyWithoutBiodataInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBiodataInput
   savings?: Prisma.SavingsUncheckedCreateNestedManyWithoutMemberInput
@@ -570,6 +587,7 @@ export type BiodataUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accountInfo?: Prisma.AccountInfoUpdateManyWithoutBiodataNestedInput
   users?: Prisma.UserUpdateManyWithoutBiodataNestedInput
+  cooperative?: Prisma.CooperativeUpdateOneWithoutBiodataNestedInput
   savings?: Prisma.SavingsUpdateManyWithoutMemberNestedInput
   shares?: Prisma.SharesUpdateManyWithoutMemberNestedInput
   loans?: Prisma.LoanUpdateManyWithoutMemberNestedInput
@@ -602,6 +620,7 @@ export type BiodataUncheckedUpdateInput = {
   membershipStatus?: Prisma.EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cooperativeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accountInfo?: Prisma.AccountInfoUncheckedUpdateManyWithoutBiodataNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBiodataNestedInput
   savings?: Prisma.SavingsUncheckedUpdateManyWithoutMemberNestedInput
@@ -636,6 +655,7 @@ export type BiodataCreateManyInput = {
   membershipStatus?: $Enums.MembershipStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  cooperativeId?: string | null
 }
 
 export type BiodataUpdateManyMutationInput = {
@@ -690,6 +710,7 @@ export type BiodataUncheckedUpdateManyInput = {
   membershipStatus?: Prisma.EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cooperativeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type BiodataNullableScalarRelationFilter = {
@@ -732,6 +753,7 @@ export type BiodataCountOrderByAggregateInput = {
   membershipStatus?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  cooperativeId?: Prisma.SortOrder
 }
 
 export type BiodataMaxOrderByAggregateInput = {
@@ -759,6 +781,7 @@ export type BiodataMaxOrderByAggregateInput = {
   membershipStatus?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  cooperativeId?: Prisma.SortOrder
 }
 
 export type BiodataMinOrderByAggregateInput = {
@@ -786,6 +809,17 @@ export type BiodataMinOrderByAggregateInput = {
   membershipStatus?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  cooperativeId?: Prisma.SortOrder
+}
+
+export type BiodataListRelationFilter = {
+  every?: Prisma.BiodataWhereInput
+  some?: Prisma.BiodataWhereInput
+  none?: Prisma.BiodataWhereInput
+}
+
+export type BiodataOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type BiodataCreateNestedOneWithoutUsersInput = {
@@ -894,6 +928,48 @@ export type BiodataUpdateOneWithoutRequestNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.BiodataUpdateToOneWithWhereWithoutRequestInput, Prisma.BiodataUpdateWithoutRequestInput>, Prisma.BiodataUncheckedUpdateWithoutRequestInput>
 }
 
+export type BiodataCreateNestedManyWithoutCooperativeInput = {
+  create?: Prisma.XOR<Prisma.BiodataCreateWithoutCooperativeInput, Prisma.BiodataUncheckedCreateWithoutCooperativeInput> | Prisma.BiodataCreateWithoutCooperativeInput[] | Prisma.BiodataUncheckedCreateWithoutCooperativeInput[]
+  connectOrCreate?: Prisma.BiodataCreateOrConnectWithoutCooperativeInput | Prisma.BiodataCreateOrConnectWithoutCooperativeInput[]
+  createMany?: Prisma.BiodataCreateManyCooperativeInputEnvelope
+  connect?: Prisma.BiodataWhereUniqueInput | Prisma.BiodataWhereUniqueInput[]
+}
+
+export type BiodataUncheckedCreateNestedManyWithoutCooperativeInput = {
+  create?: Prisma.XOR<Prisma.BiodataCreateWithoutCooperativeInput, Prisma.BiodataUncheckedCreateWithoutCooperativeInput> | Prisma.BiodataCreateWithoutCooperativeInput[] | Prisma.BiodataUncheckedCreateWithoutCooperativeInput[]
+  connectOrCreate?: Prisma.BiodataCreateOrConnectWithoutCooperativeInput | Prisma.BiodataCreateOrConnectWithoutCooperativeInput[]
+  createMany?: Prisma.BiodataCreateManyCooperativeInputEnvelope
+  connect?: Prisma.BiodataWhereUniqueInput | Prisma.BiodataWhereUniqueInput[]
+}
+
+export type BiodataUpdateManyWithoutCooperativeNestedInput = {
+  create?: Prisma.XOR<Prisma.BiodataCreateWithoutCooperativeInput, Prisma.BiodataUncheckedCreateWithoutCooperativeInput> | Prisma.BiodataCreateWithoutCooperativeInput[] | Prisma.BiodataUncheckedCreateWithoutCooperativeInput[]
+  connectOrCreate?: Prisma.BiodataCreateOrConnectWithoutCooperativeInput | Prisma.BiodataCreateOrConnectWithoutCooperativeInput[]
+  upsert?: Prisma.BiodataUpsertWithWhereUniqueWithoutCooperativeInput | Prisma.BiodataUpsertWithWhereUniqueWithoutCooperativeInput[]
+  createMany?: Prisma.BiodataCreateManyCooperativeInputEnvelope
+  set?: Prisma.BiodataWhereUniqueInput | Prisma.BiodataWhereUniqueInput[]
+  disconnect?: Prisma.BiodataWhereUniqueInput | Prisma.BiodataWhereUniqueInput[]
+  delete?: Prisma.BiodataWhereUniqueInput | Prisma.BiodataWhereUniqueInput[]
+  connect?: Prisma.BiodataWhereUniqueInput | Prisma.BiodataWhereUniqueInput[]
+  update?: Prisma.BiodataUpdateWithWhereUniqueWithoutCooperativeInput | Prisma.BiodataUpdateWithWhereUniqueWithoutCooperativeInput[]
+  updateMany?: Prisma.BiodataUpdateManyWithWhereWithoutCooperativeInput | Prisma.BiodataUpdateManyWithWhereWithoutCooperativeInput[]
+  deleteMany?: Prisma.BiodataScalarWhereInput | Prisma.BiodataScalarWhereInput[]
+}
+
+export type BiodataUncheckedUpdateManyWithoutCooperativeNestedInput = {
+  create?: Prisma.XOR<Prisma.BiodataCreateWithoutCooperativeInput, Prisma.BiodataUncheckedCreateWithoutCooperativeInput> | Prisma.BiodataCreateWithoutCooperativeInput[] | Prisma.BiodataUncheckedCreateWithoutCooperativeInput[]
+  connectOrCreate?: Prisma.BiodataCreateOrConnectWithoutCooperativeInput | Prisma.BiodataCreateOrConnectWithoutCooperativeInput[]
+  upsert?: Prisma.BiodataUpsertWithWhereUniqueWithoutCooperativeInput | Prisma.BiodataUpsertWithWhereUniqueWithoutCooperativeInput[]
+  createMany?: Prisma.BiodataCreateManyCooperativeInputEnvelope
+  set?: Prisma.BiodataWhereUniqueInput | Prisma.BiodataWhereUniqueInput[]
+  disconnect?: Prisma.BiodataWhereUniqueInput | Prisma.BiodataWhereUniqueInput[]
+  delete?: Prisma.BiodataWhereUniqueInput | Prisma.BiodataWhereUniqueInput[]
+  connect?: Prisma.BiodataWhereUniqueInput | Prisma.BiodataWhereUniqueInput[]
+  update?: Prisma.BiodataUpdateWithWhereUniqueWithoutCooperativeInput | Prisma.BiodataUpdateWithWhereUniqueWithoutCooperativeInput[]
+  updateMany?: Prisma.BiodataUpdateManyWithWhereWithoutCooperativeInput | Prisma.BiodataUpdateManyWithWhereWithoutCooperativeInput[]
+  deleteMany?: Prisma.BiodataScalarWhereInput | Prisma.BiodataScalarWhereInput[]
+}
+
 export type BiodataCreateWithoutUsersInput = {
   id?: string
   erpId: string
@@ -920,6 +996,7 @@ export type BiodataCreateWithoutUsersInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   accountInfo?: Prisma.AccountInfoCreateNestedManyWithoutBiodataInput
+  cooperative?: Prisma.CooperativeCreateNestedOneWithoutBiodataInput
   savings?: Prisma.SavingsCreateNestedManyWithoutMemberInput
   shares?: Prisma.SharesCreateNestedManyWithoutMemberInput
   loans?: Prisma.LoanCreateNestedManyWithoutMemberInput
@@ -952,6 +1029,7 @@ export type BiodataUncheckedCreateWithoutUsersInput = {
   membershipStatus?: $Enums.MembershipStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  cooperativeId?: string | null
   accountInfo?: Prisma.AccountInfoUncheckedCreateNestedManyWithoutBiodataInput
   savings?: Prisma.SavingsUncheckedCreateNestedManyWithoutMemberInput
   shares?: Prisma.SharesUncheckedCreateNestedManyWithoutMemberInput
@@ -1002,6 +1080,7 @@ export type BiodataUpdateWithoutUsersInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accountInfo?: Prisma.AccountInfoUpdateManyWithoutBiodataNestedInput
+  cooperative?: Prisma.CooperativeUpdateOneWithoutBiodataNestedInput
   savings?: Prisma.SavingsUpdateManyWithoutMemberNestedInput
   shares?: Prisma.SharesUpdateManyWithoutMemberNestedInput
   loans?: Prisma.LoanUpdateManyWithoutMemberNestedInput
@@ -1034,6 +1113,7 @@ export type BiodataUncheckedUpdateWithoutUsersInput = {
   membershipStatus?: Prisma.EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cooperativeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accountInfo?: Prisma.AccountInfoUncheckedUpdateManyWithoutBiodataNestedInput
   savings?: Prisma.SavingsUncheckedUpdateManyWithoutMemberNestedInput
   shares?: Prisma.SharesUncheckedUpdateManyWithoutMemberNestedInput
@@ -1068,6 +1148,7 @@ export type BiodataCreateWithoutAccountInfoInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   users?: Prisma.UserCreateNestedManyWithoutBiodataInput
+  cooperative?: Prisma.CooperativeCreateNestedOneWithoutBiodataInput
   savings?: Prisma.SavingsCreateNestedManyWithoutMemberInput
   shares?: Prisma.SharesCreateNestedManyWithoutMemberInput
   loans?: Prisma.LoanCreateNestedManyWithoutMemberInput
@@ -1100,6 +1181,7 @@ export type BiodataUncheckedCreateWithoutAccountInfoInput = {
   membershipStatus?: $Enums.MembershipStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  cooperativeId?: string | null
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBiodataInput
   savings?: Prisma.SavingsUncheckedCreateNestedManyWithoutMemberInput
   shares?: Prisma.SharesUncheckedCreateNestedManyWithoutMemberInput
@@ -1150,6 +1232,7 @@ export type BiodataUpdateWithoutAccountInfoInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUpdateManyWithoutBiodataNestedInput
+  cooperative?: Prisma.CooperativeUpdateOneWithoutBiodataNestedInput
   savings?: Prisma.SavingsUpdateManyWithoutMemberNestedInput
   shares?: Prisma.SharesUpdateManyWithoutMemberNestedInput
   loans?: Prisma.LoanUpdateManyWithoutMemberNestedInput
@@ -1182,6 +1265,7 @@ export type BiodataUncheckedUpdateWithoutAccountInfoInput = {
   membershipStatus?: Prisma.EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cooperativeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   users?: Prisma.UserUncheckedUpdateManyWithoutBiodataNestedInput
   savings?: Prisma.SavingsUncheckedUpdateManyWithoutMemberNestedInput
   shares?: Prisma.SharesUncheckedUpdateManyWithoutMemberNestedInput
@@ -1217,6 +1301,7 @@ export type BiodataCreateWithoutSavingsInput = {
   updatedAt?: Date | string
   accountInfo?: Prisma.AccountInfoCreateNestedManyWithoutBiodataInput
   users?: Prisma.UserCreateNestedManyWithoutBiodataInput
+  cooperative?: Prisma.CooperativeCreateNestedOneWithoutBiodataInput
   shares?: Prisma.SharesCreateNestedManyWithoutMemberInput
   loans?: Prisma.LoanCreateNestedManyWithoutMemberInput
   Request?: Prisma.RequestCreateNestedManyWithoutBiodataInput
@@ -1248,6 +1333,7 @@ export type BiodataUncheckedCreateWithoutSavingsInput = {
   membershipStatus?: $Enums.MembershipStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  cooperativeId?: string | null
   accountInfo?: Prisma.AccountInfoUncheckedCreateNestedManyWithoutBiodataInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBiodataInput
   shares?: Prisma.SharesUncheckedCreateNestedManyWithoutMemberInput
@@ -1299,6 +1385,7 @@ export type BiodataUpdateWithoutSavingsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accountInfo?: Prisma.AccountInfoUpdateManyWithoutBiodataNestedInput
   users?: Prisma.UserUpdateManyWithoutBiodataNestedInput
+  cooperative?: Prisma.CooperativeUpdateOneWithoutBiodataNestedInput
   shares?: Prisma.SharesUpdateManyWithoutMemberNestedInput
   loans?: Prisma.LoanUpdateManyWithoutMemberNestedInput
   Request?: Prisma.RequestUpdateManyWithoutBiodataNestedInput
@@ -1330,6 +1417,7 @@ export type BiodataUncheckedUpdateWithoutSavingsInput = {
   membershipStatus?: Prisma.EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cooperativeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accountInfo?: Prisma.AccountInfoUncheckedUpdateManyWithoutBiodataNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBiodataNestedInput
   shares?: Prisma.SharesUncheckedUpdateManyWithoutMemberNestedInput
@@ -1365,6 +1453,7 @@ export type BiodataCreateWithoutPersonalSavingsInput = {
   updatedAt?: Date | string
   accountInfo?: Prisma.AccountInfoCreateNestedManyWithoutBiodataInput
   users?: Prisma.UserCreateNestedManyWithoutBiodataInput
+  cooperative?: Prisma.CooperativeCreateNestedOneWithoutBiodataInput
   savings?: Prisma.SavingsCreateNestedManyWithoutMemberInput
   shares?: Prisma.SharesCreateNestedManyWithoutMemberInput
   loans?: Prisma.LoanCreateNestedManyWithoutMemberInput
@@ -1396,6 +1485,7 @@ export type BiodataUncheckedCreateWithoutPersonalSavingsInput = {
   membershipStatus?: $Enums.MembershipStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  cooperativeId?: string | null
   accountInfo?: Prisma.AccountInfoUncheckedCreateNestedManyWithoutBiodataInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBiodataInput
   savings?: Prisma.SavingsUncheckedCreateNestedManyWithoutMemberInput
@@ -1447,6 +1537,7 @@ export type BiodataUpdateWithoutPersonalSavingsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accountInfo?: Prisma.AccountInfoUpdateManyWithoutBiodataNestedInput
   users?: Prisma.UserUpdateManyWithoutBiodataNestedInput
+  cooperative?: Prisma.CooperativeUpdateOneWithoutBiodataNestedInput
   savings?: Prisma.SavingsUpdateManyWithoutMemberNestedInput
   shares?: Prisma.SharesUpdateManyWithoutMemberNestedInput
   loans?: Prisma.LoanUpdateManyWithoutMemberNestedInput
@@ -1478,6 +1569,7 @@ export type BiodataUncheckedUpdateWithoutPersonalSavingsInput = {
   membershipStatus?: Prisma.EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cooperativeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accountInfo?: Prisma.AccountInfoUncheckedUpdateManyWithoutBiodataNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBiodataNestedInput
   savings?: Prisma.SavingsUncheckedUpdateManyWithoutMemberNestedInput
@@ -1513,6 +1605,7 @@ export type BiodataCreateWithoutSharesInput = {
   updatedAt?: Date | string
   accountInfo?: Prisma.AccountInfoCreateNestedManyWithoutBiodataInput
   users?: Prisma.UserCreateNestedManyWithoutBiodataInput
+  cooperative?: Prisma.CooperativeCreateNestedOneWithoutBiodataInput
   savings?: Prisma.SavingsCreateNestedManyWithoutMemberInput
   loans?: Prisma.LoanCreateNestedManyWithoutMemberInput
   Request?: Prisma.RequestCreateNestedManyWithoutBiodataInput
@@ -1544,6 +1637,7 @@ export type BiodataUncheckedCreateWithoutSharesInput = {
   membershipStatus?: $Enums.MembershipStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  cooperativeId?: string | null
   accountInfo?: Prisma.AccountInfoUncheckedCreateNestedManyWithoutBiodataInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBiodataInput
   savings?: Prisma.SavingsUncheckedCreateNestedManyWithoutMemberInput
@@ -1595,6 +1689,7 @@ export type BiodataUpdateWithoutSharesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accountInfo?: Prisma.AccountInfoUpdateManyWithoutBiodataNestedInput
   users?: Prisma.UserUpdateManyWithoutBiodataNestedInput
+  cooperative?: Prisma.CooperativeUpdateOneWithoutBiodataNestedInput
   savings?: Prisma.SavingsUpdateManyWithoutMemberNestedInput
   loans?: Prisma.LoanUpdateManyWithoutMemberNestedInput
   Request?: Prisma.RequestUpdateManyWithoutBiodataNestedInput
@@ -1626,6 +1721,7 @@ export type BiodataUncheckedUpdateWithoutSharesInput = {
   membershipStatus?: Prisma.EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cooperativeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accountInfo?: Prisma.AccountInfoUncheckedUpdateManyWithoutBiodataNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBiodataNestedInput
   savings?: Prisma.SavingsUncheckedUpdateManyWithoutMemberNestedInput
@@ -1661,6 +1757,7 @@ export type BiodataCreateWithoutLoansInput = {
   updatedAt?: Date | string
   accountInfo?: Prisma.AccountInfoCreateNestedManyWithoutBiodataInput
   users?: Prisma.UserCreateNestedManyWithoutBiodataInput
+  cooperative?: Prisma.CooperativeCreateNestedOneWithoutBiodataInput
   savings?: Prisma.SavingsCreateNestedManyWithoutMemberInput
   shares?: Prisma.SharesCreateNestedManyWithoutMemberInput
   Request?: Prisma.RequestCreateNestedManyWithoutBiodataInput
@@ -1692,6 +1789,7 @@ export type BiodataUncheckedCreateWithoutLoansInput = {
   membershipStatus?: $Enums.MembershipStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  cooperativeId?: string | null
   accountInfo?: Prisma.AccountInfoUncheckedCreateNestedManyWithoutBiodataInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBiodataInput
   savings?: Prisma.SavingsUncheckedCreateNestedManyWithoutMemberInput
@@ -1743,6 +1841,7 @@ export type BiodataUpdateWithoutLoansInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accountInfo?: Prisma.AccountInfoUpdateManyWithoutBiodataNestedInput
   users?: Prisma.UserUpdateManyWithoutBiodataNestedInput
+  cooperative?: Prisma.CooperativeUpdateOneWithoutBiodataNestedInput
   savings?: Prisma.SavingsUpdateManyWithoutMemberNestedInput
   shares?: Prisma.SharesUpdateManyWithoutMemberNestedInput
   Request?: Prisma.RequestUpdateManyWithoutBiodataNestedInput
@@ -1774,6 +1873,7 @@ export type BiodataUncheckedUpdateWithoutLoansInput = {
   membershipStatus?: Prisma.EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cooperativeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accountInfo?: Prisma.AccountInfoUncheckedUpdateManyWithoutBiodataNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBiodataNestedInput
   savings?: Prisma.SavingsUncheckedUpdateManyWithoutMemberNestedInput
@@ -1809,6 +1909,7 @@ export type BiodataCreateWithoutRequestInput = {
   updatedAt?: Date | string
   accountInfo?: Prisma.AccountInfoCreateNestedManyWithoutBiodataInput
   users?: Prisma.UserCreateNestedManyWithoutBiodataInput
+  cooperative?: Prisma.CooperativeCreateNestedOneWithoutBiodataInput
   savings?: Prisma.SavingsCreateNestedManyWithoutMemberInput
   shares?: Prisma.SharesCreateNestedManyWithoutMemberInput
   loans?: Prisma.LoanCreateNestedManyWithoutMemberInput
@@ -1840,6 +1941,7 @@ export type BiodataUncheckedCreateWithoutRequestInput = {
   membershipStatus?: $Enums.MembershipStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  cooperativeId?: string | null
   accountInfo?: Prisma.AccountInfoUncheckedCreateNestedManyWithoutBiodataInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBiodataInput
   savings?: Prisma.SavingsUncheckedCreateNestedManyWithoutMemberInput
@@ -1891,6 +1993,7 @@ export type BiodataUpdateWithoutRequestInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accountInfo?: Prisma.AccountInfoUpdateManyWithoutBiodataNestedInput
   users?: Prisma.UserUpdateManyWithoutBiodataNestedInput
+  cooperative?: Prisma.CooperativeUpdateOneWithoutBiodataNestedInput
   savings?: Prisma.SavingsUpdateManyWithoutMemberNestedInput
   shares?: Prisma.SharesUpdateManyWithoutMemberNestedInput
   loans?: Prisma.LoanUpdateManyWithoutMemberNestedInput
@@ -1922,12 +2025,260 @@ export type BiodataUncheckedUpdateWithoutRequestInput = {
   membershipStatus?: Prisma.EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cooperativeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accountInfo?: Prisma.AccountInfoUncheckedUpdateManyWithoutBiodataNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBiodataNestedInput
   savings?: Prisma.SavingsUncheckedUpdateManyWithoutMemberNestedInput
   shares?: Prisma.SharesUncheckedUpdateManyWithoutMemberNestedInput
   loans?: Prisma.LoanUncheckedUpdateManyWithoutMemberNestedInput
   PersonalSavings?: Prisma.PersonalSavingsUncheckedUpdateManyWithoutMemberNestedInput
+}
+
+export type BiodataCreateWithoutCooperativeInput = {
+  id?: string
+  erpId: string
+  ippisId: string
+  firstName: string
+  middleName?: string | null
+  lastName: string
+  fullName: string
+  dateOfEmployment: Date | string
+  staffNo: string
+  department: string
+  residentialAddress: string
+  emailAddress: string
+  phoneNumber: string
+  nextOfKin: string
+  relationshipOfNextOfKin: string
+  nextOfKinPhoneNumber: string
+  nextOfKinEmailAddress: string
+  profilePhoto?: string | null
+  isVerified?: boolean
+  isApproved?: boolean
+  isDeleted?: boolean
+  membershipStatus?: $Enums.MembershipStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accountInfo?: Prisma.AccountInfoCreateNestedManyWithoutBiodataInput
+  users?: Prisma.UserCreateNestedManyWithoutBiodataInput
+  savings?: Prisma.SavingsCreateNestedManyWithoutMemberInput
+  shares?: Prisma.SharesCreateNestedManyWithoutMemberInput
+  loans?: Prisma.LoanCreateNestedManyWithoutMemberInput
+  Request?: Prisma.RequestCreateNestedManyWithoutBiodataInput
+  PersonalSavings?: Prisma.PersonalSavingsCreateNestedManyWithoutMemberInput
+}
+
+export type BiodataUncheckedCreateWithoutCooperativeInput = {
+  id?: string
+  erpId: string
+  ippisId: string
+  firstName: string
+  middleName?: string | null
+  lastName: string
+  fullName: string
+  dateOfEmployment: Date | string
+  staffNo: string
+  department: string
+  residentialAddress: string
+  emailAddress: string
+  phoneNumber: string
+  nextOfKin: string
+  relationshipOfNextOfKin: string
+  nextOfKinPhoneNumber: string
+  nextOfKinEmailAddress: string
+  profilePhoto?: string | null
+  isVerified?: boolean
+  isApproved?: boolean
+  isDeleted?: boolean
+  membershipStatus?: $Enums.MembershipStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accountInfo?: Prisma.AccountInfoUncheckedCreateNestedManyWithoutBiodataInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutBiodataInput
+  savings?: Prisma.SavingsUncheckedCreateNestedManyWithoutMemberInput
+  shares?: Prisma.SharesUncheckedCreateNestedManyWithoutMemberInput
+  loans?: Prisma.LoanUncheckedCreateNestedManyWithoutMemberInput
+  Request?: Prisma.RequestUncheckedCreateNestedManyWithoutBiodataInput
+  PersonalSavings?: Prisma.PersonalSavingsUncheckedCreateNestedManyWithoutMemberInput
+}
+
+export type BiodataCreateOrConnectWithoutCooperativeInput = {
+  where: Prisma.BiodataWhereUniqueInput
+  create: Prisma.XOR<Prisma.BiodataCreateWithoutCooperativeInput, Prisma.BiodataUncheckedCreateWithoutCooperativeInput>
+}
+
+export type BiodataCreateManyCooperativeInputEnvelope = {
+  data: Prisma.BiodataCreateManyCooperativeInput | Prisma.BiodataCreateManyCooperativeInput[]
+  skipDuplicates?: boolean
+}
+
+export type BiodataUpsertWithWhereUniqueWithoutCooperativeInput = {
+  where: Prisma.BiodataWhereUniqueInput
+  update: Prisma.XOR<Prisma.BiodataUpdateWithoutCooperativeInput, Prisma.BiodataUncheckedUpdateWithoutCooperativeInput>
+  create: Prisma.XOR<Prisma.BiodataCreateWithoutCooperativeInput, Prisma.BiodataUncheckedCreateWithoutCooperativeInput>
+}
+
+export type BiodataUpdateWithWhereUniqueWithoutCooperativeInput = {
+  where: Prisma.BiodataWhereUniqueInput
+  data: Prisma.XOR<Prisma.BiodataUpdateWithoutCooperativeInput, Prisma.BiodataUncheckedUpdateWithoutCooperativeInput>
+}
+
+export type BiodataUpdateManyWithWhereWithoutCooperativeInput = {
+  where: Prisma.BiodataScalarWhereInput
+  data: Prisma.XOR<Prisma.BiodataUpdateManyMutationInput, Prisma.BiodataUncheckedUpdateManyWithoutCooperativeInput>
+}
+
+export type BiodataScalarWhereInput = {
+  AND?: Prisma.BiodataScalarWhereInput | Prisma.BiodataScalarWhereInput[]
+  OR?: Prisma.BiodataScalarWhereInput[]
+  NOT?: Prisma.BiodataScalarWhereInput | Prisma.BiodataScalarWhereInput[]
+  id?: Prisma.UuidFilter<"Biodata"> | string
+  erpId?: Prisma.StringFilter<"Biodata"> | string
+  ippisId?: Prisma.StringFilter<"Biodata"> | string
+  firstName?: Prisma.StringFilter<"Biodata"> | string
+  middleName?: Prisma.StringNullableFilter<"Biodata"> | string | null
+  lastName?: Prisma.StringFilter<"Biodata"> | string
+  fullName?: Prisma.StringFilter<"Biodata"> | string
+  dateOfEmployment?: Prisma.DateTimeFilter<"Biodata"> | Date | string
+  staffNo?: Prisma.StringFilter<"Biodata"> | string
+  department?: Prisma.StringFilter<"Biodata"> | string
+  residentialAddress?: Prisma.StringFilter<"Biodata"> | string
+  emailAddress?: Prisma.StringFilter<"Biodata"> | string
+  phoneNumber?: Prisma.StringFilter<"Biodata"> | string
+  nextOfKin?: Prisma.StringFilter<"Biodata"> | string
+  relationshipOfNextOfKin?: Prisma.StringFilter<"Biodata"> | string
+  nextOfKinPhoneNumber?: Prisma.StringFilter<"Biodata"> | string
+  nextOfKinEmailAddress?: Prisma.StringFilter<"Biodata"> | string
+  profilePhoto?: Prisma.StringNullableFilter<"Biodata"> | string | null
+  isVerified?: Prisma.BoolFilter<"Biodata"> | boolean
+  isApproved?: Prisma.BoolFilter<"Biodata"> | boolean
+  isDeleted?: Prisma.BoolFilter<"Biodata"> | boolean
+  membershipStatus?: Prisma.EnumMembershipStatusFilter<"Biodata"> | $Enums.MembershipStatus
+  createdAt?: Prisma.DateTimeFilter<"Biodata"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Biodata"> | Date | string
+  cooperativeId?: Prisma.UuidNullableFilter<"Biodata"> | string | null
+}
+
+export type BiodataCreateManyCooperativeInput = {
+  id?: string
+  erpId: string
+  ippisId: string
+  firstName: string
+  middleName?: string | null
+  lastName: string
+  fullName: string
+  dateOfEmployment: Date | string
+  staffNo: string
+  department: string
+  residentialAddress: string
+  emailAddress: string
+  phoneNumber: string
+  nextOfKin: string
+  relationshipOfNextOfKin: string
+  nextOfKinPhoneNumber: string
+  nextOfKinEmailAddress: string
+  profilePhoto?: string | null
+  isVerified?: boolean
+  isApproved?: boolean
+  isDeleted?: boolean
+  membershipStatus?: $Enums.MembershipStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type BiodataUpdateWithoutCooperativeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  erpId?: Prisma.StringFieldUpdateOperationsInput | string
+  ippisId?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  middleName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  dateOfEmployment?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  staffNo?: Prisma.StringFieldUpdateOperationsInput | string
+  department?: Prisma.StringFieldUpdateOperationsInput | string
+  residentialAddress?: Prisma.StringFieldUpdateOperationsInput | string
+  emailAddress?: Prisma.StringFieldUpdateOperationsInput | string
+  phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  nextOfKin?: Prisma.StringFieldUpdateOperationsInput | string
+  relationshipOfNextOfKin?: Prisma.StringFieldUpdateOperationsInput | string
+  nextOfKinPhoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  nextOfKinEmailAddress?: Prisma.StringFieldUpdateOperationsInput | string
+  profilePhoto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isApproved?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  membershipStatus?: Prisma.EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accountInfo?: Prisma.AccountInfoUpdateManyWithoutBiodataNestedInput
+  users?: Prisma.UserUpdateManyWithoutBiodataNestedInput
+  savings?: Prisma.SavingsUpdateManyWithoutMemberNestedInput
+  shares?: Prisma.SharesUpdateManyWithoutMemberNestedInput
+  loans?: Prisma.LoanUpdateManyWithoutMemberNestedInput
+  Request?: Prisma.RequestUpdateManyWithoutBiodataNestedInput
+  PersonalSavings?: Prisma.PersonalSavingsUpdateManyWithoutMemberNestedInput
+}
+
+export type BiodataUncheckedUpdateWithoutCooperativeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  erpId?: Prisma.StringFieldUpdateOperationsInput | string
+  ippisId?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  middleName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  dateOfEmployment?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  staffNo?: Prisma.StringFieldUpdateOperationsInput | string
+  department?: Prisma.StringFieldUpdateOperationsInput | string
+  residentialAddress?: Prisma.StringFieldUpdateOperationsInput | string
+  emailAddress?: Prisma.StringFieldUpdateOperationsInput | string
+  phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  nextOfKin?: Prisma.StringFieldUpdateOperationsInput | string
+  relationshipOfNextOfKin?: Prisma.StringFieldUpdateOperationsInput | string
+  nextOfKinPhoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  nextOfKinEmailAddress?: Prisma.StringFieldUpdateOperationsInput | string
+  profilePhoto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isApproved?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  membershipStatus?: Prisma.EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accountInfo?: Prisma.AccountInfoUncheckedUpdateManyWithoutBiodataNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutBiodataNestedInput
+  savings?: Prisma.SavingsUncheckedUpdateManyWithoutMemberNestedInput
+  shares?: Prisma.SharesUncheckedUpdateManyWithoutMemberNestedInput
+  loans?: Prisma.LoanUncheckedUpdateManyWithoutMemberNestedInput
+  Request?: Prisma.RequestUncheckedUpdateManyWithoutBiodataNestedInput
+  PersonalSavings?: Prisma.PersonalSavingsUncheckedUpdateManyWithoutMemberNestedInput
+}
+
+export type BiodataUncheckedUpdateManyWithoutCooperativeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  erpId?: Prisma.StringFieldUpdateOperationsInput | string
+  ippisId?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  middleName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  dateOfEmployment?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  staffNo?: Prisma.StringFieldUpdateOperationsInput | string
+  department?: Prisma.StringFieldUpdateOperationsInput | string
+  residentialAddress?: Prisma.StringFieldUpdateOperationsInput | string
+  emailAddress?: Prisma.StringFieldUpdateOperationsInput | string
+  phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  nextOfKin?: Prisma.StringFieldUpdateOperationsInput | string
+  relationshipOfNextOfKin?: Prisma.StringFieldUpdateOperationsInput | string
+  nextOfKinPhoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  nextOfKinEmailAddress?: Prisma.StringFieldUpdateOperationsInput | string
+  profilePhoto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isApproved?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  membershipStatus?: Prisma.EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -2040,8 +2391,10 @@ export type BiodataSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   membershipStatus?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  cooperativeId?: boolean
   accountInfo?: boolean | Prisma.Biodata$accountInfoArgs<ExtArgs>
   users?: boolean | Prisma.Biodata$usersArgs<ExtArgs>
+  cooperative?: boolean | Prisma.Biodata$cooperativeArgs<ExtArgs>
   savings?: boolean | Prisma.Biodata$savingsArgs<ExtArgs>
   shares?: boolean | Prisma.Biodata$sharesArgs<ExtArgs>
   loans?: boolean | Prisma.Biodata$loansArgs<ExtArgs>
@@ -2075,6 +2428,8 @@ export type BiodataSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   membershipStatus?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  cooperativeId?: boolean
+  cooperative?: boolean | Prisma.Biodata$cooperativeArgs<ExtArgs>
 }, ExtArgs["result"]["biodata"]>
 
 export type BiodataSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -2102,6 +2457,8 @@ export type BiodataSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   membershipStatus?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  cooperativeId?: boolean
+  cooperative?: boolean | Prisma.Biodata$cooperativeArgs<ExtArgs>
 }, ExtArgs["result"]["biodata"]>
 
 export type BiodataSelectScalar = {
@@ -2129,12 +2486,14 @@ export type BiodataSelectScalar = {
   membershipStatus?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  cooperativeId?: boolean
 }
 
-export type BiodataOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "erpId" | "ippisId" | "firstName" | "middleName" | "lastName" | "fullName" | "dateOfEmployment" | "staffNo" | "department" | "residentialAddress" | "emailAddress" | "phoneNumber" | "nextOfKin" | "relationshipOfNextOfKin" | "nextOfKinPhoneNumber" | "nextOfKinEmailAddress" | "profilePhoto" | "isVerified" | "isApproved" | "isDeleted" | "membershipStatus" | "createdAt" | "updatedAt", ExtArgs["result"]["biodata"]>
+export type BiodataOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "erpId" | "ippisId" | "firstName" | "middleName" | "lastName" | "fullName" | "dateOfEmployment" | "staffNo" | "department" | "residentialAddress" | "emailAddress" | "phoneNumber" | "nextOfKin" | "relationshipOfNextOfKin" | "nextOfKinPhoneNumber" | "nextOfKinEmailAddress" | "profilePhoto" | "isVerified" | "isApproved" | "isDeleted" | "membershipStatus" | "createdAt" | "updatedAt" | "cooperativeId", ExtArgs["result"]["biodata"]>
 export type BiodataInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   accountInfo?: boolean | Prisma.Biodata$accountInfoArgs<ExtArgs>
   users?: boolean | Prisma.Biodata$usersArgs<ExtArgs>
+  cooperative?: boolean | Prisma.Biodata$cooperativeArgs<ExtArgs>
   savings?: boolean | Prisma.Biodata$savingsArgs<ExtArgs>
   shares?: boolean | Prisma.Biodata$sharesArgs<ExtArgs>
   loans?: boolean | Prisma.Biodata$loansArgs<ExtArgs>
@@ -2142,14 +2501,19 @@ export type BiodataInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
   PersonalSavings?: boolean | Prisma.Biodata$PersonalSavingsArgs<ExtArgs>
   _count?: boolean | Prisma.BiodataCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type BiodataIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type BiodataIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type BiodataIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  cooperative?: boolean | Prisma.Biodata$cooperativeArgs<ExtArgs>
+}
+export type BiodataIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  cooperative?: boolean | Prisma.Biodata$cooperativeArgs<ExtArgs>
+}
 
 export type $BiodataPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Biodata"
   objects: {
     accountInfo: Prisma.$AccountInfoPayload<ExtArgs>[]
     users: Prisma.$UserPayload<ExtArgs>[]
+    cooperative: Prisma.$CooperativePayload<ExtArgs> | null
     savings: Prisma.$SavingsPayload<ExtArgs>[]
     shares: Prisma.$SharesPayload<ExtArgs>[]
     loans: Prisma.$LoanPayload<ExtArgs>[]
@@ -2181,6 +2545,7 @@ export type $BiodataPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     membershipStatus: $Enums.MembershipStatus
     createdAt: Date
     updatedAt: Date
+    cooperativeId: string | null
   }, ExtArgs["result"]["biodata"]>
   composites: {}
 }
@@ -2577,6 +2942,7 @@ export interface Prisma__BiodataClient<T, Null = never, ExtArgs extends runtime.
   readonly [Symbol.toStringTag]: "PrismaPromise"
   accountInfo<T extends Prisma.Biodata$accountInfoArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Biodata$accountInfoArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AccountInfoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   users<T extends Prisma.Biodata$usersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Biodata$usersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  cooperative<T extends Prisma.Biodata$cooperativeArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Biodata$cooperativeArgs<ExtArgs>>): Prisma.Prisma__CooperativeClient<runtime.Types.Result.GetResult<Prisma.$CooperativePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   savings<T extends Prisma.Biodata$savingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Biodata$savingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SavingsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   shares<T extends Prisma.Biodata$sharesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Biodata$sharesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SharesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   loans<T extends Prisma.Biodata$loansArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Biodata$loansArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LoanPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -2635,6 +3001,7 @@ export interface BiodataFieldRefs {
   readonly membershipStatus: Prisma.FieldRef<"Biodata", 'MembershipStatus'>
   readonly createdAt: Prisma.FieldRef<"Biodata", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Biodata", 'DateTime'>
+  readonly cooperativeId: Prisma.FieldRef<"Biodata", 'String'>
 }
     
 
@@ -2889,6 +3256,10 @@ export type BiodataCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensi
    */
   data: Prisma.BiodataCreateManyInput | Prisma.BiodataCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BiodataIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -2959,6 +3330,10 @@ export type BiodataUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensi
    * Limit how many Biodata to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BiodataIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -3073,6 +3448,25 @@ export type Biodata$usersArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   take?: number
   skip?: number
   distinct?: Prisma.UserScalarFieldEnum | Prisma.UserScalarFieldEnum[]
+}
+
+/**
+ * Biodata.cooperative
+ */
+export type Biodata$cooperativeArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Cooperative
+   */
+  select?: Prisma.CooperativeSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Cooperative
+   */
+  omit?: Prisma.CooperativeOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CooperativeInclude<ExtArgs> | null
+  where?: Prisma.CooperativeWhereInput
 }
 
 /**

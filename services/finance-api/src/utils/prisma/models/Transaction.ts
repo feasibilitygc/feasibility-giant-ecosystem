@@ -48,6 +48,7 @@ export type TransactionMinAggregateOutputType = {
   initiatedBy: string | null
   approvedBy: string | null
   requestId: string | null
+  cooperativeId: string | null
   loanId: string | null
   savingsId: string | null
   sharesId: string | null
@@ -69,6 +70,7 @@ export type TransactionMaxAggregateOutputType = {
   initiatedBy: string | null
   approvedBy: string | null
   requestId: string | null
+  cooperativeId: string | null
   loanId: string | null
   savingsId: string | null
   sharesId: string | null
@@ -91,6 +93,7 @@ export type TransactionCountAggregateOutputType = {
   initiatedBy: number
   approvedBy: number
   requestId: number
+  cooperativeId: number
   loanId: number
   savingsId: number
   sharesId: number
@@ -124,6 +127,7 @@ export type TransactionMinAggregateInputType = {
   initiatedBy?: true
   approvedBy?: true
   requestId?: true
+  cooperativeId?: true
   loanId?: true
   savingsId?: true
   sharesId?: true
@@ -145,6 +149,7 @@ export type TransactionMaxAggregateInputType = {
   initiatedBy?: true
   approvedBy?: true
   requestId?: true
+  cooperativeId?: true
   loanId?: true
   savingsId?: true
   sharesId?: true
@@ -167,6 +172,7 @@ export type TransactionCountAggregateInputType = {
   initiatedBy?: true
   approvedBy?: true
   requestId?: true
+  cooperativeId?: true
   loanId?: true
   savingsId?: true
   sharesId?: true
@@ -276,6 +282,7 @@ export type TransactionGroupByOutputType = {
   initiatedBy: string
   approvedBy: string | null
   requestId: string | null
+  cooperativeId: string | null
   loanId: string | null
   savingsId: string | null
   sharesId: string | null
@@ -321,6 +328,7 @@ export type TransactionWhereInput = {
   initiatedBy?: Prisma.UuidFilter<"Transaction"> | string
   approvedBy?: Prisma.UuidNullableFilter<"Transaction"> | string | null
   requestId?: Prisma.UuidNullableFilter<"Transaction"> | string | null
+  cooperativeId?: Prisma.UuidNullableFilter<"Transaction"> | string | null
   loanId?: Prisma.UuidNullableFilter<"Transaction"> | string | null
   savingsId?: Prisma.UuidNullableFilter<"Transaction"> | string | null
   sharesId?: Prisma.UuidNullableFilter<"Transaction"> | string | null
@@ -331,6 +339,7 @@ export type TransactionWhereInput = {
   initiator?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   approver?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   request?: Prisma.XOR<Prisma.RequestNullableScalarRelationFilter, Prisma.RequestWhereInput> | null
+  cooperative?: Prisma.XOR<Prisma.CooperativeNullableScalarRelationFilter, Prisma.CooperativeWhereInput> | null
   loan?: Prisma.XOR<Prisma.LoanNullableScalarRelationFilter, Prisma.LoanWhereInput> | null
   savings?: Prisma.XOR<Prisma.SavingsNullableScalarRelationFilter, Prisma.SavingsWhereInput> | null
   shares?: Prisma.XOR<Prisma.SharesNullableScalarRelationFilter, Prisma.SharesWhereInput> | null
@@ -353,6 +362,7 @@ export type TransactionOrderByWithRelationInput = {
   initiatedBy?: Prisma.SortOrder
   approvedBy?: Prisma.SortOrderInput | Prisma.SortOrder
   requestId?: Prisma.SortOrderInput | Prisma.SortOrder
+  cooperativeId?: Prisma.SortOrderInput | Prisma.SortOrder
   loanId?: Prisma.SortOrderInput | Prisma.SortOrder
   savingsId?: Prisma.SortOrderInput | Prisma.SortOrder
   sharesId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -363,6 +373,7 @@ export type TransactionOrderByWithRelationInput = {
   initiator?: Prisma.UserOrderByWithRelationInput
   approver?: Prisma.UserOrderByWithRelationInput
   request?: Prisma.RequestOrderByWithRelationInput
+  cooperative?: Prisma.CooperativeOrderByWithRelationInput
   loan?: Prisma.LoanOrderByWithRelationInput
   savings?: Prisma.SavingsOrderByWithRelationInput
   shares?: Prisma.SharesOrderByWithRelationInput
@@ -388,6 +399,7 @@ export type TransactionWhereUniqueInput = Prisma.AtLeast<{
   initiatedBy?: Prisma.UuidFilter<"Transaction"> | string
   approvedBy?: Prisma.UuidNullableFilter<"Transaction"> | string | null
   requestId?: Prisma.UuidNullableFilter<"Transaction"> | string | null
+  cooperativeId?: Prisma.UuidNullableFilter<"Transaction"> | string | null
   loanId?: Prisma.UuidNullableFilter<"Transaction"> | string | null
   savingsId?: Prisma.UuidNullableFilter<"Transaction"> | string | null
   sharesId?: Prisma.UuidNullableFilter<"Transaction"> | string | null
@@ -398,6 +410,7 @@ export type TransactionWhereUniqueInput = Prisma.AtLeast<{
   initiator?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   approver?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   request?: Prisma.XOR<Prisma.RequestNullableScalarRelationFilter, Prisma.RequestWhereInput> | null
+  cooperative?: Prisma.XOR<Prisma.CooperativeNullableScalarRelationFilter, Prisma.CooperativeWhereInput> | null
   loan?: Prisma.XOR<Prisma.LoanNullableScalarRelationFilter, Prisma.LoanWhereInput> | null
   savings?: Prisma.XOR<Prisma.SavingsNullableScalarRelationFilter, Prisma.SavingsWhereInput> | null
   shares?: Prisma.XOR<Prisma.SharesNullableScalarRelationFilter, Prisma.SharesWhereInput> | null
@@ -420,6 +433,7 @@ export type TransactionOrderByWithAggregationInput = {
   initiatedBy?: Prisma.SortOrder
   approvedBy?: Prisma.SortOrderInput | Prisma.SortOrder
   requestId?: Prisma.SortOrderInput | Prisma.SortOrder
+  cooperativeId?: Prisma.SortOrderInput | Prisma.SortOrder
   loanId?: Prisma.SortOrderInput | Prisma.SortOrder
   savingsId?: Prisma.SortOrderInput | Prisma.SortOrder
   sharesId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -450,6 +464,7 @@ export type TransactionScalarWhereWithAggregatesInput = {
   initiatedBy?: Prisma.UuidWithAggregatesFilter<"Transaction"> | string
   approvedBy?: Prisma.UuidNullableWithAggregatesFilter<"Transaction"> | string | null
   requestId?: Prisma.UuidNullableWithAggregatesFilter<"Transaction"> | string | null
+  cooperativeId?: Prisma.UuidNullableWithAggregatesFilter<"Transaction"> | string | null
   loanId?: Prisma.UuidNullableWithAggregatesFilter<"Transaction"> | string | null
   savingsId?: Prisma.UuidNullableWithAggregatesFilter<"Transaction"> | string | null
   sharesId?: Prisma.UuidNullableWithAggregatesFilter<"Transaction"> | string | null
@@ -474,6 +489,7 @@ export type TransactionCreateInput = {
   initiator: Prisma.UserCreateNestedOneWithoutInitiatedTxnsInput
   approver?: Prisma.UserCreateNestedOneWithoutApprovedTxnsInput
   request?: Prisma.RequestCreateNestedOneWithoutTransactionsInput
+  cooperative?: Prisma.CooperativeCreateNestedOneWithoutTransactionsInput
   loan?: Prisma.LoanCreateNestedOneWithoutTransactionInput
   savings?: Prisma.SavingsCreateNestedOneWithoutTransactionsInput
   shares?: Prisma.SharesCreateNestedOneWithoutTransactionsInput
@@ -496,6 +512,7 @@ export type TransactionUncheckedCreateInput = {
   initiatedBy: string
   approvedBy?: string | null
   requestId?: string | null
+  cooperativeId?: string | null
   loanId?: string | null
   savingsId?: string | null
   sharesId?: string | null
@@ -522,6 +539,7 @@ export type TransactionUpdateInput = {
   initiator?: Prisma.UserUpdateOneRequiredWithoutInitiatedTxnsNestedInput
   approver?: Prisma.UserUpdateOneWithoutApprovedTxnsNestedInput
   request?: Prisma.RequestUpdateOneWithoutTransactionsNestedInput
+  cooperative?: Prisma.CooperativeUpdateOneWithoutTransactionsNestedInput
   loan?: Prisma.LoanUpdateOneWithoutTransactionNestedInput
   savings?: Prisma.SavingsUpdateOneWithoutTransactionsNestedInput
   shares?: Prisma.SharesUpdateOneWithoutTransactionsNestedInput
@@ -544,6 +562,7 @@ export type TransactionUncheckedUpdateInput = {
   initiatedBy?: Prisma.StringFieldUpdateOperationsInput | string
   approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cooperativeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   loanId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   savingsId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sharesId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -568,6 +587,7 @@ export type TransactionCreateManyInput = {
   initiatedBy: string
   approvedBy?: string | null
   requestId?: string | null
+  cooperativeId?: string | null
   loanId?: string | null
   savingsId?: string | null
   sharesId?: string | null
@@ -604,6 +624,7 @@ export type TransactionUncheckedUpdateManyInput = {
   initiatedBy?: Prisma.StringFieldUpdateOperationsInput | string
   approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cooperativeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   loanId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   savingsId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sharesId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -641,6 +662,7 @@ export type TransactionCountOrderByAggregateInput = {
   initiatedBy?: Prisma.SortOrder
   approvedBy?: Prisma.SortOrder
   requestId?: Prisma.SortOrder
+  cooperativeId?: Prisma.SortOrder
   loanId?: Prisma.SortOrder
   savingsId?: Prisma.SortOrder
   sharesId?: Prisma.SortOrder
@@ -667,6 +689,7 @@ export type TransactionMaxOrderByAggregateInput = {
   initiatedBy?: Prisma.SortOrder
   approvedBy?: Prisma.SortOrder
   requestId?: Prisma.SortOrder
+  cooperativeId?: Prisma.SortOrder
   loanId?: Prisma.SortOrder
   savingsId?: Prisma.SortOrder
   sharesId?: Prisma.SortOrder
@@ -688,6 +711,7 @@ export type TransactionMinOrderByAggregateInput = {
   initiatedBy?: Prisma.SortOrder
   approvedBy?: Prisma.SortOrder
   requestId?: Prisma.SortOrder
+  cooperativeId?: Prisma.SortOrder
   loanId?: Prisma.SortOrder
   savingsId?: Prisma.SortOrder
   sharesId?: Prisma.SortOrder
@@ -1082,6 +1106,48 @@ export type TransactionUncheckedUpdateManyWithoutParentTransactionNestedInput = 
   deleteMany?: Prisma.TransactionScalarWhereInput | Prisma.TransactionScalarWhereInput[]
 }
 
+export type TransactionCreateNestedManyWithoutCooperativeInput = {
+  create?: Prisma.XOR<Prisma.TransactionCreateWithoutCooperativeInput, Prisma.TransactionUncheckedCreateWithoutCooperativeInput> | Prisma.TransactionCreateWithoutCooperativeInput[] | Prisma.TransactionUncheckedCreateWithoutCooperativeInput[]
+  connectOrCreate?: Prisma.TransactionCreateOrConnectWithoutCooperativeInput | Prisma.TransactionCreateOrConnectWithoutCooperativeInput[]
+  createMany?: Prisma.TransactionCreateManyCooperativeInputEnvelope
+  connect?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+}
+
+export type TransactionUncheckedCreateNestedManyWithoutCooperativeInput = {
+  create?: Prisma.XOR<Prisma.TransactionCreateWithoutCooperativeInput, Prisma.TransactionUncheckedCreateWithoutCooperativeInput> | Prisma.TransactionCreateWithoutCooperativeInput[] | Prisma.TransactionUncheckedCreateWithoutCooperativeInput[]
+  connectOrCreate?: Prisma.TransactionCreateOrConnectWithoutCooperativeInput | Prisma.TransactionCreateOrConnectWithoutCooperativeInput[]
+  createMany?: Prisma.TransactionCreateManyCooperativeInputEnvelope
+  connect?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+}
+
+export type TransactionUpdateManyWithoutCooperativeNestedInput = {
+  create?: Prisma.XOR<Prisma.TransactionCreateWithoutCooperativeInput, Prisma.TransactionUncheckedCreateWithoutCooperativeInput> | Prisma.TransactionCreateWithoutCooperativeInput[] | Prisma.TransactionUncheckedCreateWithoutCooperativeInput[]
+  connectOrCreate?: Prisma.TransactionCreateOrConnectWithoutCooperativeInput | Prisma.TransactionCreateOrConnectWithoutCooperativeInput[]
+  upsert?: Prisma.TransactionUpsertWithWhereUniqueWithoutCooperativeInput | Prisma.TransactionUpsertWithWhereUniqueWithoutCooperativeInput[]
+  createMany?: Prisma.TransactionCreateManyCooperativeInputEnvelope
+  set?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  disconnect?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  delete?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  connect?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  update?: Prisma.TransactionUpdateWithWhereUniqueWithoutCooperativeInput | Prisma.TransactionUpdateWithWhereUniqueWithoutCooperativeInput[]
+  updateMany?: Prisma.TransactionUpdateManyWithWhereWithoutCooperativeInput | Prisma.TransactionUpdateManyWithWhereWithoutCooperativeInput[]
+  deleteMany?: Prisma.TransactionScalarWhereInput | Prisma.TransactionScalarWhereInput[]
+}
+
+export type TransactionUncheckedUpdateManyWithoutCooperativeNestedInput = {
+  create?: Prisma.XOR<Prisma.TransactionCreateWithoutCooperativeInput, Prisma.TransactionUncheckedCreateWithoutCooperativeInput> | Prisma.TransactionCreateWithoutCooperativeInput[] | Prisma.TransactionUncheckedCreateWithoutCooperativeInput[]
+  connectOrCreate?: Prisma.TransactionCreateOrConnectWithoutCooperativeInput | Prisma.TransactionCreateOrConnectWithoutCooperativeInput[]
+  upsert?: Prisma.TransactionUpsertWithWhereUniqueWithoutCooperativeInput | Prisma.TransactionUpsertWithWhereUniqueWithoutCooperativeInput[]
+  createMany?: Prisma.TransactionCreateManyCooperativeInputEnvelope
+  set?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  disconnect?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  delete?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  connect?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  update?: Prisma.TransactionUpdateWithWhereUniqueWithoutCooperativeInput | Prisma.TransactionUpdateWithWhereUniqueWithoutCooperativeInput[]
+  updateMany?: Prisma.TransactionUpdateManyWithWhereWithoutCooperativeInput | Prisma.TransactionUpdateManyWithWhereWithoutCooperativeInput[]
+  deleteMany?: Prisma.TransactionScalarWhereInput | Prisma.TransactionScalarWhereInput[]
+}
+
 export type TransactionCreateWithoutInitiatorInput = {
   id?: string
   transactionType: $Enums.TransactionType
@@ -1096,6 +1162,7 @@ export type TransactionCreateWithoutInitiatorInput = {
   completedAt?: Date | string | null
   approver?: Prisma.UserCreateNestedOneWithoutApprovedTxnsInput
   request?: Prisma.RequestCreateNestedOneWithoutTransactionsInput
+  cooperative?: Prisma.CooperativeCreateNestedOneWithoutTransactionsInput
   loan?: Prisma.LoanCreateNestedOneWithoutTransactionInput
   savings?: Prisma.SavingsCreateNestedOneWithoutTransactionsInput
   shares?: Prisma.SharesCreateNestedOneWithoutTransactionsInput
@@ -1117,6 +1184,7 @@ export type TransactionUncheckedCreateWithoutInitiatorInput = {
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   approvedBy?: string | null
   requestId?: string | null
+  cooperativeId?: string | null
   loanId?: string | null
   savingsId?: string | null
   sharesId?: string | null
@@ -1152,6 +1220,7 @@ export type TransactionCreateWithoutApproverInput = {
   completedAt?: Date | string | null
   initiator: Prisma.UserCreateNestedOneWithoutInitiatedTxnsInput
   request?: Prisma.RequestCreateNestedOneWithoutTransactionsInput
+  cooperative?: Prisma.CooperativeCreateNestedOneWithoutTransactionsInput
   loan?: Prisma.LoanCreateNestedOneWithoutTransactionInput
   savings?: Prisma.SavingsCreateNestedOneWithoutTransactionsInput
   shares?: Prisma.SharesCreateNestedOneWithoutTransactionsInput
@@ -1173,6 +1242,7 @@ export type TransactionUncheckedCreateWithoutApproverInput = {
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   initiatedBy: string
   requestId?: string | null
+  cooperativeId?: string | null
   loanId?: string | null
   savingsId?: string | null
   sharesId?: string | null
@@ -1226,6 +1296,7 @@ export type TransactionScalarWhereInput = {
   initiatedBy?: Prisma.UuidFilter<"Transaction"> | string
   approvedBy?: Prisma.UuidNullableFilter<"Transaction"> | string | null
   requestId?: Prisma.UuidNullableFilter<"Transaction"> | string | null
+  cooperativeId?: Prisma.UuidNullableFilter<"Transaction"> | string | null
   loanId?: Prisma.UuidNullableFilter<"Transaction"> | string | null
   savingsId?: Prisma.UuidNullableFilter<"Transaction"> | string | null
   sharesId?: Prisma.UuidNullableFilter<"Transaction"> | string | null
@@ -1266,6 +1337,7 @@ export type TransactionCreateWithoutSavingsInput = {
   initiator: Prisma.UserCreateNestedOneWithoutInitiatedTxnsInput
   approver?: Prisma.UserCreateNestedOneWithoutApprovedTxnsInput
   request?: Prisma.RequestCreateNestedOneWithoutTransactionsInput
+  cooperative?: Prisma.CooperativeCreateNestedOneWithoutTransactionsInput
   loan?: Prisma.LoanCreateNestedOneWithoutTransactionInput
   shares?: Prisma.SharesCreateNestedOneWithoutTransactionsInput
   personalSavings?: Prisma.PersonalSavingsCreateNestedOneWithoutTransactionsInput
@@ -1287,6 +1359,7 @@ export type TransactionUncheckedCreateWithoutSavingsInput = {
   initiatedBy: string
   approvedBy?: string | null
   requestId?: string | null
+  cooperativeId?: string | null
   loanId?: string | null
   sharesId?: string | null
   personalSavingsId?: string | null
@@ -1338,6 +1411,7 @@ export type TransactionCreateWithoutPersonalSavingsInput = {
   initiator: Prisma.UserCreateNestedOneWithoutInitiatedTxnsInput
   approver?: Prisma.UserCreateNestedOneWithoutApprovedTxnsInput
   request?: Prisma.RequestCreateNestedOneWithoutTransactionsInput
+  cooperative?: Prisma.CooperativeCreateNestedOneWithoutTransactionsInput
   loan?: Prisma.LoanCreateNestedOneWithoutTransactionInput
   savings?: Prisma.SavingsCreateNestedOneWithoutTransactionsInput
   shares?: Prisma.SharesCreateNestedOneWithoutTransactionsInput
@@ -1359,6 +1433,7 @@ export type TransactionUncheckedCreateWithoutPersonalSavingsInput = {
   initiatedBy: string
   approvedBy?: string | null
   requestId?: string | null
+  cooperativeId?: string | null
   loanId?: string | null
   savingsId?: string | null
   sharesId?: string | null
@@ -1410,6 +1485,7 @@ export type TransactionCreateWithoutSharesInput = {
   initiator: Prisma.UserCreateNestedOneWithoutInitiatedTxnsInput
   approver?: Prisma.UserCreateNestedOneWithoutApprovedTxnsInput
   request?: Prisma.RequestCreateNestedOneWithoutTransactionsInput
+  cooperative?: Prisma.CooperativeCreateNestedOneWithoutTransactionsInput
   loan?: Prisma.LoanCreateNestedOneWithoutTransactionInput
   savings?: Prisma.SavingsCreateNestedOneWithoutTransactionsInput
   personalSavings?: Prisma.PersonalSavingsCreateNestedOneWithoutTransactionsInput
@@ -1431,6 +1507,7 @@ export type TransactionUncheckedCreateWithoutSharesInput = {
   initiatedBy: string
   approvedBy?: string | null
   requestId?: string | null
+  cooperativeId?: string | null
   loanId?: string | null
   savingsId?: string | null
   personalSavingsId?: string | null
@@ -1482,6 +1559,7 @@ export type TransactionCreateWithoutLoanInput = {
   initiator: Prisma.UserCreateNestedOneWithoutInitiatedTxnsInput
   approver?: Prisma.UserCreateNestedOneWithoutApprovedTxnsInput
   request?: Prisma.RequestCreateNestedOneWithoutTransactionsInput
+  cooperative?: Prisma.CooperativeCreateNestedOneWithoutTransactionsInput
   savings?: Prisma.SavingsCreateNestedOneWithoutTransactionsInput
   shares?: Prisma.SharesCreateNestedOneWithoutTransactionsInput
   personalSavings?: Prisma.PersonalSavingsCreateNestedOneWithoutTransactionsInput
@@ -1503,6 +1581,7 @@ export type TransactionUncheckedCreateWithoutLoanInput = {
   initiatedBy: string
   approvedBy?: string | null
   requestId?: string | null
+  cooperativeId?: string | null
   savingsId?: string | null
   sharesId?: string | null
   personalSavingsId?: string | null
@@ -1553,6 +1632,7 @@ export type TransactionCreateWithoutRequestInput = {
   completedAt?: Date | string | null
   initiator: Prisma.UserCreateNestedOneWithoutInitiatedTxnsInput
   approver?: Prisma.UserCreateNestedOneWithoutApprovedTxnsInput
+  cooperative?: Prisma.CooperativeCreateNestedOneWithoutTransactionsInput
   loan?: Prisma.LoanCreateNestedOneWithoutTransactionInput
   savings?: Prisma.SavingsCreateNestedOneWithoutTransactionsInput
   shares?: Prisma.SharesCreateNestedOneWithoutTransactionsInput
@@ -1574,6 +1654,7 @@ export type TransactionUncheckedCreateWithoutRequestInput = {
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   initiatedBy: string
   approvedBy?: string | null
+  cooperativeId?: string | null
   loanId?: string | null
   savingsId?: string | null
   sharesId?: string | null
@@ -1626,6 +1707,7 @@ export type TransactionCreateWithoutNotificationsInput = {
   initiator: Prisma.UserCreateNestedOneWithoutInitiatedTxnsInput
   approver?: Prisma.UserCreateNestedOneWithoutApprovedTxnsInput
   request?: Prisma.RequestCreateNestedOneWithoutTransactionsInput
+  cooperative?: Prisma.CooperativeCreateNestedOneWithoutTransactionsInput
   loan?: Prisma.LoanCreateNestedOneWithoutTransactionInput
   savings?: Prisma.SavingsCreateNestedOneWithoutTransactionsInput
   shares?: Prisma.SharesCreateNestedOneWithoutTransactionsInput
@@ -1647,6 +1729,7 @@ export type TransactionUncheckedCreateWithoutNotificationsInput = {
   initiatedBy: string
   approvedBy?: string | null
   requestId?: string | null
+  cooperativeId?: string | null
   loanId?: string | null
   savingsId?: string | null
   sharesId?: string | null
@@ -1688,6 +1771,7 @@ export type TransactionUpdateWithoutNotificationsInput = {
   initiator?: Prisma.UserUpdateOneRequiredWithoutInitiatedTxnsNestedInput
   approver?: Prisma.UserUpdateOneWithoutApprovedTxnsNestedInput
   request?: Prisma.RequestUpdateOneWithoutTransactionsNestedInput
+  cooperative?: Prisma.CooperativeUpdateOneWithoutTransactionsNestedInput
   loan?: Prisma.LoanUpdateOneWithoutTransactionNestedInput
   savings?: Prisma.SavingsUpdateOneWithoutTransactionsNestedInput
   shares?: Prisma.SharesUpdateOneWithoutTransactionsNestedInput
@@ -1709,6 +1793,7 @@ export type TransactionUncheckedUpdateWithoutNotificationsInput = {
   initiatedBy?: Prisma.StringFieldUpdateOperationsInput | string
   approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cooperativeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   loanId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   savingsId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sharesId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1734,6 +1819,7 @@ export type TransactionCreateWithoutChildTransactionsInput = {
   initiator: Prisma.UserCreateNestedOneWithoutInitiatedTxnsInput
   approver?: Prisma.UserCreateNestedOneWithoutApprovedTxnsInput
   request?: Prisma.RequestCreateNestedOneWithoutTransactionsInput
+  cooperative?: Prisma.CooperativeCreateNestedOneWithoutTransactionsInput
   loan?: Prisma.LoanCreateNestedOneWithoutTransactionInput
   savings?: Prisma.SavingsCreateNestedOneWithoutTransactionsInput
   shares?: Prisma.SharesCreateNestedOneWithoutTransactionsInput
@@ -1755,6 +1841,7 @@ export type TransactionUncheckedCreateWithoutChildTransactionsInput = {
   initiatedBy: string
   approvedBy?: string | null
   requestId?: string | null
+  cooperativeId?: string | null
   loanId?: string | null
   savingsId?: string | null
   sharesId?: string | null
@@ -1785,6 +1872,7 @@ export type TransactionCreateWithoutParentTransactionInput = {
   initiator: Prisma.UserCreateNestedOneWithoutInitiatedTxnsInput
   approver?: Prisma.UserCreateNestedOneWithoutApprovedTxnsInput
   request?: Prisma.RequestCreateNestedOneWithoutTransactionsInput
+  cooperative?: Prisma.CooperativeCreateNestedOneWithoutTransactionsInput
   loan?: Prisma.LoanCreateNestedOneWithoutTransactionInput
   savings?: Prisma.SavingsCreateNestedOneWithoutTransactionsInput
   shares?: Prisma.SharesCreateNestedOneWithoutTransactionsInput
@@ -1806,6 +1894,7 @@ export type TransactionUncheckedCreateWithoutParentTransactionInput = {
   initiatedBy: string
   approvedBy?: string | null
   requestId?: string | null
+  cooperativeId?: string | null
   loanId?: string | null
   savingsId?: string | null
   sharesId?: string | null
@@ -1852,6 +1941,7 @@ export type TransactionUpdateWithoutChildTransactionsInput = {
   initiator?: Prisma.UserUpdateOneRequiredWithoutInitiatedTxnsNestedInput
   approver?: Prisma.UserUpdateOneWithoutApprovedTxnsNestedInput
   request?: Prisma.RequestUpdateOneWithoutTransactionsNestedInput
+  cooperative?: Prisma.CooperativeUpdateOneWithoutTransactionsNestedInput
   loan?: Prisma.LoanUpdateOneWithoutTransactionNestedInput
   savings?: Prisma.SavingsUpdateOneWithoutTransactionsNestedInput
   shares?: Prisma.SharesUpdateOneWithoutTransactionsNestedInput
@@ -1873,6 +1963,7 @@ export type TransactionUncheckedUpdateWithoutChildTransactionsInput = {
   initiatedBy?: Prisma.StringFieldUpdateOperationsInput | string
   approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cooperativeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   loanId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   savingsId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sharesId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1899,6 +1990,80 @@ export type TransactionUpdateManyWithWhereWithoutParentTransactionInput = {
   data: Prisma.XOR<Prisma.TransactionUpdateManyMutationInput, Prisma.TransactionUncheckedUpdateManyWithoutParentTransactionInput>
 }
 
+export type TransactionCreateWithoutCooperativeInput = {
+  id?: string
+  transactionType: $Enums.TransactionType
+  baseType: $Enums.TransactionType
+  module: $Enums.TransactionModule
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  balanceAfter: runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: $Enums.TransactionStatus
+  description?: string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  completedAt?: Date | string | null
+  initiator: Prisma.UserCreateNestedOneWithoutInitiatedTxnsInput
+  approver?: Prisma.UserCreateNestedOneWithoutApprovedTxnsInput
+  request?: Prisma.RequestCreateNestedOneWithoutTransactionsInput
+  loan?: Prisma.LoanCreateNestedOneWithoutTransactionInput
+  savings?: Prisma.SavingsCreateNestedOneWithoutTransactionsInput
+  shares?: Prisma.SharesCreateNestedOneWithoutTransactionsInput
+  personalSavings?: Prisma.PersonalSavingsCreateNestedOneWithoutTransactionsInput
+  parentTransaction?: Prisma.TransactionCreateNestedOneWithoutChildTransactionsInput
+  childTransactions?: Prisma.TransactionCreateNestedManyWithoutParentTransactionInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutTransactionInput
+}
+
+export type TransactionUncheckedCreateWithoutCooperativeInput = {
+  id?: string
+  transactionType: $Enums.TransactionType
+  baseType: $Enums.TransactionType
+  module: $Enums.TransactionModule
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  balanceAfter: runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: $Enums.TransactionStatus
+  description?: string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  initiatedBy: string
+  approvedBy?: string | null
+  requestId?: string | null
+  loanId?: string | null
+  savingsId?: string | null
+  sharesId?: string | null
+  personalSavingsId?: string | null
+  parentTxnId?: string | null
+  createdAt?: Date | string
+  completedAt?: Date | string | null
+  childTransactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutParentTransactionInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTransactionInput
+}
+
+export type TransactionCreateOrConnectWithoutCooperativeInput = {
+  where: Prisma.TransactionWhereUniqueInput
+  create: Prisma.XOR<Prisma.TransactionCreateWithoutCooperativeInput, Prisma.TransactionUncheckedCreateWithoutCooperativeInput>
+}
+
+export type TransactionCreateManyCooperativeInputEnvelope = {
+  data: Prisma.TransactionCreateManyCooperativeInput | Prisma.TransactionCreateManyCooperativeInput[]
+  skipDuplicates?: boolean
+}
+
+export type TransactionUpsertWithWhereUniqueWithoutCooperativeInput = {
+  where: Prisma.TransactionWhereUniqueInput
+  update: Prisma.XOR<Prisma.TransactionUpdateWithoutCooperativeInput, Prisma.TransactionUncheckedUpdateWithoutCooperativeInput>
+  create: Prisma.XOR<Prisma.TransactionCreateWithoutCooperativeInput, Prisma.TransactionUncheckedCreateWithoutCooperativeInput>
+}
+
+export type TransactionUpdateWithWhereUniqueWithoutCooperativeInput = {
+  where: Prisma.TransactionWhereUniqueInput
+  data: Prisma.XOR<Prisma.TransactionUpdateWithoutCooperativeInput, Prisma.TransactionUncheckedUpdateWithoutCooperativeInput>
+}
+
+export type TransactionUpdateManyWithWhereWithoutCooperativeInput = {
+  where: Prisma.TransactionScalarWhereInput
+  data: Prisma.XOR<Prisma.TransactionUpdateManyMutationInput, Prisma.TransactionUncheckedUpdateManyWithoutCooperativeInput>
+}
+
 export type TransactionCreateManyInitiatorInput = {
   id?: string
   transactionType: $Enums.TransactionType
@@ -1911,6 +2076,7 @@ export type TransactionCreateManyInitiatorInput = {
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   approvedBy?: string | null
   requestId?: string | null
+  cooperativeId?: string | null
   loanId?: string | null
   savingsId?: string | null
   sharesId?: string | null
@@ -1932,6 +2098,7 @@ export type TransactionCreateManyApproverInput = {
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   initiatedBy: string
   requestId?: string | null
+  cooperativeId?: string | null
   loanId?: string | null
   savingsId?: string | null
   sharesId?: string | null
@@ -1955,6 +2122,7 @@ export type TransactionUpdateWithoutInitiatorInput = {
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   approver?: Prisma.UserUpdateOneWithoutApprovedTxnsNestedInput
   request?: Prisma.RequestUpdateOneWithoutTransactionsNestedInput
+  cooperative?: Prisma.CooperativeUpdateOneWithoutTransactionsNestedInput
   loan?: Prisma.LoanUpdateOneWithoutTransactionNestedInput
   savings?: Prisma.SavingsUpdateOneWithoutTransactionsNestedInput
   shares?: Prisma.SharesUpdateOneWithoutTransactionsNestedInput
@@ -1976,6 +2144,7 @@ export type TransactionUncheckedUpdateWithoutInitiatorInput = {
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cooperativeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   loanId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   savingsId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sharesId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1999,6 +2168,7 @@ export type TransactionUncheckedUpdateManyWithoutInitiatorInput = {
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cooperativeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   loanId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   savingsId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sharesId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2022,6 +2192,7 @@ export type TransactionUpdateWithoutApproverInput = {
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   initiator?: Prisma.UserUpdateOneRequiredWithoutInitiatedTxnsNestedInput
   request?: Prisma.RequestUpdateOneWithoutTransactionsNestedInput
+  cooperative?: Prisma.CooperativeUpdateOneWithoutTransactionsNestedInput
   loan?: Prisma.LoanUpdateOneWithoutTransactionNestedInput
   savings?: Prisma.SavingsUpdateOneWithoutTransactionsNestedInput
   shares?: Prisma.SharesUpdateOneWithoutTransactionsNestedInput
@@ -2043,6 +2214,7 @@ export type TransactionUncheckedUpdateWithoutApproverInput = {
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   initiatedBy?: Prisma.StringFieldUpdateOperationsInput | string
   requestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cooperativeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   loanId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   savingsId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sharesId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2066,6 +2238,7 @@ export type TransactionUncheckedUpdateManyWithoutApproverInput = {
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   initiatedBy?: Prisma.StringFieldUpdateOperationsInput | string
   requestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cooperativeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   loanId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   savingsId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sharesId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2088,6 +2261,7 @@ export type TransactionCreateManySavingsInput = {
   initiatedBy: string
   approvedBy?: string | null
   requestId?: string | null
+  cooperativeId?: string | null
   loanId?: string | null
   sharesId?: string | null
   personalSavingsId?: string | null
@@ -2111,6 +2285,7 @@ export type TransactionUpdateWithoutSavingsInput = {
   initiator?: Prisma.UserUpdateOneRequiredWithoutInitiatedTxnsNestedInput
   approver?: Prisma.UserUpdateOneWithoutApprovedTxnsNestedInput
   request?: Prisma.RequestUpdateOneWithoutTransactionsNestedInput
+  cooperative?: Prisma.CooperativeUpdateOneWithoutTransactionsNestedInput
   loan?: Prisma.LoanUpdateOneWithoutTransactionNestedInput
   shares?: Prisma.SharesUpdateOneWithoutTransactionsNestedInput
   personalSavings?: Prisma.PersonalSavingsUpdateOneWithoutTransactionsNestedInput
@@ -2132,6 +2307,7 @@ export type TransactionUncheckedUpdateWithoutSavingsInput = {
   initiatedBy?: Prisma.StringFieldUpdateOperationsInput | string
   approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cooperativeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   loanId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sharesId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   personalSavingsId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2155,6 +2331,7 @@ export type TransactionUncheckedUpdateManyWithoutSavingsInput = {
   initiatedBy?: Prisma.StringFieldUpdateOperationsInput | string
   approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cooperativeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   loanId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sharesId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   personalSavingsId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2176,6 +2353,7 @@ export type TransactionCreateManyPersonalSavingsInput = {
   initiatedBy: string
   approvedBy?: string | null
   requestId?: string | null
+  cooperativeId?: string | null
   loanId?: string | null
   savingsId?: string | null
   sharesId?: string | null
@@ -2199,6 +2377,7 @@ export type TransactionUpdateWithoutPersonalSavingsInput = {
   initiator?: Prisma.UserUpdateOneRequiredWithoutInitiatedTxnsNestedInput
   approver?: Prisma.UserUpdateOneWithoutApprovedTxnsNestedInput
   request?: Prisma.RequestUpdateOneWithoutTransactionsNestedInput
+  cooperative?: Prisma.CooperativeUpdateOneWithoutTransactionsNestedInput
   loan?: Prisma.LoanUpdateOneWithoutTransactionNestedInput
   savings?: Prisma.SavingsUpdateOneWithoutTransactionsNestedInput
   shares?: Prisma.SharesUpdateOneWithoutTransactionsNestedInput
@@ -2220,6 +2399,7 @@ export type TransactionUncheckedUpdateWithoutPersonalSavingsInput = {
   initiatedBy?: Prisma.StringFieldUpdateOperationsInput | string
   approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cooperativeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   loanId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   savingsId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sharesId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2243,6 +2423,7 @@ export type TransactionUncheckedUpdateManyWithoutPersonalSavingsInput = {
   initiatedBy?: Prisma.StringFieldUpdateOperationsInput | string
   approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cooperativeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   loanId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   savingsId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sharesId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2264,6 +2445,7 @@ export type TransactionCreateManySharesInput = {
   initiatedBy: string
   approvedBy?: string | null
   requestId?: string | null
+  cooperativeId?: string | null
   loanId?: string | null
   savingsId?: string | null
   personalSavingsId?: string | null
@@ -2287,6 +2469,7 @@ export type TransactionUpdateWithoutSharesInput = {
   initiator?: Prisma.UserUpdateOneRequiredWithoutInitiatedTxnsNestedInput
   approver?: Prisma.UserUpdateOneWithoutApprovedTxnsNestedInput
   request?: Prisma.RequestUpdateOneWithoutTransactionsNestedInput
+  cooperative?: Prisma.CooperativeUpdateOneWithoutTransactionsNestedInput
   loan?: Prisma.LoanUpdateOneWithoutTransactionNestedInput
   savings?: Prisma.SavingsUpdateOneWithoutTransactionsNestedInput
   personalSavings?: Prisma.PersonalSavingsUpdateOneWithoutTransactionsNestedInput
@@ -2308,6 +2491,7 @@ export type TransactionUncheckedUpdateWithoutSharesInput = {
   initiatedBy?: Prisma.StringFieldUpdateOperationsInput | string
   approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cooperativeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   loanId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   savingsId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   personalSavingsId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2331,6 +2515,7 @@ export type TransactionUncheckedUpdateManyWithoutSharesInput = {
   initiatedBy?: Prisma.StringFieldUpdateOperationsInput | string
   approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cooperativeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   loanId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   savingsId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   personalSavingsId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2352,6 +2537,7 @@ export type TransactionCreateManyLoanInput = {
   initiatedBy: string
   approvedBy?: string | null
   requestId?: string | null
+  cooperativeId?: string | null
   savingsId?: string | null
   sharesId?: string | null
   personalSavingsId?: string | null
@@ -2375,6 +2561,7 @@ export type TransactionUpdateWithoutLoanInput = {
   initiator?: Prisma.UserUpdateOneRequiredWithoutInitiatedTxnsNestedInput
   approver?: Prisma.UserUpdateOneWithoutApprovedTxnsNestedInput
   request?: Prisma.RequestUpdateOneWithoutTransactionsNestedInput
+  cooperative?: Prisma.CooperativeUpdateOneWithoutTransactionsNestedInput
   savings?: Prisma.SavingsUpdateOneWithoutTransactionsNestedInput
   shares?: Prisma.SharesUpdateOneWithoutTransactionsNestedInput
   personalSavings?: Prisma.PersonalSavingsUpdateOneWithoutTransactionsNestedInput
@@ -2396,6 +2583,7 @@ export type TransactionUncheckedUpdateWithoutLoanInput = {
   initiatedBy?: Prisma.StringFieldUpdateOperationsInput | string
   approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cooperativeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   savingsId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sharesId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   personalSavingsId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2419,6 +2607,7 @@ export type TransactionUncheckedUpdateManyWithoutLoanInput = {
   initiatedBy?: Prisma.StringFieldUpdateOperationsInput | string
   approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cooperativeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   savingsId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sharesId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   personalSavingsId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2439,6 +2628,7 @@ export type TransactionCreateManyRequestInput = {
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   initiatedBy: string
   approvedBy?: string | null
+  cooperativeId?: string | null
   loanId?: string | null
   savingsId?: string | null
   sharesId?: string | null
@@ -2462,6 +2652,7 @@ export type TransactionUpdateWithoutRequestInput = {
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   initiator?: Prisma.UserUpdateOneRequiredWithoutInitiatedTxnsNestedInput
   approver?: Prisma.UserUpdateOneWithoutApprovedTxnsNestedInput
+  cooperative?: Prisma.CooperativeUpdateOneWithoutTransactionsNestedInput
   loan?: Prisma.LoanUpdateOneWithoutTransactionNestedInput
   savings?: Prisma.SavingsUpdateOneWithoutTransactionsNestedInput
   shares?: Prisma.SharesUpdateOneWithoutTransactionsNestedInput
@@ -2483,6 +2674,7 @@ export type TransactionUncheckedUpdateWithoutRequestInput = {
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   initiatedBy?: Prisma.StringFieldUpdateOperationsInput | string
   approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cooperativeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   loanId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   savingsId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sharesId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2506,6 +2698,7 @@ export type TransactionUncheckedUpdateManyWithoutRequestInput = {
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   initiatedBy?: Prisma.StringFieldUpdateOperationsInput | string
   approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cooperativeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   loanId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   savingsId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sharesId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2528,6 +2721,7 @@ export type TransactionCreateManyParentTransactionInput = {
   initiatedBy: string
   approvedBy?: string | null
   requestId?: string | null
+  cooperativeId?: string | null
   loanId?: string | null
   savingsId?: string | null
   sharesId?: string | null
@@ -2551,6 +2745,7 @@ export type TransactionUpdateWithoutParentTransactionInput = {
   initiator?: Prisma.UserUpdateOneRequiredWithoutInitiatedTxnsNestedInput
   approver?: Prisma.UserUpdateOneWithoutApprovedTxnsNestedInput
   request?: Prisma.RequestUpdateOneWithoutTransactionsNestedInput
+  cooperative?: Prisma.CooperativeUpdateOneWithoutTransactionsNestedInput
   loan?: Prisma.LoanUpdateOneWithoutTransactionNestedInput
   savings?: Prisma.SavingsUpdateOneWithoutTransactionsNestedInput
   shares?: Prisma.SharesUpdateOneWithoutTransactionsNestedInput
@@ -2572,6 +2767,7 @@ export type TransactionUncheckedUpdateWithoutParentTransactionInput = {
   initiatedBy?: Prisma.StringFieldUpdateOperationsInput | string
   approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cooperativeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   loanId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   savingsId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sharesId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2595,10 +2791,103 @@ export type TransactionUncheckedUpdateManyWithoutParentTransactionInput = {
   initiatedBy?: Prisma.StringFieldUpdateOperationsInput | string
   approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cooperativeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   loanId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   savingsId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sharesId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   personalSavingsId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
+export type TransactionCreateManyCooperativeInput = {
+  id?: string
+  transactionType: $Enums.TransactionType
+  baseType: $Enums.TransactionType
+  module: $Enums.TransactionModule
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  balanceAfter: runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: $Enums.TransactionStatus
+  description?: string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  initiatedBy: string
+  approvedBy?: string | null
+  requestId?: string | null
+  loanId?: string | null
+  savingsId?: string | null
+  sharesId?: string | null
+  personalSavingsId?: string | null
+  parentTxnId?: string | null
+  createdAt?: Date | string
+  completedAt?: Date | string | null
+}
+
+export type TransactionUpdateWithoutCooperativeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  transactionType?: Prisma.EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
+  baseType?: Prisma.EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
+  module?: Prisma.EnumTransactionModuleFieldUpdateOperationsInput | $Enums.TransactionModule
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  balanceAfter?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  initiator?: Prisma.UserUpdateOneRequiredWithoutInitiatedTxnsNestedInput
+  approver?: Prisma.UserUpdateOneWithoutApprovedTxnsNestedInput
+  request?: Prisma.RequestUpdateOneWithoutTransactionsNestedInput
+  loan?: Prisma.LoanUpdateOneWithoutTransactionNestedInput
+  savings?: Prisma.SavingsUpdateOneWithoutTransactionsNestedInput
+  shares?: Prisma.SharesUpdateOneWithoutTransactionsNestedInput
+  personalSavings?: Prisma.PersonalSavingsUpdateOneWithoutTransactionsNestedInput
+  parentTransaction?: Prisma.TransactionUpdateOneWithoutChildTransactionsNestedInput
+  childTransactions?: Prisma.TransactionUpdateManyWithoutParentTransactionNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutTransactionNestedInput
+}
+
+export type TransactionUncheckedUpdateWithoutCooperativeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  transactionType?: Prisma.EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
+  baseType?: Prisma.EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
+  module?: Prisma.EnumTransactionModuleFieldUpdateOperationsInput | $Enums.TransactionModule
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  balanceAfter?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  initiatedBy?: Prisma.StringFieldUpdateOperationsInput | string
+  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  loanId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  savingsId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sharesId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  personalSavingsId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  parentTxnId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  childTransactions?: Prisma.TransactionUncheckedUpdateManyWithoutParentTransactionNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTransactionNestedInput
+}
+
+export type TransactionUncheckedUpdateManyWithoutCooperativeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  transactionType?: Prisma.EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
+  baseType?: Prisma.EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
+  module?: Prisma.EnumTransactionModuleFieldUpdateOperationsInput | $Enums.TransactionModule
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  balanceAfter?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  initiatedBy?: Prisma.StringFieldUpdateOperationsInput | string
+  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  loanId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  savingsId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sharesId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  personalSavingsId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  parentTxnId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
@@ -2656,6 +2945,7 @@ export type TransactionSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   initiatedBy?: boolean
   approvedBy?: boolean
   requestId?: boolean
+  cooperativeId?: boolean
   loanId?: boolean
   savingsId?: boolean
   sharesId?: boolean
@@ -2666,6 +2956,7 @@ export type TransactionSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   initiator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   approver?: boolean | Prisma.Transaction$approverArgs<ExtArgs>
   request?: boolean | Prisma.Transaction$requestArgs<ExtArgs>
+  cooperative?: boolean | Prisma.Transaction$cooperativeArgs<ExtArgs>
   loan?: boolean | Prisma.Transaction$loanArgs<ExtArgs>
   savings?: boolean | Prisma.Transaction$savingsArgs<ExtArgs>
   shares?: boolean | Prisma.Transaction$sharesArgs<ExtArgs>
@@ -2689,6 +2980,7 @@ export type TransactionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   initiatedBy?: boolean
   approvedBy?: boolean
   requestId?: boolean
+  cooperativeId?: boolean
   loanId?: boolean
   savingsId?: boolean
   sharesId?: boolean
@@ -2699,6 +2991,7 @@ export type TransactionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   initiator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   approver?: boolean | Prisma.Transaction$approverArgs<ExtArgs>
   request?: boolean | Prisma.Transaction$requestArgs<ExtArgs>
+  cooperative?: boolean | Prisma.Transaction$cooperativeArgs<ExtArgs>
   loan?: boolean | Prisma.Transaction$loanArgs<ExtArgs>
   savings?: boolean | Prisma.Transaction$savingsArgs<ExtArgs>
   shares?: boolean | Prisma.Transaction$sharesArgs<ExtArgs>
@@ -2719,6 +3012,7 @@ export type TransactionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   initiatedBy?: boolean
   approvedBy?: boolean
   requestId?: boolean
+  cooperativeId?: boolean
   loanId?: boolean
   savingsId?: boolean
   sharesId?: boolean
@@ -2729,6 +3023,7 @@ export type TransactionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   initiator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   approver?: boolean | Prisma.Transaction$approverArgs<ExtArgs>
   request?: boolean | Prisma.Transaction$requestArgs<ExtArgs>
+  cooperative?: boolean | Prisma.Transaction$cooperativeArgs<ExtArgs>
   loan?: boolean | Prisma.Transaction$loanArgs<ExtArgs>
   savings?: boolean | Prisma.Transaction$savingsArgs<ExtArgs>
   shares?: boolean | Prisma.Transaction$sharesArgs<ExtArgs>
@@ -2749,6 +3044,7 @@ export type TransactionSelectScalar = {
   initiatedBy?: boolean
   approvedBy?: boolean
   requestId?: boolean
+  cooperativeId?: boolean
   loanId?: boolean
   savingsId?: boolean
   sharesId?: boolean
@@ -2758,11 +3054,12 @@ export type TransactionSelectScalar = {
   completedAt?: boolean
 }
 
-export type TransactionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "transactionType" | "baseType" | "module" | "amount" | "balanceAfter" | "status" | "description" | "metadata" | "initiatedBy" | "approvedBy" | "requestId" | "loanId" | "savingsId" | "sharesId" | "personalSavingsId" | "parentTxnId" | "createdAt" | "completedAt", ExtArgs["result"]["transaction"]>
+export type TransactionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "transactionType" | "baseType" | "module" | "amount" | "balanceAfter" | "status" | "description" | "metadata" | "initiatedBy" | "approvedBy" | "requestId" | "cooperativeId" | "loanId" | "savingsId" | "sharesId" | "personalSavingsId" | "parentTxnId" | "createdAt" | "completedAt", ExtArgs["result"]["transaction"]>
 export type TransactionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   initiator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   approver?: boolean | Prisma.Transaction$approverArgs<ExtArgs>
   request?: boolean | Prisma.Transaction$requestArgs<ExtArgs>
+  cooperative?: boolean | Prisma.Transaction$cooperativeArgs<ExtArgs>
   loan?: boolean | Prisma.Transaction$loanArgs<ExtArgs>
   savings?: boolean | Prisma.Transaction$savingsArgs<ExtArgs>
   shares?: boolean | Prisma.Transaction$sharesArgs<ExtArgs>
@@ -2776,6 +3073,7 @@ export type TransactionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.
   initiator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   approver?: boolean | Prisma.Transaction$approverArgs<ExtArgs>
   request?: boolean | Prisma.Transaction$requestArgs<ExtArgs>
+  cooperative?: boolean | Prisma.Transaction$cooperativeArgs<ExtArgs>
   loan?: boolean | Prisma.Transaction$loanArgs<ExtArgs>
   savings?: boolean | Prisma.Transaction$savingsArgs<ExtArgs>
   shares?: boolean | Prisma.Transaction$sharesArgs<ExtArgs>
@@ -2786,6 +3084,7 @@ export type TransactionIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.
   initiator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   approver?: boolean | Prisma.Transaction$approverArgs<ExtArgs>
   request?: boolean | Prisma.Transaction$requestArgs<ExtArgs>
+  cooperative?: boolean | Prisma.Transaction$cooperativeArgs<ExtArgs>
   loan?: boolean | Prisma.Transaction$loanArgs<ExtArgs>
   savings?: boolean | Prisma.Transaction$savingsArgs<ExtArgs>
   shares?: boolean | Prisma.Transaction$sharesArgs<ExtArgs>
@@ -2799,6 +3098,7 @@ export type $TransactionPayload<ExtArgs extends runtime.Types.Extensions.Interna
     initiator: Prisma.$UserPayload<ExtArgs>
     approver: Prisma.$UserPayload<ExtArgs> | null
     request: Prisma.$RequestPayload<ExtArgs> | null
+    cooperative: Prisma.$CooperativePayload<ExtArgs> | null
     loan: Prisma.$LoanPayload<ExtArgs> | null
     savings: Prisma.$SavingsPayload<ExtArgs> | null
     shares: Prisma.$SharesPayload<ExtArgs> | null
@@ -2820,6 +3120,7 @@ export type $TransactionPayload<ExtArgs extends runtime.Types.Extensions.Interna
     initiatedBy: string
     approvedBy: string | null
     requestId: string | null
+    cooperativeId: string | null
     loanId: string | null
     savingsId: string | null
     sharesId: string | null
@@ -3224,6 +3525,7 @@ export interface Prisma__TransactionClient<T, Null = never, ExtArgs extends runt
   initiator<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   approver<T extends Prisma.Transaction$approverArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Transaction$approverArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   request<T extends Prisma.Transaction$requestArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Transaction$requestArgs<ExtArgs>>): Prisma.Prisma__RequestClient<runtime.Types.Result.GetResult<Prisma.$RequestPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  cooperative<T extends Prisma.Transaction$cooperativeArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Transaction$cooperativeArgs<ExtArgs>>): Prisma.Prisma__CooperativeClient<runtime.Types.Result.GetResult<Prisma.$CooperativePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   loan<T extends Prisma.Transaction$loanArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Transaction$loanArgs<ExtArgs>>): Prisma.Prisma__LoanClient<runtime.Types.Result.GetResult<Prisma.$LoanPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   savings<T extends Prisma.Transaction$savingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Transaction$savingsArgs<ExtArgs>>): Prisma.Prisma__SavingsClient<runtime.Types.Result.GetResult<Prisma.$SavingsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   shares<T extends Prisma.Transaction$sharesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Transaction$sharesArgs<ExtArgs>>): Prisma.Prisma__SharesClient<runtime.Types.Result.GetResult<Prisma.$SharesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
@@ -3272,6 +3574,7 @@ export interface TransactionFieldRefs {
   readonly initiatedBy: Prisma.FieldRef<"Transaction", 'String'>
   readonly approvedBy: Prisma.FieldRef<"Transaction", 'String'>
   readonly requestId: Prisma.FieldRef<"Transaction", 'String'>
+  readonly cooperativeId: Prisma.FieldRef<"Transaction", 'String'>
   readonly loanId: Prisma.FieldRef<"Transaction", 'String'>
   readonly savingsId: Prisma.FieldRef<"Transaction", 'String'>
   readonly sharesId: Prisma.FieldRef<"Transaction", 'String'>
@@ -3715,6 +4018,25 @@ export type Transaction$requestArgs<ExtArgs extends runtime.Types.Extensions.Int
    */
   include?: Prisma.RequestInclude<ExtArgs> | null
   where?: Prisma.RequestWhereInput
+}
+
+/**
+ * Transaction.cooperative
+ */
+export type Transaction$cooperativeArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Cooperative
+   */
+  select?: Prisma.CooperativeSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Cooperative
+   */
+  omit?: Prisma.CooperativeOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CooperativeInclude<ExtArgs> | null
+  where?: Prisma.CooperativeWhereInput
 }
 
 /**

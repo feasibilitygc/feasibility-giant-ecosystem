@@ -1,8 +1,9 @@
 'use client';
 
-import { ThemeProvider, CssBaseline } from '@mui/material';
+import { createTheme, ThemeProvider, CssBaseline } from '@mui/material';
 import { ReactNode, createContext, useContext, useMemo, useState, useEffect } from 'react';
 import { lightTheme, darkTheme } from '@/lib/theme';
+import { useTenant } from '@/lib/api/contexts/TenantContext';
 
 type ThemeMode = 'light' | 'dark' | 'system';
 
@@ -25,7 +26,7 @@ export function useTheme() {
 const THEME_MODE_KEY = 'coop_theme_mode';
 
 export default function ThemeRegistry({ children }: { children: ReactNode }) {
-  // Initialize theme preference from localStorage or default to 'system'
+  const { tenant } = useTenant();
   const [mode, setModeState] = useState<ThemeMode>('system');
   const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
 
@@ -60,8 +61,34 @@ export default function ThemeRegistry({ children }: { children: ReactNode }) {
     localStorage.setItem(THEME_MODE_KEY, newMode);
   };
 
-  // Select theme based on dark mode state
-  const theme = useMemo(() => (isDarkMode ? darkTheme : lightTheme), [isDarkMode]);
+  // Inject CSS Custom Properties for Tailwind CSS dynamically
+  useEffect(() => {
+    if (tenant?.theme) {
+      const root = document.documentElement;
+      root.style.setProperty('--primary-color', tenant.theme.primary_color);
+      root.style.setProperty('--secondary-color', tenant.theme.secondary_color);
+    }
+  }, [tenant]);
+
+  // Select and dynamically customize theme based on tenant config and mode
+  const theme = useMemo(() => {
+    const baseTheme = isDarkMode ? darkTheme : lightTheme;
+    if (!tenant?.theme) return baseTheme;
+
+    const { primary_color, secondary_color } = tenant.theme;
+    
+    // Create a new customized theme by merging custom palette colors into baseTheme
+    return createTheme(baseTheme, {
+      palette: {
+        primary: {
+          main: primary_color,
+        },
+        secondary: {
+          main: secondary_color,
+        },
+      },
+    });
+  }, [isDarkMode, tenant]);
 
   // Theme context value
   const contextValue = useMemo(

@@ -20,6 +20,12 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  FormHelperText,
+  Skeleton,
 } from "@mui/material"
 import {
   Person as PersonIcon,
@@ -31,6 +37,7 @@ import {
   ArrowForward as ArrowForwardIcon,
   Error as ErrorIcon,
   Warning as WarningIcon,
+  Business as BusinessIcon,
 } from "@mui/icons-material"
 import PersonalInfoStep from "@/components/organisms/auth/registration/personal-info-step"
 import EmploymentInfoStep from "@/components/organisms/auth/registration/employment-info-step"
@@ -39,9 +46,9 @@ import NextOfKinStep from "@/components/organisms/auth/registration/next-of-kin-
 import ReviewStep from "@/components/organisms/auth/registration/review-step"
 import SuccessStep from "@/components/organisms/auth/registration/success-step"
 
-// Add these imports at the top
 import { useMemberRegistration, type MemberRegistrationData } from "@/lib/hooks/member/useMemberRegistration"
 import { getFieldDisplayName } from "@/lib/utils/errorUtils"
+import { useCooperatives } from "@/lib/hooks/cooperative/useCooperatives"
 
 interface FormData {
   // Personal Information
@@ -93,6 +100,7 @@ const initialFormData: FormData = {
 }
 
 const steps = [
+  { label: "Select Cooperative", icon: BusinessIcon, description: "Your cooperative" },
   { label: "Personal Information", icon: PersonIcon, description: "Basic personal details" },
   { label: "Employment Details", icon: WorkIcon, description: "Work-related information" },
   { label: "Contact Information", icon: PhoneIcon, description: "Contact details" },
@@ -103,11 +111,14 @@ const steps = [
 export default function RegisterPage() {
   const theme = useTheme()
   const [currentStep, setCurrentStep] = useState(0)
+  const [selectedCoopId, setSelectedCoopId] = useState('')
+  const [coopError, setCoopError] = useState('')
   const [formData, setFormData] = useState<FormData>(initialFormData)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [submitError, setSubmitError] = useState<string>("")
   const [serverFieldErrors, setServerFieldErrors] = useState<Record<string, string>>({})
+  const { data: cooperatives, isLoading: coopsLoading, isError: coopsLoadError } = useCooperatives()
 
   const updateFormData = (data: Partial<FormData>) => {
     setFormData((prev) => ({ ...prev, ...data }))
@@ -135,18 +146,21 @@ export default function RegisterPage() {
 
     switch (step) {
       case 0:
+        // Cooperative selection — validated separately via coopError state
+        return true
+      case 1:
         if (!formData.firstName.trim()) newErrors.firstName = "First name is required"
         if (!formData.lastName.trim()) newErrors.lastName = "Last name is required"
         if (!formData.dateOfBirth) newErrors.dateOfBirth = "Date of birth is required"
         break
-      case 1:
+      case 2:
         if (!formData.erpId.trim()) newErrors.erpId = "ERP ID is required"
         if (!formData.ippisId.trim()) newErrors.ippisId = "IPPIS ID is required"
         if (!formData.staffNo.trim()) newErrors.staffNo = "Staff number is required"
         if (!formData.department.trim()) newErrors.department = "Department is required"
         if (!formData.dateOfEmployment) newErrors.dateOfEmployment = "Date of employment is required"
         break
-      case 2:
+      case 3:
         if (!formData.emailAddress.trim()) newErrors.emailAddress = "Email address is required"
         if (!formData.phoneNumber.trim()) newErrors.phoneNumber = "Phone number is required"
         if (!formData.residentialAddress.trim()) newErrors.residentialAddress = "Residential address is required"
@@ -154,7 +168,7 @@ export default function RegisterPage() {
           newErrors.emailAddress = "Please enter a valid email address"
         }
         break
-      case 3:
+      case 4:
         if (!formData.nextOfKin.trim()) newErrors.nextOfKin = "Next of kin name is required"
         if (!formData.relationshipOfNextOfKin.trim()) newErrors.relationshipOfNextOfKin = "Relationship is required"
         if (!formData.nextOfKinPhoneNumber.trim())
@@ -171,11 +185,22 @@ export default function RegisterPage() {
   }
 
   const validateAllSteps = (): boolean => {
-    // Validate all steps before final submission
-    return [0, 1, 2, 3].every((step) => validateStep(step))
+    // Validate all steps before final submission (skip step 0 — cooperative, step 5 — review)
+    return [1, 2, 3, 4].every((step) => validateStep(step))
   }
 
   const handleNext = () => {
+    // Step 0: cooperative selection validation
+    if (currentStep === 0) {
+      if (!selectedCoopId) {
+        setCoopError('Please select your cooperative to continue.')
+        return
+      }
+      setCoopError('')
+      sessionStorage.setItem('selected_cooperative_id', selectedCoopId)
+      setCurrentStep(1)
+      return
+    }
     if (validateStep(currentStep)) {
       setCurrentStep((prev) => Math.min(prev + 1, steps.length - 1))
     }
@@ -241,10 +266,9 @@ export default function RegisterPage() {
     setSubmitError("")
     setServerFieldErrors({})
 
-    // Validate all steps before submission
+    // Validate all steps before submission (steps 1-4)
     if (!validateAllSteps()) {
-      // Find first step with errors and navigate to it
-      for (let i = 0; i < 4; i++) {
+      for (let i = 1; i <= 4; i++) {
         if (!validateStep(i)) {
           setCurrentStep(i)
           return
@@ -458,18 +482,46 @@ export default function RegisterPage() {
 
                 {/* Step Content */}
                 {currentStep === 0 && (
-                  <PersonalInfoStep formData={formData} updateFormData={updateFormData} errors={combinedErrors} />
+                  <Box>
+                    <Typography variant="h6" fontWeight="600" gutterBottom>Select Your Cooperative</Typography>
+                    <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+                      Choose the cooperative you are applying to join. Your application will be submitted to their administrators for review.
+                    </Typography>
+                    {coopsLoading && <Skeleton variant="rounded" height={56} />}
+                    {coopsLoadError && (
+                      <Alert severity="warning">Could not load cooperatives. Please refresh and try again.</Alert>
+                    )}
+                    {!coopsLoading && !coopsLoadError && (
+                      <FormControl fullWidth error={!!coopError}>
+                        <InputLabel id="join-coop-select-label">Cooperative *</InputLabel>
+                        <Select
+                          labelId="join-coop-select-label"
+                          value={selectedCoopId}
+                          label="Cooperative *"
+                          onChange={(e) => { setSelectedCoopId(e.target.value); setCoopError('') }}
+                        >
+                          {cooperatives?.map((coop) => (
+                            <MenuItem key={coop.id} value={coop.id}>{coop.name}</MenuItem>
+                          ))}
+                        </Select>
+                        {coopError && <FormHelperText>{coopError}</FormHelperText>}
+                      </FormControl>
+                    )}
+                  </Box>
                 )}
                 {currentStep === 1 && (
-                  <EmploymentInfoStep formData={formData} updateFormData={updateFormData} errors={combinedErrors} />
+                  <PersonalInfoStep formData={formData} updateFormData={updateFormData} errors={combinedErrors} />
                 )}
                 {currentStep === 2 && (
-                  <ContactInfoStep formData={formData} updateFormData={updateFormData} errors={combinedErrors} />
+                  <EmploymentInfoStep formData={formData} updateFormData={updateFormData} errors={combinedErrors} />
                 )}
                 {currentStep === 3 && (
+                  <ContactInfoStep formData={formData} updateFormData={updateFormData} errors={combinedErrors} />
+                )}
+                {currentStep === 4 && (
                   <NextOfKinStep formData={formData} updateFormData={updateFormData} errors={combinedErrors} />
                 )}
-                {currentStep === 4 && <ReviewStep formData={formData} errors={combinedErrors} />}
+                {currentStep === 5 && <ReviewStep formData={formData} errors={combinedErrors} />}
 
                 {/* Navigation Buttons */}
                 <Box
@@ -497,7 +549,7 @@ export default function RegisterPage() {
                     Previous
                   </Button>
 
-                  {currentStep < 4 ? (
+                  {currentStep < 5 ? (
                     <Button
                       variant="contained"
                       onClick={handleNext}

@@ -2,8 +2,6 @@ import { redisClient } from '../config/redis';
 import { prisma } from '@/prisma';
 import logger from '../utils/logger';
 
-import { prisma } from '@/prisma';
-
 interface HealthStatus {
   status: 'healthy' | 'degraded' | 'unhealthy';
   redis: boolean;

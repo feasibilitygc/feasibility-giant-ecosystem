@@ -17,10 +17,12 @@ const adapter = new PrismaPg(pool)
 
 // Singleton pattern for Node.js (prevents multiple instances in dev mode)
 const globalForPrisma = globalThis as unknown as {
-  prisma: PrismaClient | undefined
+  prisma: any
 }
 
-export const prisma =
+import { getCooperativeId } from './contextStore';
+
+const basePrisma =
   globalForPrisma.prisma ??
   new PrismaClient({
     adapter,
@@ -28,6 +30,53 @@ export const prisma =
       ? ['query', 'error', 'warn'] 
       : ['error'],
   });
+
+export const prisma = basePrisma.$extends({
+  query: {
+    $allModels: {
+      async $allOperations({ model, operation, args, query }: { model: string, operation: string, args: any, query: (args: any) => Promise<any> }) {
+        const coopId = getCooperativeId();
+        if (coopId) {
+          const modelsToScope = ['User', 'Biodata', 'Savings', 'Shares', 'Loan', 'Request', 'Transaction'];
+          
+          if (modelsToScope.includes(model)) {
+            // 1. Scope queries by cooperativeId for read/update/delete operations
+            if (['findMany', 'findFirst', 'findUnique', 'count', 'aggregate', 'groupBy', 'update', 'updateMany', 'delete', 'deleteMany'].includes(operation)) {
+              (args as any).where = (args as any).where || {};
+              (args as any).where.cooperativeId = coopId;
+            }
+            // 2. Inject cooperativeId for create operations
+            else if (operation === 'create') {
+              (args as any).data = (args as any).data || {};
+              (args as any).data.cooperativeId = coopId;
+            }
+            // 3. Inject cooperativeId for createMany operations
+            else if (operation === 'createMany') {
+              if (Array.isArray((args as any).data)) {
+                (args as any).data = (args as any).data.map((item: any) => ({
+                  ...item,
+                  cooperativeId: coopId
+                }));
+              } else if ((args as any).data) {
+                (args as any).data.cooperativeId = coopId;
+              }
+            }
+            // 4. Inject cooperativeId for upsert operations
+            else if (operation === 'upsert') {
+              (args as any).create = (args as any).create || {};
+              (args as any).create.cooperativeId = coopId;
+              (args as any).update = (args as any).update || {};
+              (args as any).update.cooperativeId = coopId;
+              (args as any).where = (args as any).where || {};
+              (args as any).where.cooperativeId = coopId;
+            }
+          }
+        }
+        return query(args);
+      }
+    }
+  }
+});
 
 // Optional test-only instrumentation: increment an in-memory counter for every Prisma query
 // Enabled when PRISMA_CAPTURE_QUERIES_FOR_TEST === 'true' (dev/test only)
@@ -57,6 +106,6 @@ export {
   Prisma,
 } from './prisma/client'
 
-export { Decimal } from '@prisma/client/runtime/client'
+export { Decimal } from 'decimal.js'
 
 export default prisma

@@ -408,7 +408,8 @@ export const ModelName = {
   Session: 'Session',
   Transaction: 'Transaction',
   SystemSettings: 'SystemSettings',
-  SystemSettingsHistory: 'SystemSettingsHistory'
+  SystemSettingsHistory: 'SystemSettingsHistory',
+  Cooperative: 'Cooperative'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -424,7 +425,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "role" | "userRole" | "adminUserProfile" | "accountInfo" | "bank" | "biodata" | "otpVerification" | "savings" | "personalSavingsPlan" | "personalSavings" | "shares" | "loanType" | "loan" | "loanSchedule" | "bulkRepaymentUpload" | "loanRepayment" | "loanStatusHistory" | "request" | "requestApproval" | "notification" | "session" | "transaction" | "systemSettings" | "systemSettingsHistory"
+    modelProps: "user" | "role" | "userRole" | "adminUserProfile" | "accountInfo" | "bank" | "biodata" | "otpVerification" | "savings" | "personalSavingsPlan" | "personalSavings" | "shares" | "loanType" | "loan" | "loanSchedule" | "bulkRepaymentUpload" | "loanRepayment" | "loanStatusHistory" | "request" | "requestApproval" | "notification" | "session" | "transaction" | "systemSettings" | "systemSettingsHistory" | "cooperative"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2278,6 +2279,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Cooperative: {
+      payload: Prisma.$CooperativePayload<ExtArgs>
+      fields: Prisma.CooperativeFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CooperativeFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CooperativePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CooperativeFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CooperativePayload>
+        }
+        findFirst: {
+          args: Prisma.CooperativeFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CooperativePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CooperativeFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CooperativePayload>
+        }
+        findMany: {
+          args: Prisma.CooperativeFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CooperativePayload>[]
+        }
+        create: {
+          args: Prisma.CooperativeCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CooperativePayload>
+        }
+        createMany: {
+          args: Prisma.CooperativeCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CooperativeCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CooperativePayload>[]
+        }
+        delete: {
+          args: Prisma.CooperativeDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CooperativePayload>
+        }
+        update: {
+          args: Prisma.CooperativeUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CooperativePayload>
+        }
+        deleteMany: {
+          args: Prisma.CooperativeDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CooperativeUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CooperativeUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CooperativePayload>[]
+        }
+        upsert: {
+          args: Prisma.CooperativeUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CooperativePayload>
+        }
+        aggregate: {
+          args: Prisma.CooperativeAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCooperative>
+        }
+        groupBy: {
+          args: Prisma.CooperativeGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CooperativeGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CooperativeCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CooperativeCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -2325,7 +2400,8 @@ export const UserScalarFieldEnum = {
   isActive: 'isActive',
   isMember: 'isMember',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  cooperativeId: 'cooperativeId'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -2428,7 +2504,8 @@ export const BiodataScalarFieldEnum = {
   isDeleted: 'isDeleted',
   membershipStatus: 'membershipStatus',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  cooperativeId: 'cooperativeId'
 } as const
 
 export type BiodataScalarFieldEnum = (typeof BiodataScalarFieldEnum)[keyof typeof BiodataScalarFieldEnum]
@@ -2462,7 +2539,8 @@ export const SavingsScalarFieldEnum = {
   isProcessed: 'isProcessed',
   status: 'status',
   description: 'description',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  cooperativeId: 'cooperativeId'
 } as const
 
 export type SavingsScalarFieldEnum = (typeof SavingsScalarFieldEnum)[keyof typeof SavingsScalarFieldEnum]
@@ -2511,7 +2589,8 @@ export const SharesScalarFieldEnum = {
   year: 'year',
   status: 'status',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  cooperativeId: 'cooperativeId'
 } as const
 
 export type SharesScalarFieldEnum = (typeof SharesScalarFieldEnum)[keyof typeof SharesScalarFieldEnum]
@@ -2538,6 +2617,7 @@ export const LoanScalarFieldEnum = {
   memberId: 'memberId',
   erpId: 'erpId',
   loanTypeId: 'loanTypeId',
+  cooperativeId: 'cooperativeId',
   principalAmount: 'principalAmount',
   interestAmount: 'interestAmount',
   totalAmount: 'totalAmount',
@@ -2641,6 +2721,7 @@ export const RequestScalarFieldEnum = {
   loanId: 'loanId',
   savingsId: 'savingsId',
   biodataId: 'biodataId',
+  cooperativeId: 'cooperativeId',
   personalSavingsId: 'personalSavingsId',
   notes: 'notes',
   createdAt: 'createdAt',
@@ -2718,6 +2799,7 @@ export const TransactionScalarFieldEnum = {
   initiatedBy: 'initiatedBy',
   approvedBy: 'approvedBy',
   requestId: 'requestId',
+  cooperativeId: 'cooperativeId',
   loanId: 'loanId',
   savingsId: 'savingsId',
   sharesId: 'sharesId',
@@ -2756,6 +2838,20 @@ export const SystemSettingsHistoryScalarFieldEnum = {
 } as const
 
 export type SystemSettingsHistoryScalarFieldEnum = (typeof SystemSettingsHistoryScalarFieldEnum)[keyof typeof SystemSettingsHistoryScalarFieldEnum]
+
+
+export const CooperativeScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  subdomain: 'subdomain',
+  customDomain: 'customDomain',
+  themeConfig: 'themeConfig',
+  systemSettings: 'systemSettings',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CooperativeScalarFieldEnum = (typeof CooperativeScalarFieldEnum)[keyof typeof CooperativeScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -3261,6 +3357,7 @@ export type GlobalOmitConfig = {
   transaction?: Prisma.TransactionOmit
   systemSettings?: Prisma.SystemSettingsOmit
   systemSettingsHistory?: Prisma.SystemSettingsHistoryOmit
+  cooperative?: Prisma.CooperativeOmit
 }
 
 /* Types for Logging */

@@ -122,3 +122,25 @@ dist
 
 # End of https://mrkandreev.name/snippets/gitignore-generator/#Node
 /generated/prisma
+
+# Prisma generated client output (build artifacts — do not commit)
+src/utils/prisma/*.dll.node
+src/utils/prisma/*.wasm
+src/utils/prisma/*.wasm-base64.js
+src/utils/prisma/query_compiler_fast_bg.js
+src/utils/prisma/index-browser.js
+src/utils/prisma/index.js
+src/utils/prisma/index.d.ts
+src/utils/prisma/edge.js
+src/utils/prisma/edge.d.ts
+src/utils/prisma/default.js
+src/utils/prisma/default.d.ts
+src/utils/prisma/client.js
+src/utils/prisma/client.d.ts
+src/utils/prisma/wasm.js
+src/utils/prisma/wasm.d.ts
+src/utils/prisma/wasm-worker-loader.mjs
+src/utils/prisma/wasm-edge-light-loader.mjs
+src/utils/prisma/schema.prisma
+src/utils/prisma/package.json
+src/utils/prisma/runtime/
