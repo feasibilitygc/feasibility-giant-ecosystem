@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "commonjs",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "./dist",
+    "rootDir": ".", 
+    "paths": {
+      "@/prisma": ["./src/utils/prisma.ts"],
+      "@/*": ["./src/*"],
+    }
+  },
+  "ts-node": {
+    "require": ["tsconfig-paths/register"],
+    "transpileOnly": true
+  },
+  "typeRoots": ["./node_modules/@types", "./src/types"],
+  "include": ["src/**/*", "src/utils/prisma.ts", "src/types/**/*", "prisma/*", "twilio/twilioUtils.ts"],
+  "exclude": ["node_modules", "**/*.spec.ts", "dist"]
+}
