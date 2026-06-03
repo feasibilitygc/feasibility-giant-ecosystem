@@ -43,3 +43,6 @@ Thumbs.db
 # prisma
 /packages/db/prisma/dev.db
 /packages/db/prisma/dev.db-journal
+
+# build outputs
+*.tsbuildinfo
