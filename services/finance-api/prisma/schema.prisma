@@ -25,6 +25,8 @@ model User {
   updatedAt       DateTime          @updatedAt
   roleAssignments UserRole[]
   biodata         Biodata?          @relation(fields: [biodataId], references: [id])
+  cooperativeId   String?           @db.Uuid
+  cooperative     Cooperative?      @relation(fields: [cooperativeId], references: [id])
   adminProfile    AdminUserProfile?
   notifications   Notification[]
   sessions        Session[]
@@ -159,6 +161,8 @@ model Biodata {
   updatedAt               DateTime          @updatedAt
   accountInfo             AccountInfo[]
   users                   User[]
+  cooperativeId           String?           @db.Uuid
+  cooperative             Cooperative?      @relation(fields: [cooperativeId], references: [id])
   savings                 Savings[]
   shares                  Shares[]
   loans                   Loan[]
@@ -201,6 +205,8 @@ model Savings {
   description  String?
   createdAt    DateTime      @default(now())
   member       Biodata       @relation(fields: [memberId, erpId], references: [id, erpId])
+  cooperativeId      String?       @db.Uuid
+  cooperative        Cooperative?  @relation(fields: [cooperativeId], references: [id])
   requests     Request[] // Withdrawal requests
   transactions Transaction[] // Related transactions
   shares       Shares[]      @relation("SavingsShares")
@@ -266,6 +272,8 @@ model Shares {
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
   member       Biodata       @relation(fields: [memberId], references: [id])
+  cooperativeId String?       @db.Uuid
+  cooperative   Cooperative?  @relation(fields: [cooperativeId], references: [id])
   savings      Savings       @relation("SavingsShares", fields: [savingsId], references: [id])
   transactions Transaction[] // Share purchase/liquidation transactions
 
@@ -298,6 +306,8 @@ model Loan {
   member     Biodata  @relation(fields: [memberId], references: [id])
   loanTypeId String   @db.Uuid
   loanType   LoanType @relation(fields: [loanTypeId], references: [id])
+  cooperativeId String?  @db.Uuid
+  cooperative   Cooperative? @relation(fields: [cooperativeId], references: [id])
 
   // Loan details
   principalAmount  Decimal @db.Decimal(15, 2)
@@ -453,6 +463,8 @@ model Request {
   savings   Savings? @relation(fields: [savingsId], references: [id])
   biodataId String?  @db.Uuid
   biodata   Biodata? @relation(fields: [biodataId], references: [id])
+  cooperativeId String?  @db.Uuid
+  cooperative   Cooperative? @relation(fields: [cooperativeId], references: [id])
 
   // Personal Savings
   personalSavingsId String?          @db.Uuid
@@ -566,6 +578,8 @@ model Transaction {
   // Related records
   requestId String?  @db.Uuid
   request   Request? @relation(fields: [requestId], references: [id])
+  cooperativeId     String?            @db.Uuid
+  cooperative       Cooperative?       @relation(fields: [cooperativeId], references: [id])
   loanId    String?  @db.Uuid
   loan      Loan?    @relation(fields: [loanId], references: [id])
   savingsId String?  @db.Uuid
@@ -627,6 +641,25 @@ model SystemSettingsHistory {
   createdAt DateTime       @default(now())
 
   @@index([settingId])
+}
+
+model Cooperative {
+  id             String            @id @default(uuid()) @db.Uuid
+  name           String
+  subdomain      String            @unique
+  customDomain   String?           @unique
+  themeConfig    Json?             // { primary_color: string, secondary_color: string, logo_url: string }
+  systemSettings Json?             // { allow_self_registration: boolean, require_mfa: boolean }
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+
+  users          User[]
+  biodata        Biodata[]
+  savings        Savings[]
+  shares         Shares[]
+  loans          Loan[]
+  requests       Request[]
+  transactions   Transaction[]
 }
 
 // Enums with proper formatting

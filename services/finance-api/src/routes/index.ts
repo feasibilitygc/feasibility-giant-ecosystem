@@ -9,6 +9,7 @@ import loanRoutes from '../modules/loan/routes';
 import transactions from '../modules/transaction/routes/transaction.routes'
 import routes from '../modules/request/routes';
 import personalSavingsRouter from '../modules/personal-savings';
+import cooperativeRoutes from '../modules/cooperative/routes/cooperative.routes';
 
 import { authenticateUser as authenticate } from '../middlewares/auth';
 
@@ -25,6 +26,7 @@ router.use('/biodata', biodataRoutes);
 router.use('/users', userRoutes);
 router.use('/requests', routes);
 router.use('/accounts', accountRoutes);
+router.use('/cooperatives', cooperativeRoutes);
 
 // Protected routes (require authentication)
 router.use(authenticate);

@@ -8,8 +8,6 @@ import { processSavingsTransaction } from './transaction.service';
 import { SystemSettingsService } from '../../system/services/systemSettings.service';
 import logger from '../../../utils/logger';
 
-import { prisma } from '@/prisma';
-
 export class SavingsUploadService {
     private static async getShareAmount(): Promise<Decimal> {
         try {

@@ -33,6 +33,7 @@ export type UserMinAggregateOutputType = {
   isMember: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
+  cooperativeId: string | null
 }
 
 export type UserMaxAggregateOutputType = {
@@ -44,6 +45,7 @@ export type UserMaxAggregateOutputType = {
   isMember: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
+  cooperativeId: string | null
 }
 
 export type UserCountAggregateOutputType = {
@@ -55,6 +57,7 @@ export type UserCountAggregateOutputType = {
   isMember: number
   createdAt: number
   updatedAt: number
+  cooperativeId: number
   _all: number
 }
 
@@ -68,6 +71,7 @@ export type UserMinAggregateInputType = {
   isMember?: true
   createdAt?: true
   updatedAt?: true
+  cooperativeId?: true
 }
 
 export type UserMaxAggregateInputType = {
@@ -79,6 +83,7 @@ export type UserMaxAggregateInputType = {
   isMember?: true
   createdAt?: true
   updatedAt?: true
+  cooperativeId?: true
 }
 
 export type UserCountAggregateInputType = {
@@ -90,6 +95,7 @@ export type UserCountAggregateInputType = {
   isMember?: true
   createdAt?: true
   updatedAt?: true
+  cooperativeId?: true
   _all?: true
 }
 
@@ -174,6 +180,7 @@ export type UserGroupByOutputType = {
   isMember: boolean
   createdAt: Date
   updatedAt: Date
+  cooperativeId: string | null
   _count: UserCountAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
   _max: UserMaxAggregateOutputType | null
@@ -206,8 +213,10 @@ export type UserWhereInput = {
   isMember?: Prisma.BoolFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  cooperativeId?: Prisma.UuidNullableFilter<"User"> | string | null
   roleAssignments?: Prisma.UserRoleListRelationFilter
   biodata?: Prisma.XOR<Prisma.BiodataNullableScalarRelationFilter, Prisma.BiodataWhereInput> | null
+  cooperative?: Prisma.XOR<Prisma.CooperativeNullableScalarRelationFilter, Prisma.CooperativeWhereInput> | null
   adminProfile?: Prisma.XOR<Prisma.AdminUserProfileNullableScalarRelationFilter, Prisma.AdminUserProfileWhereInput> | null
   notifications?: Prisma.NotificationListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
@@ -231,8 +240,10 @@ export type UserOrderByWithRelationInput = {
   isMember?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  cooperativeId?: Prisma.SortOrderInput | Prisma.SortOrder
   roleAssignments?: Prisma.UserRoleOrderByRelationAggregateInput
   biodata?: Prisma.BiodataOrderByWithRelationInput
+  cooperative?: Prisma.CooperativeOrderByWithRelationInput
   adminProfile?: Prisma.AdminUserProfileOrderByWithRelationInput
   notifications?: Prisma.NotificationOrderByRelationAggregateInput
   sessions?: Prisma.SessionOrderByRelationAggregateInput
@@ -259,8 +270,10 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   isMember?: Prisma.BoolFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  cooperativeId?: Prisma.UuidNullableFilter<"User"> | string | null
   roleAssignments?: Prisma.UserRoleListRelationFilter
   biodata?: Prisma.XOR<Prisma.BiodataNullableScalarRelationFilter, Prisma.BiodataWhereInput> | null
+  cooperative?: Prisma.XOR<Prisma.CooperativeNullableScalarRelationFilter, Prisma.CooperativeWhereInput> | null
   adminProfile?: Prisma.XOR<Prisma.AdminUserProfileNullableScalarRelationFilter, Prisma.AdminUserProfileWhereInput> | null
   notifications?: Prisma.NotificationListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
@@ -284,6 +297,7 @@ export type UserOrderByWithAggregationInput = {
   isMember?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  cooperativeId?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
   _max?: Prisma.UserMaxOrderByAggregateInput
   _min?: Prisma.UserMinOrderByAggregateInput
@@ -301,6 +315,7 @@ export type UserScalarWhereWithAggregatesInput = {
   isMember?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
+  cooperativeId?: Prisma.UuidNullableWithAggregatesFilter<"User"> | string | null
 }
 
 export type UserCreateInput = {
@@ -313,6 +328,7 @@ export type UserCreateInput = {
   updatedAt?: Date | string
   roleAssignments?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   biodata?: Prisma.BiodataCreateNestedOneWithoutUsersInput
+  cooperative?: Prisma.CooperativeCreateNestedOneWithoutUsersInput
   adminProfile?: Prisma.AdminUserProfileCreateNestedOneWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
@@ -336,6 +352,7 @@ export type UserUncheckedCreateInput = {
   isMember?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  cooperativeId?: string | null
   roleAssignments?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   adminProfile?: Prisma.AdminUserProfileUncheckedCreateNestedOneWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
@@ -361,6 +378,7 @@ export type UserUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   roleAssignments?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   biodata?: Prisma.BiodataUpdateOneWithoutUsersNestedInput
+  cooperative?: Prisma.CooperativeUpdateOneWithoutUsersNestedInput
   adminProfile?: Prisma.AdminUserProfileUpdateOneWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
@@ -384,6 +402,7 @@ export type UserUncheckedUpdateInput = {
   isMember?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cooperativeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roleAssignments?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   adminProfile?: Prisma.AdminUserProfileUncheckedUpdateOneWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
@@ -408,6 +427,7 @@ export type UserCreateManyInput = {
   isMember?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  cooperativeId?: string | null
 }
 
 export type UserUpdateManyMutationInput = {
@@ -429,6 +449,7 @@ export type UserUncheckedUpdateManyInput = {
   isMember?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cooperativeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type UserCountOrderByAggregateInput = {
@@ -440,6 +461,7 @@ export type UserCountOrderByAggregateInput = {
   isMember?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  cooperativeId?: Prisma.SortOrder
 }
 
 export type UserMaxOrderByAggregateInput = {
@@ -451,6 +473,7 @@ export type UserMaxOrderByAggregateInput = {
   isMember?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  cooperativeId?: Prisma.SortOrder
 }
 
 export type UserMinOrderByAggregateInput = {
@@ -462,6 +485,7 @@ export type UserMinOrderByAggregateInput = {
   isMember?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  cooperativeId?: Prisma.SortOrder
 }
 
 export type UserScalarRelationFilter = {
@@ -734,6 +758,48 @@ export type UserUpdateOneWithoutApprovedTxnsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutApprovedTxnsInput, Prisma.UserUpdateWithoutApprovedTxnsInput>, Prisma.UserUncheckedUpdateWithoutApprovedTxnsInput>
 }
 
+export type UserCreateNestedManyWithoutCooperativeInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCooperativeInput, Prisma.UserUncheckedCreateWithoutCooperativeInput> | Prisma.UserCreateWithoutCooperativeInput[] | Prisma.UserUncheckedCreateWithoutCooperativeInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCooperativeInput | Prisma.UserCreateOrConnectWithoutCooperativeInput[]
+  createMany?: Prisma.UserCreateManyCooperativeInputEnvelope
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+}
+
+export type UserUncheckedCreateNestedManyWithoutCooperativeInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCooperativeInput, Prisma.UserUncheckedCreateWithoutCooperativeInput> | Prisma.UserCreateWithoutCooperativeInput[] | Prisma.UserUncheckedCreateWithoutCooperativeInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCooperativeInput | Prisma.UserCreateOrConnectWithoutCooperativeInput[]
+  createMany?: Prisma.UserCreateManyCooperativeInputEnvelope
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+}
+
+export type UserUpdateManyWithoutCooperativeNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCooperativeInput, Prisma.UserUncheckedCreateWithoutCooperativeInput> | Prisma.UserCreateWithoutCooperativeInput[] | Prisma.UserUncheckedCreateWithoutCooperativeInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCooperativeInput | Prisma.UserCreateOrConnectWithoutCooperativeInput[]
+  upsert?: Prisma.UserUpsertWithWhereUniqueWithoutCooperativeInput | Prisma.UserUpsertWithWhereUniqueWithoutCooperativeInput[]
+  createMany?: Prisma.UserCreateManyCooperativeInputEnvelope
+  set?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  disconnect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  delete?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  update?: Prisma.UserUpdateWithWhereUniqueWithoutCooperativeInput | Prisma.UserUpdateWithWhereUniqueWithoutCooperativeInput[]
+  updateMany?: Prisma.UserUpdateManyWithWhereWithoutCooperativeInput | Prisma.UserUpdateManyWithWhereWithoutCooperativeInput[]
+  deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
+}
+
+export type UserUncheckedUpdateManyWithoutCooperativeNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCooperativeInput, Prisma.UserUncheckedCreateWithoutCooperativeInput> | Prisma.UserCreateWithoutCooperativeInput[] | Prisma.UserUncheckedCreateWithoutCooperativeInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCooperativeInput | Prisma.UserCreateOrConnectWithoutCooperativeInput[]
+  upsert?: Prisma.UserUpsertWithWhereUniqueWithoutCooperativeInput | Prisma.UserUpsertWithWhereUniqueWithoutCooperativeInput[]
+  createMany?: Prisma.UserCreateManyCooperativeInputEnvelope
+  set?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  disconnect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  delete?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  update?: Prisma.UserUpdateWithWhereUniqueWithoutCooperativeInput | Prisma.UserUpdateWithWhereUniqueWithoutCooperativeInput[]
+  updateMany?: Prisma.UserUpdateManyWithWhereWithoutCooperativeInput | Prisma.UserUpdateManyWithWhereWithoutCooperativeInput[]
+  deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
+}
+
 export type UserCreateWithoutRoleAssignmentsInput = {
   id?: string
   username?: string | null
@@ -743,6 +809,7 @@ export type UserCreateWithoutRoleAssignmentsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   biodata?: Prisma.BiodataCreateNestedOneWithoutUsersInput
+  cooperative?: Prisma.CooperativeCreateNestedOneWithoutUsersInput
   adminProfile?: Prisma.AdminUserProfileCreateNestedOneWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
@@ -766,6 +833,7 @@ export type UserUncheckedCreateWithoutRoleAssignmentsInput = {
   isMember?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  cooperativeId?: string | null
   adminProfile?: Prisma.AdminUserProfileUncheckedCreateNestedOneWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
@@ -805,6 +873,7 @@ export type UserUpdateWithoutRoleAssignmentsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   biodata?: Prisma.BiodataUpdateOneWithoutUsersNestedInput
+  cooperative?: Prisma.CooperativeUpdateOneWithoutUsersNestedInput
   adminProfile?: Prisma.AdminUserProfileUpdateOneWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
@@ -828,6 +897,7 @@ export type UserUncheckedUpdateWithoutRoleAssignmentsInput = {
   isMember?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cooperativeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   adminProfile?: Prisma.AdminUserProfileUncheckedUpdateOneWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
@@ -852,6 +922,7 @@ export type UserCreateWithoutAdminProfileInput = {
   updatedAt?: Date | string
   roleAssignments?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   biodata?: Prisma.BiodataCreateNestedOneWithoutUsersInput
+  cooperative?: Prisma.CooperativeCreateNestedOneWithoutUsersInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   initiatedRequests?: Prisma.RequestCreateNestedManyWithoutInitiatorInput
@@ -874,6 +945,7 @@ export type UserUncheckedCreateWithoutAdminProfileInput = {
   isMember?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  cooperativeId?: string | null
   roleAssignments?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
@@ -914,6 +986,7 @@ export type UserUpdateWithoutAdminProfileInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   roleAssignments?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   biodata?: Prisma.BiodataUpdateOneWithoutUsersNestedInput
+  cooperative?: Prisma.CooperativeUpdateOneWithoutUsersNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   initiatedRequests?: Prisma.RequestUpdateManyWithoutInitiatorNestedInput
@@ -936,6 +1009,7 @@ export type UserUncheckedUpdateWithoutAdminProfileInput = {
   isMember?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cooperativeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roleAssignments?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
@@ -959,6 +1033,7 @@ export type UserCreateWithoutBiodataInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   roleAssignments?: Prisma.UserRoleCreateNestedManyWithoutUserInput
+  cooperative?: Prisma.CooperativeCreateNestedOneWithoutUsersInput
   adminProfile?: Prisma.AdminUserProfileCreateNestedOneWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
@@ -981,6 +1056,7 @@ export type UserUncheckedCreateWithoutBiodataInput = {
   isMember?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  cooperativeId?: string | null
   roleAssignments?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   adminProfile?: Prisma.AdminUserProfileUncheckedCreateNestedOneWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
@@ -1034,6 +1110,7 @@ export type UserScalarWhereInput = {
   isMember?: Prisma.BoolFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  cooperativeId?: Prisma.UuidNullableFilter<"User"> | string | null
 }
 
 export type UserCreateWithoutUploadedRepaymentsInput = {
@@ -1046,6 +1123,7 @@ export type UserCreateWithoutUploadedRepaymentsInput = {
   updatedAt?: Date | string
   roleAssignments?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   biodata?: Prisma.BiodataCreateNestedOneWithoutUsersInput
+  cooperative?: Prisma.CooperativeCreateNestedOneWithoutUsersInput
   adminProfile?: Prisma.AdminUserProfileCreateNestedOneWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
@@ -1068,6 +1146,7 @@ export type UserUncheckedCreateWithoutUploadedRepaymentsInput = {
   isMember?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  cooperativeId?: string | null
   roleAssignments?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   adminProfile?: Prisma.AdminUserProfileUncheckedCreateNestedOneWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
@@ -1108,6 +1187,7 @@ export type UserUpdateWithoutUploadedRepaymentsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   roleAssignments?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   biodata?: Prisma.BiodataUpdateOneWithoutUsersNestedInput
+  cooperative?: Prisma.CooperativeUpdateOneWithoutUsersNestedInput
   adminProfile?: Prisma.AdminUserProfileUpdateOneWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
@@ -1130,6 +1210,7 @@ export type UserUncheckedUpdateWithoutUploadedRepaymentsInput = {
   isMember?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cooperativeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roleAssignments?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   adminProfile?: Prisma.AdminUserProfileUncheckedUpdateOneWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
@@ -1154,6 +1235,7 @@ export type UserCreateWithoutProcessedRepaymentsInput = {
   updatedAt?: Date | string
   roleAssignments?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   biodata?: Prisma.BiodataCreateNestedOneWithoutUsersInput
+  cooperative?: Prisma.CooperativeCreateNestedOneWithoutUsersInput
   adminProfile?: Prisma.AdminUserProfileCreateNestedOneWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
@@ -1176,6 +1258,7 @@ export type UserUncheckedCreateWithoutProcessedRepaymentsInput = {
   isMember?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  cooperativeId?: string | null
   roleAssignments?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   adminProfile?: Prisma.AdminUserProfileUncheckedCreateNestedOneWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
@@ -1216,6 +1299,7 @@ export type UserUpdateWithoutProcessedRepaymentsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   roleAssignments?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   biodata?: Prisma.BiodataUpdateOneWithoutUsersNestedInput
+  cooperative?: Prisma.CooperativeUpdateOneWithoutUsersNestedInput
   adminProfile?: Prisma.AdminUserProfileUpdateOneWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
@@ -1238,6 +1322,7 @@ export type UserUncheckedUpdateWithoutProcessedRepaymentsInput = {
   isMember?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cooperativeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roleAssignments?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   adminProfile?: Prisma.AdminUserProfileUncheckedUpdateOneWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
@@ -1262,6 +1347,7 @@ export type UserCreateWithoutStatusChangesInput = {
   updatedAt?: Date | string
   roleAssignments?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   biodata?: Prisma.BiodataCreateNestedOneWithoutUsersInput
+  cooperative?: Prisma.CooperativeCreateNestedOneWithoutUsersInput
   adminProfile?: Prisma.AdminUserProfileCreateNestedOneWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
@@ -1284,6 +1370,7 @@ export type UserUncheckedCreateWithoutStatusChangesInput = {
   isMember?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  cooperativeId?: string | null
   roleAssignments?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   adminProfile?: Prisma.AdminUserProfileUncheckedCreateNestedOneWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
@@ -1324,6 +1411,7 @@ export type UserUpdateWithoutStatusChangesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   roleAssignments?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   biodata?: Prisma.BiodataUpdateOneWithoutUsersNestedInput
+  cooperative?: Prisma.CooperativeUpdateOneWithoutUsersNestedInput
   adminProfile?: Prisma.AdminUserProfileUpdateOneWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
@@ -1346,6 +1434,7 @@ export type UserUncheckedUpdateWithoutStatusChangesInput = {
   isMember?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cooperativeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roleAssignments?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   adminProfile?: Prisma.AdminUserProfileUncheckedUpdateOneWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
@@ -1370,6 +1459,7 @@ export type UserCreateWithoutInitiatedRequestsInput = {
   updatedAt?: Date | string
   roleAssignments?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   biodata?: Prisma.BiodataCreateNestedOneWithoutUsersInput
+  cooperative?: Prisma.CooperativeCreateNestedOneWithoutUsersInput
   adminProfile?: Prisma.AdminUserProfileCreateNestedOneWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
@@ -1392,6 +1482,7 @@ export type UserUncheckedCreateWithoutInitiatedRequestsInput = {
   isMember?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  cooperativeId?: string | null
   roleAssignments?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   adminProfile?: Prisma.AdminUserProfileUncheckedCreateNestedOneWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
@@ -1421,6 +1512,7 @@ export type UserCreateWithoutAssignedRequestsInput = {
   updatedAt?: Date | string
   roleAssignments?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   biodata?: Prisma.BiodataCreateNestedOneWithoutUsersInput
+  cooperative?: Prisma.CooperativeCreateNestedOneWithoutUsersInput
   adminProfile?: Prisma.AdminUserProfileCreateNestedOneWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
@@ -1443,6 +1535,7 @@ export type UserUncheckedCreateWithoutAssignedRequestsInput = {
   isMember?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  cooperativeId?: string | null
   roleAssignments?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   adminProfile?: Prisma.AdminUserProfileUncheckedCreateNestedOneWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
@@ -1472,6 +1565,7 @@ export type UserCreateWithoutApprovedRequestsInput = {
   updatedAt?: Date | string
   roleAssignments?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   biodata?: Prisma.BiodataCreateNestedOneWithoutUsersInput
+  cooperative?: Prisma.CooperativeCreateNestedOneWithoutUsersInput
   adminProfile?: Prisma.AdminUserProfileCreateNestedOneWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
@@ -1494,6 +1588,7 @@ export type UserUncheckedCreateWithoutApprovedRequestsInput = {
   isMember?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  cooperativeId?: string | null
   roleAssignments?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   adminProfile?: Prisma.AdminUserProfileUncheckedCreateNestedOneWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
@@ -1534,6 +1629,7 @@ export type UserUpdateWithoutInitiatedRequestsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   roleAssignments?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   biodata?: Prisma.BiodataUpdateOneWithoutUsersNestedInput
+  cooperative?: Prisma.CooperativeUpdateOneWithoutUsersNestedInput
   adminProfile?: Prisma.AdminUserProfileUpdateOneWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
@@ -1556,6 +1652,7 @@ export type UserUncheckedUpdateWithoutInitiatedRequestsInput = {
   isMember?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cooperativeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roleAssignments?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   adminProfile?: Prisma.AdminUserProfileUncheckedUpdateOneWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
@@ -1591,6 +1688,7 @@ export type UserUpdateWithoutAssignedRequestsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   roleAssignments?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   biodata?: Prisma.BiodataUpdateOneWithoutUsersNestedInput
+  cooperative?: Prisma.CooperativeUpdateOneWithoutUsersNestedInput
   adminProfile?: Prisma.AdminUserProfileUpdateOneWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
@@ -1613,6 +1711,7 @@ export type UserUncheckedUpdateWithoutAssignedRequestsInput = {
   isMember?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cooperativeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roleAssignments?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   adminProfile?: Prisma.AdminUserProfileUncheckedUpdateOneWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
@@ -1648,6 +1747,7 @@ export type UserUpdateWithoutApprovedRequestsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   roleAssignments?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   biodata?: Prisma.BiodataUpdateOneWithoutUsersNestedInput
+  cooperative?: Prisma.CooperativeUpdateOneWithoutUsersNestedInput
   adminProfile?: Prisma.AdminUserProfileUpdateOneWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
@@ -1670,6 +1770,7 @@ export type UserUncheckedUpdateWithoutApprovedRequestsInput = {
   isMember?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cooperativeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roleAssignments?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   adminProfile?: Prisma.AdminUserProfileUncheckedUpdateOneWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
@@ -1694,6 +1795,7 @@ export type UserCreateWithoutRequestApprovalInput = {
   updatedAt?: Date | string
   roleAssignments?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   biodata?: Prisma.BiodataCreateNestedOneWithoutUsersInput
+  cooperative?: Prisma.CooperativeCreateNestedOneWithoutUsersInput
   adminProfile?: Prisma.AdminUserProfileCreateNestedOneWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
@@ -1716,6 +1818,7 @@ export type UserUncheckedCreateWithoutRequestApprovalInput = {
   isMember?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  cooperativeId?: string | null
   roleAssignments?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   adminProfile?: Prisma.AdminUserProfileUncheckedCreateNestedOneWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
@@ -1756,6 +1859,7 @@ export type UserUpdateWithoutRequestApprovalInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   roleAssignments?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   biodata?: Prisma.BiodataUpdateOneWithoutUsersNestedInput
+  cooperative?: Prisma.CooperativeUpdateOneWithoutUsersNestedInput
   adminProfile?: Prisma.AdminUserProfileUpdateOneWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
@@ -1778,6 +1882,7 @@ export type UserUncheckedUpdateWithoutRequestApprovalInput = {
   isMember?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cooperativeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roleAssignments?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   adminProfile?: Prisma.AdminUserProfileUncheckedUpdateOneWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
@@ -1802,6 +1907,7 @@ export type UserCreateWithoutNotificationsInput = {
   updatedAt?: Date | string
   roleAssignments?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   biodata?: Prisma.BiodataCreateNestedOneWithoutUsersInput
+  cooperative?: Prisma.CooperativeCreateNestedOneWithoutUsersInput
   adminProfile?: Prisma.AdminUserProfileCreateNestedOneWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   initiatedRequests?: Prisma.RequestCreateNestedManyWithoutInitiatorInput
@@ -1824,6 +1930,7 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   isMember?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  cooperativeId?: string | null
   roleAssignments?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   adminProfile?: Prisma.AdminUserProfileUncheckedCreateNestedOneWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
@@ -1864,6 +1971,7 @@ export type UserUpdateWithoutNotificationsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   roleAssignments?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   biodata?: Prisma.BiodataUpdateOneWithoutUsersNestedInput
+  cooperative?: Prisma.CooperativeUpdateOneWithoutUsersNestedInput
   adminProfile?: Prisma.AdminUserProfileUpdateOneWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   initiatedRequests?: Prisma.RequestUpdateManyWithoutInitiatorNestedInput
@@ -1886,6 +1994,7 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   isMember?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cooperativeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roleAssignments?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   adminProfile?: Prisma.AdminUserProfileUncheckedUpdateOneWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
@@ -1910,6 +2019,7 @@ export type UserCreateWithoutSessionsInput = {
   updatedAt?: Date | string
   roleAssignments?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   biodata?: Prisma.BiodataCreateNestedOneWithoutUsersInput
+  cooperative?: Prisma.CooperativeCreateNestedOneWithoutUsersInput
   adminProfile?: Prisma.AdminUserProfileCreateNestedOneWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   initiatedRequests?: Prisma.RequestCreateNestedManyWithoutInitiatorInput
@@ -1932,6 +2042,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   isMember?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  cooperativeId?: string | null
   roleAssignments?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   adminProfile?: Prisma.AdminUserProfileUncheckedCreateNestedOneWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
@@ -1972,6 +2083,7 @@ export type UserUpdateWithoutSessionsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   roleAssignments?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   biodata?: Prisma.BiodataUpdateOneWithoutUsersNestedInput
+  cooperative?: Prisma.CooperativeUpdateOneWithoutUsersNestedInput
   adminProfile?: Prisma.AdminUserProfileUpdateOneWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   initiatedRequests?: Prisma.RequestUpdateManyWithoutInitiatorNestedInput
@@ -1994,6 +2106,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   isMember?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cooperativeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roleAssignments?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   adminProfile?: Prisma.AdminUserProfileUncheckedUpdateOneWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
@@ -2018,6 +2131,7 @@ export type UserCreateWithoutInitiatedTxnsInput = {
   updatedAt?: Date | string
   roleAssignments?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   biodata?: Prisma.BiodataCreateNestedOneWithoutUsersInput
+  cooperative?: Prisma.CooperativeCreateNestedOneWithoutUsersInput
   adminProfile?: Prisma.AdminUserProfileCreateNestedOneWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
@@ -2040,6 +2154,7 @@ export type UserUncheckedCreateWithoutInitiatedTxnsInput = {
   isMember?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  cooperativeId?: string | null
   roleAssignments?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   adminProfile?: Prisma.AdminUserProfileUncheckedCreateNestedOneWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
@@ -2069,6 +2184,7 @@ export type UserCreateWithoutApprovedTxnsInput = {
   updatedAt?: Date | string
   roleAssignments?: Prisma.UserRoleCreateNestedManyWithoutUserInput
   biodata?: Prisma.BiodataCreateNestedOneWithoutUsersInput
+  cooperative?: Prisma.CooperativeCreateNestedOneWithoutUsersInput
   adminProfile?: Prisma.AdminUserProfileCreateNestedOneWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
@@ -2091,6 +2207,7 @@ export type UserUncheckedCreateWithoutApprovedTxnsInput = {
   isMember?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  cooperativeId?: string | null
   roleAssignments?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
   adminProfile?: Prisma.AdminUserProfileUncheckedCreateNestedOneWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
@@ -2131,6 +2248,7 @@ export type UserUpdateWithoutInitiatedTxnsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   roleAssignments?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   biodata?: Prisma.BiodataUpdateOneWithoutUsersNestedInput
+  cooperative?: Prisma.CooperativeUpdateOneWithoutUsersNestedInput
   adminProfile?: Prisma.AdminUserProfileUpdateOneWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
@@ -2153,6 +2271,7 @@ export type UserUncheckedUpdateWithoutInitiatedTxnsInput = {
   isMember?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cooperativeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roleAssignments?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   adminProfile?: Prisma.AdminUserProfileUncheckedUpdateOneWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
@@ -2188,6 +2307,7 @@ export type UserUpdateWithoutApprovedTxnsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   roleAssignments?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
   biodata?: Prisma.BiodataUpdateOneWithoutUsersNestedInput
+  cooperative?: Prisma.CooperativeUpdateOneWithoutUsersNestedInput
   adminProfile?: Prisma.AdminUserProfileUpdateOneWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
@@ -2210,6 +2330,7 @@ export type UserUncheckedUpdateWithoutApprovedTxnsInput = {
   isMember?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cooperativeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roleAssignments?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   adminProfile?: Prisma.AdminUserProfileUncheckedUpdateOneWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
@@ -2224,6 +2345,80 @@ export type UserUncheckedUpdateWithoutApprovedTxnsInput = {
   RequestApproval?: Prisma.RequestApprovalUncheckedUpdateManyWithoutApproverNestedInput
 }
 
+export type UserCreateWithoutCooperativeInput = {
+  id?: string
+  username?: string | null
+  password?: string | null
+  isActive?: boolean
+  isMember?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  roleAssignments?: Prisma.UserRoleCreateNestedManyWithoutUserInput
+  biodata?: Prisma.BiodataCreateNestedOneWithoutUsersInput
+  adminProfile?: Prisma.AdminUserProfileCreateNestedOneWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  initiatedRequests?: Prisma.RequestCreateNestedManyWithoutInitiatorInput
+  assignedRequests?: Prisma.RequestCreateNestedManyWithoutAssigneeInput
+  approvedRequests?: Prisma.RequestCreateNestedManyWithoutApproverInput
+  initiatedTxns?: Prisma.TransactionCreateNestedManyWithoutInitiatorInput
+  approvedTxns?: Prisma.TransactionCreateNestedManyWithoutApproverInput
+  uploadedRepayments?: Prisma.BulkRepaymentUploadCreateNestedManyWithoutUploaderInput
+  processedRepayments?: Prisma.LoanRepaymentCreateNestedManyWithoutUploaderInput
+  statusChanges?: Prisma.LoanStatusHistoryCreateNestedManyWithoutChangeUserInput
+  RequestApproval?: Prisma.RequestApprovalCreateNestedManyWithoutApproverInput
+}
+
+export type UserUncheckedCreateWithoutCooperativeInput = {
+  id?: string
+  biodataId?: string | null
+  username?: string | null
+  password?: string | null
+  isActive?: boolean
+  isMember?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  roleAssignments?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
+  adminProfile?: Prisma.AdminUserProfileUncheckedCreateNestedOneWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  initiatedRequests?: Prisma.RequestUncheckedCreateNestedManyWithoutInitiatorInput
+  assignedRequests?: Prisma.RequestUncheckedCreateNestedManyWithoutAssigneeInput
+  approvedRequests?: Prisma.RequestUncheckedCreateNestedManyWithoutApproverInput
+  initiatedTxns?: Prisma.TransactionUncheckedCreateNestedManyWithoutInitiatorInput
+  approvedTxns?: Prisma.TransactionUncheckedCreateNestedManyWithoutApproverInput
+  uploadedRepayments?: Prisma.BulkRepaymentUploadUncheckedCreateNestedManyWithoutUploaderInput
+  processedRepayments?: Prisma.LoanRepaymentUncheckedCreateNestedManyWithoutUploaderInput
+  statusChanges?: Prisma.LoanStatusHistoryUncheckedCreateNestedManyWithoutChangeUserInput
+  RequestApproval?: Prisma.RequestApprovalUncheckedCreateNestedManyWithoutApproverInput
+}
+
+export type UserCreateOrConnectWithoutCooperativeInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCooperativeInput, Prisma.UserUncheckedCreateWithoutCooperativeInput>
+}
+
+export type UserCreateManyCooperativeInputEnvelope = {
+  data: Prisma.UserCreateManyCooperativeInput | Prisma.UserCreateManyCooperativeInput[]
+  skipDuplicates?: boolean
+}
+
+export type UserUpsertWithWhereUniqueWithoutCooperativeInput = {
+  where: Prisma.UserWhereUniqueInput
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCooperativeInput, Prisma.UserUncheckedUpdateWithoutCooperativeInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCooperativeInput, Prisma.UserUncheckedCreateWithoutCooperativeInput>
+}
+
+export type UserUpdateWithWhereUniqueWithoutCooperativeInput = {
+  where: Prisma.UserWhereUniqueInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCooperativeInput, Prisma.UserUncheckedUpdateWithoutCooperativeInput>
+}
+
+export type UserUpdateManyWithWhereWithoutCooperativeInput = {
+  where: Prisma.UserScalarWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateManyMutationInput, Prisma.UserUncheckedUpdateManyWithoutCooperativeInput>
+}
+
 export type UserCreateManyBiodataInput = {
   id?: string
   username?: string | null
@@ -2232,6 +2427,7 @@ export type UserCreateManyBiodataInput = {
   isMember?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  cooperativeId?: string | null
 }
 
 export type UserUpdateWithoutBiodataInput = {
@@ -2243,6 +2439,7 @@ export type UserUpdateWithoutBiodataInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   roleAssignments?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
+  cooperative?: Prisma.CooperativeUpdateOneWithoutUsersNestedInput
   adminProfile?: Prisma.AdminUserProfileUpdateOneWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
@@ -2265,6 +2462,7 @@ export type UserUncheckedUpdateWithoutBiodataInput = {
   isMember?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cooperativeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roleAssignments?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
   adminProfile?: Prisma.AdminUserProfileUncheckedUpdateOneWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
@@ -2282,6 +2480,77 @@ export type UserUncheckedUpdateWithoutBiodataInput = {
 
 export type UserUncheckedUpdateManyWithoutBiodataInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isMember?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cooperativeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type UserCreateManyCooperativeInput = {
+  id?: string
+  biodataId?: string | null
+  username?: string | null
+  password?: string | null
+  isActive?: boolean
+  isMember?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type UserUpdateWithoutCooperativeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isMember?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  roleAssignments?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
+  biodata?: Prisma.BiodataUpdateOneWithoutUsersNestedInput
+  adminProfile?: Prisma.AdminUserProfileUpdateOneWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  initiatedRequests?: Prisma.RequestUpdateManyWithoutInitiatorNestedInput
+  assignedRequests?: Prisma.RequestUpdateManyWithoutAssigneeNestedInput
+  approvedRequests?: Prisma.RequestUpdateManyWithoutApproverNestedInput
+  initiatedTxns?: Prisma.TransactionUpdateManyWithoutInitiatorNestedInput
+  approvedTxns?: Prisma.TransactionUpdateManyWithoutApproverNestedInput
+  uploadedRepayments?: Prisma.BulkRepaymentUploadUpdateManyWithoutUploaderNestedInput
+  processedRepayments?: Prisma.LoanRepaymentUpdateManyWithoutUploaderNestedInput
+  statusChanges?: Prisma.LoanStatusHistoryUpdateManyWithoutChangeUserNestedInput
+  RequestApproval?: Prisma.RequestApprovalUpdateManyWithoutApproverNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCooperativeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  biodataId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isMember?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  roleAssignments?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
+  adminProfile?: Prisma.AdminUserProfileUncheckedUpdateOneWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  initiatedRequests?: Prisma.RequestUncheckedUpdateManyWithoutInitiatorNestedInput
+  assignedRequests?: Prisma.RequestUncheckedUpdateManyWithoutAssigneeNestedInput
+  approvedRequests?: Prisma.RequestUncheckedUpdateManyWithoutApproverNestedInput
+  initiatedTxns?: Prisma.TransactionUncheckedUpdateManyWithoutInitiatorNestedInput
+  approvedTxns?: Prisma.TransactionUncheckedUpdateManyWithoutApproverNestedInput
+  uploadedRepayments?: Prisma.BulkRepaymentUploadUncheckedUpdateManyWithoutUploaderNestedInput
+  processedRepayments?: Prisma.LoanRepaymentUncheckedUpdateManyWithoutUploaderNestedInput
+  statusChanges?: Prisma.LoanStatusHistoryUncheckedUpdateManyWithoutChangeUserNestedInput
+  RequestApproval?: Prisma.RequestApprovalUncheckedUpdateManyWithoutApproverNestedInput
+}
+
+export type UserUncheckedUpdateManyWithoutCooperativeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  biodataId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2429,8 +2698,10 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   isMember?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  cooperativeId?: boolean
   roleAssignments?: boolean | Prisma.User$roleAssignmentsArgs<ExtArgs>
   biodata?: boolean | Prisma.User$biodataArgs<ExtArgs>
+  cooperative?: boolean | Prisma.User$cooperativeArgs<ExtArgs>
   adminProfile?: boolean | Prisma.User$adminProfileArgs<ExtArgs>
   notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
@@ -2455,7 +2726,9 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   isMember?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  cooperativeId?: boolean
   biodata?: boolean | Prisma.User$biodataArgs<ExtArgs>
+  cooperative?: boolean | Prisma.User$cooperativeArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -2467,7 +2740,9 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   isMember?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  cooperativeId?: boolean
   biodata?: boolean | Prisma.User$biodataArgs<ExtArgs>
+  cooperative?: boolean | Prisma.User$cooperativeArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectScalar = {
@@ -2479,12 +2754,14 @@ export type UserSelectScalar = {
   isMember?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  cooperativeId?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "biodataId" | "username" | "password" | "isActive" | "isMember" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "biodataId" | "username" | "password" | "isActive" | "isMember" | "createdAt" | "updatedAt" | "cooperativeId", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   roleAssignments?: boolean | Prisma.User$roleAssignmentsArgs<ExtArgs>
   biodata?: boolean | Prisma.User$biodataArgs<ExtArgs>
+  cooperative?: boolean | Prisma.User$cooperativeArgs<ExtArgs>
   adminProfile?: boolean | Prisma.User$adminProfileArgs<ExtArgs>
   notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
@@ -2501,9 +2778,11 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   biodata?: boolean | Prisma.User$biodataArgs<ExtArgs>
+  cooperative?: boolean | Prisma.User$cooperativeArgs<ExtArgs>
 }
 export type UserIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   biodata?: boolean | Prisma.User$biodataArgs<ExtArgs>
+  cooperative?: boolean | Prisma.User$cooperativeArgs<ExtArgs>
 }
 
 export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2511,6 +2790,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   objects: {
     roleAssignments: Prisma.$UserRolePayload<ExtArgs>[]
     biodata: Prisma.$BiodataPayload<ExtArgs> | null
+    cooperative: Prisma.$CooperativePayload<ExtArgs> | null
     adminProfile: Prisma.$AdminUserProfilePayload<ExtArgs> | null
     notifications: Prisma.$NotificationPayload<ExtArgs>[]
     sessions: Prisma.$SessionPayload<ExtArgs>[]
@@ -2533,6 +2813,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     isMember: boolean
     createdAt: Date
     updatedAt: Date
+    cooperativeId: string | null
   }, ExtArgs["result"]["user"]>
   composites: {}
 }
@@ -2929,6 +3210,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   readonly [Symbol.toStringTag]: "PrismaPromise"
   roleAssignments<T extends Prisma.User$roleAssignmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$roleAssignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserRolePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   biodata<T extends Prisma.User$biodataArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$biodataArgs<ExtArgs>>): Prisma.Prisma__BiodataClient<runtime.Types.Result.GetResult<Prisma.$BiodataPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  cooperative<T extends Prisma.User$cooperativeArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$cooperativeArgs<ExtArgs>>): Prisma.Prisma__CooperativeClient<runtime.Types.Result.GetResult<Prisma.$CooperativePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   adminProfile<T extends Prisma.User$adminProfileArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$adminProfileArgs<ExtArgs>>): Prisma.Prisma__AdminUserProfileClient<runtime.Types.Result.GetResult<Prisma.$AdminUserProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   notifications<T extends Prisma.User$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sessions<T extends Prisma.User$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -2978,6 +3260,7 @@ export interface UserFieldRefs {
   readonly isMember: Prisma.FieldRef<"User", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
+  readonly cooperativeId: Prisma.FieldRef<"User", 'String'>
 }
     
 
@@ -3419,6 +3702,25 @@ export type User$biodataArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
    */
   include?: Prisma.BiodataInclude<ExtArgs> | null
   where?: Prisma.BiodataWhereInput
+}
+
+/**
+ * User.cooperative
+ */
+export type User$cooperativeArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Cooperative
+   */
+  select?: Prisma.CooperativeSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Cooperative
+   */
+  omit?: Prisma.CooperativeOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CooperativeInclude<ExtArgs> | null
+  where?: Prisma.CooperativeWhereInput
 }
 
 /**

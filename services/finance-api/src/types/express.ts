@@ -7,7 +7,7 @@ export interface AuthenticatedUser {
         name: string;
         isAdmin: boolean;
     }>;
-    permissions: string[];
+    permissions?: string[];
     approvalLevel: number;
     isAdmin: boolean;
     username: string;
@@ -31,6 +31,12 @@ declare global {
             userAgent: string | undefined;
             deviceInfo: string | undefined;
             ipAddress: string | undefined;
+        }
+    }
+
+    namespace Express {
+        interface Request {
+            cooperativeId?: string;
         }
     }
 }

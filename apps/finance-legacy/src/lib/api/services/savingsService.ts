@@ -406,6 +406,22 @@ class SavingsService {
     
     return apiService.get(url);
   }
+
+  /**
+   * Get savings stats for a specific year
+   * GET /savings/stats/:year
+   */
+  async getSavingsStats(year: number): Promise<any> {
+    return apiService.get(`/savings/stats/${year}`);
+  }
+
+  /**
+   * Update share amount config
+   * PATCH /savings/config/share-amount
+   */
+  async updateShareAmount(amount: number): Promise<any> {
+    return apiService.patch('/savings/config/share-amount', { amount });
+  }
 }
 
 export const savingsService = new SavingsService();

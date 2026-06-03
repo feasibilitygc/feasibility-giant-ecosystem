@@ -16,6 +16,7 @@ import { authenticateUser } from '../middlewares/auth';
 import { generateCsrfToken, validateCsrfToken } from '../middlewares/csrf';
 import { authRateLimiter } from '../middlewares/rateLimit';
 import { healthService } from '../services/health.service';
+import { tenantResolver } from '../middlewares/tenantResolver';
 
 
 const app = express();
@@ -24,14 +25,40 @@ const permissionSync = new PermissionSyncService(prisma);
 
 // Middleware setup
 app.use(cors({
-    origin: process.env.CORS_ORIGINS?.split(',') || [
-        'http://localhost:3000',
-        'http://fuosmcsl.online', // Add your domain here
-        'http://168.231.116.82:3000',
-    ],
+    origin: (origin, callback) => {
+        if (!origin) {
+            callback(null, true);
+            return;
+        }
+        
+        // Allow localhost development origins (including subdomains and ports)
+        if (origin.match(/^https?:\/\/localhost(:\d+)?$/) || origin.match(/^https?:\/\/[a-z0-9-]+\.localhost(:\d+)?$/)) {
+            callback(null, true);
+            return;
+        }
+        
+        // Allow feasibilityfinance.com origins
+        if (origin.match(/^https?:\/\/(?:[a-z0-9-]+\.)?feasibilityfinance\.com$/)) {
+            callback(null, true);
+            return;
+        }
+        
+        // Check custom configured origins
+        const allowedOrigins = process.env.CORS_ORIGINS?.split(',') || [
+            'http://localhost:3000',
+            'http://fuosmcsl.online',
+            'http://168.231.116.82:3000',
+        ];
+        if (allowedOrigins.includes(origin)) {
+            callback(null, true);
+            return;
+        }
+        
+        callback(new Error('Not allowed by CORS'));
+    },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Tenant-ID'],
     exposedHeaders: ['Content-Range', 'X-Content-Range']
 }));
 
@@ -41,6 +68,7 @@ app.use(cookieParser());
 app.use(securityHeaders);
 app.use(requestLogger);
 app.use(requestContextMiddleware);
+app.use(tenantResolver);
 
 // Initialize application
 const initializeApp = async (): Promise<void> => {

@@ -7,6 +7,7 @@ import { AuthProvider } from '@/lib/api/contexts/AuthContext';
 import { SnackbarProvider } from 'notistack';
 import ThemeRegistry from '@/lib/theme/ThemeRegistry';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { TenantProvider } from '@/lib/api/contexts/TenantContext';
 
 // Create a client for React Query
 const queryClient = new QueryClient({
@@ -23,20 +24,22 @@ export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <ReduxProvider store={store}>
       <QueryClientProvider client={queryClient}>
-        <ThemeRegistry>
-          <SnackbarProvider 
-            maxSnack={3} 
-            autoHideDuration={5000}
-            anchorOrigin={{ 
-              vertical: 'bottom', 
-              horizontal: 'right' 
-            }}
-          >
-            <AuthProvider>
-              {children}
-            </AuthProvider>
-          </SnackbarProvider>
-        </ThemeRegistry>
+        <TenantProvider>
+          <ThemeRegistry>
+            <SnackbarProvider 
+              maxSnack={3} 
+              autoHideDuration={5000}
+              anchorOrigin={{ 
+                vertical: 'bottom', 
+                horizontal: 'right' 
+              }}
+            >
+              <AuthProvider>
+                {children}
+              </AuthProvider>
+            </SnackbarProvider>
+          </ThemeRegistry>
+        </TenantProvider>
         {process.env.NODE_ENV !== 'production' && <ReactQueryDevtools />}
       </QueryClientProvider>
     </ReduxProvider>

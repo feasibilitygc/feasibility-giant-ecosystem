@@ -91,6 +91,14 @@ class ApiService {
           config.headers.Authorization = `Bearer ${tokens.accessToken}`;
         }
         
+        // Add dynamic Tenant/Cooperative ID context
+        if (typeof window !== 'undefined') {
+          const tenantId = window.localStorage.getItem('cooperative_id');
+          if (tenantId) {
+            config.headers['X-Tenant-ID'] = tenantId;
+          }
+        }
+        
         return config;
       },
       (error) => Promise.reject(error)

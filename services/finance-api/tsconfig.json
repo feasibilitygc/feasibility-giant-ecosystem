@@ -3,6 +3,7 @@
     "target": "ES6",
     "module": "commonjs",
     "strict": true,
+    "noImplicitAny": false,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
@@ -17,7 +18,7 @@
     "require": ["tsconfig-paths/register"],
     "transpileOnly": true
   },
-  "typeRoots": ["./node_modules/@types", "./src/types"],
+  "typeRoots": ["../../node_modules/@types", "./node_modules/@types", "./src/types"],
   "include": ["src/**/*", "src/utils/prisma.ts", "src/types/**/*", "prisma/*", "twilio/twilioUtils.ts"],
   "exclude": ["node_modules", "**/*.spec.ts", "dist"]
 }

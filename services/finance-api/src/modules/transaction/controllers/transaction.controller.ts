@@ -102,7 +102,7 @@ export class TransactionController {
    */
   public getTransaction = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     try {
-      const { id } = req.params;
+      const id = req.params.id as string;
       
       // Validate UUID format
       if (!isUUID(id)) {
@@ -138,7 +138,7 @@ export class TransactionController {
    */
   public updateTransactionStatus = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     try {
-      const { id } = req.params;
+      const id = req.params.id as string;
       
       // Validate UUID format
       if (!isUUID(id)) {
@@ -176,7 +176,7 @@ export class TransactionController {
    */
   public reverseTransaction = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     try {
-      const { id } = req.params;
+      const id = req.params.id as string;
       
       // Validate UUID format
       if (!isUUID(id)) {
@@ -274,7 +274,8 @@ export class TransactionController {
    */
   public getEntityTransactions = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     try {
-      const { entityType, entityId } = req.params;
+      const entityType = req.params.entityType as string;
+      const entityId = req.params.entityId as string;
       
       // Validate entityType format
       if (!['SAVINGS', 'LOAN', 'SHARES', 'BIODATA'].includes(entityType)) {
@@ -371,7 +372,7 @@ export class TransactionController {
    */
   public getUserTransactions = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     try {
-      const requestedUserId = req.params.userId || req.user!.id;
+      const requestedUserId = (req.params.userId || req.user!.id) as string;
       
       // Validate if the ID is a valid UUID
       

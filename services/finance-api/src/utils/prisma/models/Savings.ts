@@ -59,6 +59,7 @@ export type SavingsMinAggregateOutputType = {
   status: $Enums.AccountStatus | null
   description: string | null
   createdAt: Date | null
+  cooperativeId: string | null
 }
 
 export type SavingsMaxAggregateOutputType = {
@@ -76,6 +77,7 @@ export type SavingsMaxAggregateOutputType = {
   status: $Enums.AccountStatus | null
   description: string | null
   createdAt: Date | null
+  cooperativeId: string | null
 }
 
 export type SavingsCountAggregateOutputType = {
@@ -93,6 +95,7 @@ export type SavingsCountAggregateOutputType = {
   status: number
   description: number
   createdAt: number
+  cooperativeId: number
   _all: number
 }
 
@@ -130,6 +133,7 @@ export type SavingsMinAggregateInputType = {
   status?: true
   description?: true
   createdAt?: true
+  cooperativeId?: true
 }
 
 export type SavingsMaxAggregateInputType = {
@@ -147,6 +151,7 @@ export type SavingsMaxAggregateInputType = {
   status?: true
   description?: true
   createdAt?: true
+  cooperativeId?: true
 }
 
 export type SavingsCountAggregateInputType = {
@@ -164,6 +169,7 @@ export type SavingsCountAggregateInputType = {
   status?: true
   description?: true
   createdAt?: true
+  cooperativeId?: true
   _all?: true
 }
 
@@ -268,6 +274,7 @@ export type SavingsGroupByOutputType = {
   status: $Enums.AccountStatus
   description: string | null
   createdAt: Date
+  cooperativeId: string | null
   _count: SavingsCountAggregateOutputType | null
   _avg: SavingsAvgAggregateOutputType | null
   _sum: SavingsSumAggregateOutputType | null
@@ -308,7 +315,9 @@ export type SavingsWhereInput = {
   status?: Prisma.EnumAccountStatusFilter<"Savings"> | $Enums.AccountStatus
   description?: Prisma.StringNullableFilter<"Savings"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Savings"> | Date | string
+  cooperativeId?: Prisma.UuidNullableFilter<"Savings"> | string | null
   member?: Prisma.XOR<Prisma.BiodataScalarRelationFilter, Prisma.BiodataWhereInput>
+  cooperative?: Prisma.XOR<Prisma.CooperativeNullableScalarRelationFilter, Prisma.CooperativeWhereInput> | null
   requests?: Prisma.RequestListRelationFilter
   transactions?: Prisma.TransactionListRelationFilter
   shares?: Prisma.SharesListRelationFilter
@@ -329,7 +338,9 @@ export type SavingsOrderByWithRelationInput = {
   status?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  cooperativeId?: Prisma.SortOrderInput | Prisma.SortOrder
   member?: Prisma.BiodataOrderByWithRelationInput
+  cooperative?: Prisma.CooperativeOrderByWithRelationInput
   requests?: Prisma.RequestOrderByRelationAggregateInput
   transactions?: Prisma.TransactionOrderByRelationAggregateInput
   shares?: Prisma.SharesOrderByRelationAggregateInput
@@ -354,7 +365,9 @@ export type SavingsWhereUniqueInput = Prisma.AtLeast<{
   status?: Prisma.EnumAccountStatusFilter<"Savings"> | $Enums.AccountStatus
   description?: Prisma.StringNullableFilter<"Savings"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Savings"> | Date | string
+  cooperativeId?: Prisma.UuidNullableFilter<"Savings"> | string | null
   member?: Prisma.XOR<Prisma.BiodataScalarRelationFilter, Prisma.BiodataWhereInput>
+  cooperative?: Prisma.XOR<Prisma.CooperativeNullableScalarRelationFilter, Prisma.CooperativeWhereInput> | null
   requests?: Prisma.RequestListRelationFilter
   transactions?: Prisma.TransactionListRelationFilter
   shares?: Prisma.SharesListRelationFilter
@@ -375,6 +388,7 @@ export type SavingsOrderByWithAggregationInput = {
   status?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  cooperativeId?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.SavingsCountOrderByAggregateInput
   _avg?: Prisma.SavingsAvgOrderByAggregateInput
   _max?: Prisma.SavingsMaxOrderByAggregateInput
@@ -400,6 +414,7 @@ export type SavingsScalarWhereWithAggregatesInput = {
   status?: Prisma.EnumAccountStatusWithAggregatesFilter<"Savings"> | $Enums.AccountStatus
   description?: Prisma.StringNullableWithAggregatesFilter<"Savings"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Savings"> | Date | string
+  cooperativeId?: Prisma.UuidNullableWithAggregatesFilter<"Savings"> | string | null
 }
 
 export type SavingsCreateInput = {
@@ -416,6 +431,7 @@ export type SavingsCreateInput = {
   description?: string | null
   createdAt?: Date | string
   member: Prisma.BiodataCreateNestedOneWithoutSavingsInput
+  cooperative?: Prisma.CooperativeCreateNestedOneWithoutSavingsInput
   requests?: Prisma.RequestCreateNestedManyWithoutSavingsInput
   transactions?: Prisma.TransactionCreateNestedManyWithoutSavingsInput
   shares?: Prisma.SharesCreateNestedManyWithoutSavingsInput
@@ -436,6 +452,7 @@ export type SavingsUncheckedCreateInput = {
   status?: $Enums.AccountStatus
   description?: string | null
   createdAt?: Date | string
+  cooperativeId?: string | null
   requests?: Prisma.RequestUncheckedCreateNestedManyWithoutSavingsInput
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutSavingsInput
   shares?: Prisma.SharesUncheckedCreateNestedManyWithoutSavingsInput
@@ -455,6 +472,7 @@ export type SavingsUpdateInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   member?: Prisma.BiodataUpdateOneRequiredWithoutSavingsNestedInput
+  cooperative?: Prisma.CooperativeUpdateOneWithoutSavingsNestedInput
   requests?: Prisma.RequestUpdateManyWithoutSavingsNestedInput
   transactions?: Prisma.TransactionUpdateManyWithoutSavingsNestedInput
   shares?: Prisma.SharesUpdateManyWithoutSavingsNestedInput
@@ -475,6 +493,7 @@ export type SavingsUncheckedUpdateInput = {
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cooperativeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requests?: Prisma.RequestUncheckedUpdateManyWithoutSavingsNestedInput
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutSavingsNestedInput
   shares?: Prisma.SharesUncheckedUpdateManyWithoutSavingsNestedInput
@@ -495,6 +514,7 @@ export type SavingsCreateManyInput = {
   status?: $Enums.AccountStatus
   description?: string | null
   createdAt?: Date | string
+  cooperativeId?: string | null
 }
 
 export type SavingsUpdateManyMutationInput = {
@@ -527,6 +547,7 @@ export type SavingsUncheckedUpdateManyInput = {
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cooperativeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type SavingsListRelationFilter = {
@@ -560,6 +581,7 @@ export type SavingsCountOrderByAggregateInput = {
   status?: Prisma.SortOrder
   description?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  cooperativeId?: Prisma.SortOrder
 }
 
 export type SavingsAvgOrderByAggregateInput = {
@@ -586,6 +608,7 @@ export type SavingsMaxOrderByAggregateInput = {
   status?: Prisma.SortOrder
   description?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  cooperativeId?: Prisma.SortOrder
 }
 
 export type SavingsMinOrderByAggregateInput = {
@@ -603,6 +626,7 @@ export type SavingsMinOrderByAggregateInput = {
   status?: Prisma.SortOrder
   description?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  cooperativeId?: Prisma.SortOrder
 }
 
 export type SavingsSumOrderByAggregateInput = {
@@ -724,6 +748,48 @@ export type SavingsUpdateOneWithoutTransactionsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.SavingsUpdateToOneWithWhereWithoutTransactionsInput, Prisma.SavingsUpdateWithoutTransactionsInput>, Prisma.SavingsUncheckedUpdateWithoutTransactionsInput>
 }
 
+export type SavingsCreateNestedManyWithoutCooperativeInput = {
+  create?: Prisma.XOR<Prisma.SavingsCreateWithoutCooperativeInput, Prisma.SavingsUncheckedCreateWithoutCooperativeInput> | Prisma.SavingsCreateWithoutCooperativeInput[] | Prisma.SavingsUncheckedCreateWithoutCooperativeInput[]
+  connectOrCreate?: Prisma.SavingsCreateOrConnectWithoutCooperativeInput | Prisma.SavingsCreateOrConnectWithoutCooperativeInput[]
+  createMany?: Prisma.SavingsCreateManyCooperativeInputEnvelope
+  connect?: Prisma.SavingsWhereUniqueInput | Prisma.SavingsWhereUniqueInput[]
+}
+
+export type SavingsUncheckedCreateNestedManyWithoutCooperativeInput = {
+  create?: Prisma.XOR<Prisma.SavingsCreateWithoutCooperativeInput, Prisma.SavingsUncheckedCreateWithoutCooperativeInput> | Prisma.SavingsCreateWithoutCooperativeInput[] | Prisma.SavingsUncheckedCreateWithoutCooperativeInput[]
+  connectOrCreate?: Prisma.SavingsCreateOrConnectWithoutCooperativeInput | Prisma.SavingsCreateOrConnectWithoutCooperativeInput[]
+  createMany?: Prisma.SavingsCreateManyCooperativeInputEnvelope
+  connect?: Prisma.SavingsWhereUniqueInput | Prisma.SavingsWhereUniqueInput[]
+}
+
+export type SavingsUpdateManyWithoutCooperativeNestedInput = {
+  create?: Prisma.XOR<Prisma.SavingsCreateWithoutCooperativeInput, Prisma.SavingsUncheckedCreateWithoutCooperativeInput> | Prisma.SavingsCreateWithoutCooperativeInput[] | Prisma.SavingsUncheckedCreateWithoutCooperativeInput[]
+  connectOrCreate?: Prisma.SavingsCreateOrConnectWithoutCooperativeInput | Prisma.SavingsCreateOrConnectWithoutCooperativeInput[]
+  upsert?: Prisma.SavingsUpsertWithWhereUniqueWithoutCooperativeInput | Prisma.SavingsUpsertWithWhereUniqueWithoutCooperativeInput[]
+  createMany?: Prisma.SavingsCreateManyCooperativeInputEnvelope
+  set?: Prisma.SavingsWhereUniqueInput | Prisma.SavingsWhereUniqueInput[]
+  disconnect?: Prisma.SavingsWhereUniqueInput | Prisma.SavingsWhereUniqueInput[]
+  delete?: Prisma.SavingsWhereUniqueInput | Prisma.SavingsWhereUniqueInput[]
+  connect?: Prisma.SavingsWhereUniqueInput | Prisma.SavingsWhereUniqueInput[]
+  update?: Prisma.SavingsUpdateWithWhereUniqueWithoutCooperativeInput | Prisma.SavingsUpdateWithWhereUniqueWithoutCooperativeInput[]
+  updateMany?: Prisma.SavingsUpdateManyWithWhereWithoutCooperativeInput | Prisma.SavingsUpdateManyWithWhereWithoutCooperativeInput[]
+  deleteMany?: Prisma.SavingsScalarWhereInput | Prisma.SavingsScalarWhereInput[]
+}
+
+export type SavingsUncheckedUpdateManyWithoutCooperativeNestedInput = {
+  create?: Prisma.XOR<Prisma.SavingsCreateWithoutCooperativeInput, Prisma.SavingsUncheckedCreateWithoutCooperativeInput> | Prisma.SavingsCreateWithoutCooperativeInput[] | Prisma.SavingsUncheckedCreateWithoutCooperativeInput[]
+  connectOrCreate?: Prisma.SavingsCreateOrConnectWithoutCooperativeInput | Prisma.SavingsCreateOrConnectWithoutCooperativeInput[]
+  upsert?: Prisma.SavingsUpsertWithWhereUniqueWithoutCooperativeInput | Prisma.SavingsUpsertWithWhereUniqueWithoutCooperativeInput[]
+  createMany?: Prisma.SavingsCreateManyCooperativeInputEnvelope
+  set?: Prisma.SavingsWhereUniqueInput | Prisma.SavingsWhereUniqueInput[]
+  disconnect?: Prisma.SavingsWhereUniqueInput | Prisma.SavingsWhereUniqueInput[]
+  delete?: Prisma.SavingsWhereUniqueInput | Prisma.SavingsWhereUniqueInput[]
+  connect?: Prisma.SavingsWhereUniqueInput | Prisma.SavingsWhereUniqueInput[]
+  update?: Prisma.SavingsUpdateWithWhereUniqueWithoutCooperativeInput | Prisma.SavingsUpdateWithWhereUniqueWithoutCooperativeInput[]
+  updateMany?: Prisma.SavingsUpdateManyWithWhereWithoutCooperativeInput | Prisma.SavingsUpdateManyWithWhereWithoutCooperativeInput[]
+  deleteMany?: Prisma.SavingsScalarWhereInput | Prisma.SavingsScalarWhereInput[]
+}
+
 export type SavingsCreateWithoutMemberInput = {
   id?: string
   balance: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -737,6 +803,7 @@ export type SavingsCreateWithoutMemberInput = {
   status?: $Enums.AccountStatus
   description?: string | null
   createdAt?: Date | string
+  cooperative?: Prisma.CooperativeCreateNestedOneWithoutSavingsInput
   requests?: Prisma.RequestCreateNestedManyWithoutSavingsInput
   transactions?: Prisma.TransactionCreateNestedManyWithoutSavingsInput
   shares?: Prisma.SharesCreateNestedManyWithoutSavingsInput
@@ -755,6 +822,7 @@ export type SavingsUncheckedCreateWithoutMemberInput = {
   status?: $Enums.AccountStatus
   description?: string | null
   createdAt?: Date | string
+  cooperativeId?: string | null
   requests?: Prisma.RequestUncheckedCreateNestedManyWithoutSavingsInput
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutSavingsInput
   shares?: Prisma.SharesUncheckedCreateNestedManyWithoutSavingsInput
@@ -804,6 +872,7 @@ export type SavingsScalarWhereInput = {
   status?: Prisma.EnumAccountStatusFilter<"Savings"> | $Enums.AccountStatus
   description?: Prisma.StringNullableFilter<"Savings"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Savings"> | Date | string
+  cooperativeId?: Prisma.UuidNullableFilter<"Savings"> | string | null
 }
 
 export type SavingsCreateWithoutSharesInput = {
@@ -820,6 +889,7 @@ export type SavingsCreateWithoutSharesInput = {
   description?: string | null
   createdAt?: Date | string
   member: Prisma.BiodataCreateNestedOneWithoutSavingsInput
+  cooperative?: Prisma.CooperativeCreateNestedOneWithoutSavingsInput
   requests?: Prisma.RequestCreateNestedManyWithoutSavingsInput
   transactions?: Prisma.TransactionCreateNestedManyWithoutSavingsInput
 }
@@ -839,6 +909,7 @@ export type SavingsUncheckedCreateWithoutSharesInput = {
   status?: $Enums.AccountStatus
   description?: string | null
   createdAt?: Date | string
+  cooperativeId?: string | null
   requests?: Prisma.RequestUncheckedCreateNestedManyWithoutSavingsInput
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutSavingsInput
 }
@@ -873,6 +944,7 @@ export type SavingsUpdateWithoutSharesInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   member?: Prisma.BiodataUpdateOneRequiredWithoutSavingsNestedInput
+  cooperative?: Prisma.CooperativeUpdateOneWithoutSavingsNestedInput
   requests?: Prisma.RequestUpdateManyWithoutSavingsNestedInput
   transactions?: Prisma.TransactionUpdateManyWithoutSavingsNestedInput
 }
@@ -892,6 +964,7 @@ export type SavingsUncheckedUpdateWithoutSharesInput = {
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cooperativeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requests?: Prisma.RequestUncheckedUpdateManyWithoutSavingsNestedInput
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutSavingsNestedInput
 }
@@ -910,6 +983,7 @@ export type SavingsCreateWithoutRequestsInput = {
   description?: string | null
   createdAt?: Date | string
   member: Prisma.BiodataCreateNestedOneWithoutSavingsInput
+  cooperative?: Prisma.CooperativeCreateNestedOneWithoutSavingsInput
   transactions?: Prisma.TransactionCreateNestedManyWithoutSavingsInput
   shares?: Prisma.SharesCreateNestedManyWithoutSavingsInput
 }
@@ -929,6 +1003,7 @@ export type SavingsUncheckedCreateWithoutRequestsInput = {
   status?: $Enums.AccountStatus
   description?: string | null
   createdAt?: Date | string
+  cooperativeId?: string | null
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutSavingsInput
   shares?: Prisma.SharesUncheckedCreateNestedManyWithoutSavingsInput
 }
@@ -963,6 +1038,7 @@ export type SavingsUpdateWithoutRequestsInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   member?: Prisma.BiodataUpdateOneRequiredWithoutSavingsNestedInput
+  cooperative?: Prisma.CooperativeUpdateOneWithoutSavingsNestedInput
   transactions?: Prisma.TransactionUpdateManyWithoutSavingsNestedInput
   shares?: Prisma.SharesUpdateManyWithoutSavingsNestedInput
 }
@@ -982,6 +1058,7 @@ export type SavingsUncheckedUpdateWithoutRequestsInput = {
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cooperativeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutSavingsNestedInput
   shares?: Prisma.SharesUncheckedUpdateManyWithoutSavingsNestedInput
 }
@@ -1000,6 +1077,7 @@ export type SavingsCreateWithoutTransactionsInput = {
   description?: string | null
   createdAt?: Date | string
   member: Prisma.BiodataCreateNestedOneWithoutSavingsInput
+  cooperative?: Prisma.CooperativeCreateNestedOneWithoutSavingsInput
   requests?: Prisma.RequestCreateNestedManyWithoutSavingsInput
   shares?: Prisma.SharesCreateNestedManyWithoutSavingsInput
 }
@@ -1019,6 +1097,7 @@ export type SavingsUncheckedCreateWithoutTransactionsInput = {
   status?: $Enums.AccountStatus
   description?: string | null
   createdAt?: Date | string
+  cooperativeId?: string | null
   requests?: Prisma.RequestUncheckedCreateNestedManyWithoutSavingsInput
   shares?: Prisma.SharesUncheckedCreateNestedManyWithoutSavingsInput
 }
@@ -1053,6 +1132,7 @@ export type SavingsUpdateWithoutTransactionsInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   member?: Prisma.BiodataUpdateOneRequiredWithoutSavingsNestedInput
+  cooperative?: Prisma.CooperativeUpdateOneWithoutSavingsNestedInput
   requests?: Prisma.RequestUpdateManyWithoutSavingsNestedInput
   shares?: Prisma.SharesUpdateManyWithoutSavingsNestedInput
 }
@@ -1072,8 +1152,74 @@ export type SavingsUncheckedUpdateWithoutTransactionsInput = {
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cooperativeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requests?: Prisma.RequestUncheckedUpdateManyWithoutSavingsNestedInput
   shares?: Prisma.SharesUncheckedUpdateManyWithoutSavingsNestedInput
+}
+
+export type SavingsCreateWithoutCooperativeInput = {
+  id?: string
+  balance: runtime.Decimal | runtime.DecimalJsLike | number | string
+  monthlyTarget: runtime.Decimal | runtime.DecimalJsLike | number | string
+  totalGrossAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  totalSavingsAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  lastDeposit?: Date | string | null
+  month: number
+  year: number
+  isProcessed?: boolean
+  status?: $Enums.AccountStatus
+  description?: string | null
+  createdAt?: Date | string
+  member: Prisma.BiodataCreateNestedOneWithoutSavingsInput
+  requests?: Prisma.RequestCreateNestedManyWithoutSavingsInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutSavingsInput
+  shares?: Prisma.SharesCreateNestedManyWithoutSavingsInput
+}
+
+export type SavingsUncheckedCreateWithoutCooperativeInput = {
+  id?: string
+  memberId: string
+  erpId: string
+  balance: runtime.Decimal | runtime.DecimalJsLike | number | string
+  monthlyTarget: runtime.Decimal | runtime.DecimalJsLike | number | string
+  totalGrossAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  totalSavingsAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  lastDeposit?: Date | string | null
+  month: number
+  year: number
+  isProcessed?: boolean
+  status?: $Enums.AccountStatus
+  description?: string | null
+  createdAt?: Date | string
+  requests?: Prisma.RequestUncheckedCreateNestedManyWithoutSavingsInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutSavingsInput
+  shares?: Prisma.SharesUncheckedCreateNestedManyWithoutSavingsInput
+}
+
+export type SavingsCreateOrConnectWithoutCooperativeInput = {
+  where: Prisma.SavingsWhereUniqueInput
+  create: Prisma.XOR<Prisma.SavingsCreateWithoutCooperativeInput, Prisma.SavingsUncheckedCreateWithoutCooperativeInput>
+}
+
+export type SavingsCreateManyCooperativeInputEnvelope = {
+  data: Prisma.SavingsCreateManyCooperativeInput | Prisma.SavingsCreateManyCooperativeInput[]
+  skipDuplicates?: boolean
+}
+
+export type SavingsUpsertWithWhereUniqueWithoutCooperativeInput = {
+  where: Prisma.SavingsWhereUniqueInput
+  update: Prisma.XOR<Prisma.SavingsUpdateWithoutCooperativeInput, Prisma.SavingsUncheckedUpdateWithoutCooperativeInput>
+  create: Prisma.XOR<Prisma.SavingsCreateWithoutCooperativeInput, Prisma.SavingsUncheckedCreateWithoutCooperativeInput>
+}
+
+export type SavingsUpdateWithWhereUniqueWithoutCooperativeInput = {
+  where: Prisma.SavingsWhereUniqueInput
+  data: Prisma.XOR<Prisma.SavingsUpdateWithoutCooperativeInput, Prisma.SavingsUncheckedUpdateWithoutCooperativeInput>
+}
+
+export type SavingsUpdateManyWithWhereWithoutCooperativeInput = {
+  where: Prisma.SavingsScalarWhereInput
+  data: Prisma.XOR<Prisma.SavingsUpdateManyMutationInput, Prisma.SavingsUncheckedUpdateManyWithoutCooperativeInput>
 }
 
 export type SavingsCreateManyMemberInput = {
@@ -1089,6 +1235,7 @@ export type SavingsCreateManyMemberInput = {
   status?: $Enums.AccountStatus
   description?: string | null
   createdAt?: Date | string
+  cooperativeId?: string | null
 }
 
 export type SavingsUpdateWithoutMemberInput = {
@@ -1104,6 +1251,7 @@ export type SavingsUpdateWithoutMemberInput = {
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cooperative?: Prisma.CooperativeUpdateOneWithoutSavingsNestedInput
   requests?: Prisma.RequestUpdateManyWithoutSavingsNestedInput
   transactions?: Prisma.TransactionUpdateManyWithoutSavingsNestedInput
   shares?: Prisma.SharesUpdateManyWithoutSavingsNestedInput
@@ -1122,6 +1270,7 @@ export type SavingsUncheckedUpdateWithoutMemberInput = {
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cooperativeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requests?: Prisma.RequestUncheckedUpdateManyWithoutSavingsNestedInput
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutSavingsNestedInput
   shares?: Prisma.SharesUncheckedUpdateManyWithoutSavingsNestedInput
@@ -1129,6 +1278,80 @@ export type SavingsUncheckedUpdateWithoutMemberInput = {
 
 export type SavingsUncheckedUpdateManyWithoutMemberInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  balance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  monthlyTarget?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  totalGrossAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  totalSavingsAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  lastDeposit?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  month?: Prisma.IntFieldUpdateOperationsInput | number
+  year?: Prisma.IntFieldUpdateOperationsInput | number
+  isProcessed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cooperativeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type SavingsCreateManyCooperativeInput = {
+  id?: string
+  memberId: string
+  erpId: string
+  balance: runtime.Decimal | runtime.DecimalJsLike | number | string
+  monthlyTarget: runtime.Decimal | runtime.DecimalJsLike | number | string
+  totalGrossAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  totalSavingsAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  lastDeposit?: Date | string | null
+  month: number
+  year: number
+  isProcessed?: boolean
+  status?: $Enums.AccountStatus
+  description?: string | null
+  createdAt?: Date | string
+}
+
+export type SavingsUpdateWithoutCooperativeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  balance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  monthlyTarget?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  totalGrossAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  totalSavingsAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  lastDeposit?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  month?: Prisma.IntFieldUpdateOperationsInput | number
+  year?: Prisma.IntFieldUpdateOperationsInput | number
+  isProcessed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  member?: Prisma.BiodataUpdateOneRequiredWithoutSavingsNestedInput
+  requests?: Prisma.RequestUpdateManyWithoutSavingsNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutSavingsNestedInput
+  shares?: Prisma.SharesUpdateManyWithoutSavingsNestedInput
+}
+
+export type SavingsUncheckedUpdateWithoutCooperativeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  memberId?: Prisma.StringFieldUpdateOperationsInput | string
+  erpId?: Prisma.StringFieldUpdateOperationsInput | string
+  balance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  monthlyTarget?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  totalGrossAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  totalSavingsAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  lastDeposit?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  month?: Prisma.IntFieldUpdateOperationsInput | number
+  year?: Prisma.IntFieldUpdateOperationsInput | number
+  isProcessed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  requests?: Prisma.RequestUncheckedUpdateManyWithoutSavingsNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutSavingsNestedInput
+  shares?: Prisma.SharesUncheckedUpdateManyWithoutSavingsNestedInput
+}
+
+export type SavingsUncheckedUpdateManyWithoutCooperativeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  memberId?: Prisma.StringFieldUpdateOperationsInput | string
+  erpId?: Prisma.StringFieldUpdateOperationsInput | string
   balance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   monthlyTarget?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   totalGrossAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1206,7 +1429,9 @@ export type SavingsSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   status?: boolean
   description?: boolean
   createdAt?: boolean
+  cooperativeId?: boolean
   member?: boolean | Prisma.BiodataDefaultArgs<ExtArgs>
+  cooperative?: boolean | Prisma.Savings$cooperativeArgs<ExtArgs>
   requests?: boolean | Prisma.Savings$requestsArgs<ExtArgs>
   transactions?: boolean | Prisma.Savings$transactionsArgs<ExtArgs>
   shares?: boolean | Prisma.Savings$sharesArgs<ExtArgs>
@@ -1228,7 +1453,9 @@ export type SavingsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   status?: boolean
   description?: boolean
   createdAt?: boolean
+  cooperativeId?: boolean
   member?: boolean | Prisma.BiodataDefaultArgs<ExtArgs>
+  cooperative?: boolean | Prisma.Savings$cooperativeArgs<ExtArgs>
 }, ExtArgs["result"]["savings"]>
 
 export type SavingsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1246,7 +1473,9 @@ export type SavingsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   status?: boolean
   description?: boolean
   createdAt?: boolean
+  cooperativeId?: boolean
   member?: boolean | Prisma.BiodataDefaultArgs<ExtArgs>
+  cooperative?: boolean | Prisma.Savings$cooperativeArgs<ExtArgs>
 }, ExtArgs["result"]["savings"]>
 
 export type SavingsSelectScalar = {
@@ -1264,11 +1493,13 @@ export type SavingsSelectScalar = {
   status?: boolean
   description?: boolean
   createdAt?: boolean
+  cooperativeId?: boolean
 }
 
-export type SavingsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "memberId" | "erpId" | "balance" | "monthlyTarget" | "totalGrossAmount" | "totalSavingsAmount" | "lastDeposit" | "month" | "year" | "isProcessed" | "status" | "description" | "createdAt", ExtArgs["result"]["savings"]>
+export type SavingsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "memberId" | "erpId" | "balance" | "monthlyTarget" | "totalGrossAmount" | "totalSavingsAmount" | "lastDeposit" | "month" | "year" | "isProcessed" | "status" | "description" | "createdAt" | "cooperativeId", ExtArgs["result"]["savings"]>
 export type SavingsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   member?: boolean | Prisma.BiodataDefaultArgs<ExtArgs>
+  cooperative?: boolean | Prisma.Savings$cooperativeArgs<ExtArgs>
   requests?: boolean | Prisma.Savings$requestsArgs<ExtArgs>
   transactions?: boolean | Prisma.Savings$transactionsArgs<ExtArgs>
   shares?: boolean | Prisma.Savings$sharesArgs<ExtArgs>
@@ -1276,15 +1507,18 @@ export type SavingsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
 }
 export type SavingsIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   member?: boolean | Prisma.BiodataDefaultArgs<ExtArgs>
+  cooperative?: boolean | Prisma.Savings$cooperativeArgs<ExtArgs>
 }
 export type SavingsIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   member?: boolean | Prisma.BiodataDefaultArgs<ExtArgs>
+  cooperative?: boolean | Prisma.Savings$cooperativeArgs<ExtArgs>
 }
 
 export type $SavingsPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Savings"
   objects: {
     member: Prisma.$BiodataPayload<ExtArgs>
+    cooperative: Prisma.$CooperativePayload<ExtArgs> | null
     requests: Prisma.$RequestPayload<ExtArgs>[]
     transactions: Prisma.$TransactionPayload<ExtArgs>[]
     shares: Prisma.$SharesPayload<ExtArgs>[]
@@ -1304,6 +1538,7 @@ export type $SavingsPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     status: $Enums.AccountStatus
     description: string | null
     createdAt: Date
+    cooperativeId: string | null
   }, ExtArgs["result"]["savings"]>
   composites: {}
 }
@@ -1699,6 +1934,7 @@ readonly fields: SavingsFieldRefs;
 export interface Prisma__SavingsClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   member<T extends Prisma.BiodataDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BiodataDefaultArgs<ExtArgs>>): Prisma.Prisma__BiodataClient<runtime.Types.Result.GetResult<Prisma.$BiodataPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  cooperative<T extends Prisma.Savings$cooperativeArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Savings$cooperativeArgs<ExtArgs>>): Prisma.Prisma__CooperativeClient<runtime.Types.Result.GetResult<Prisma.$CooperativePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   requests<T extends Prisma.Savings$requestsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Savings$requestsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   transactions<T extends Prisma.Savings$transactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Savings$transactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   shares<T extends Prisma.Savings$sharesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Savings$sharesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SharesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -1745,6 +1981,7 @@ export interface SavingsFieldRefs {
   readonly status: Prisma.FieldRef<"Savings", 'AccountStatus'>
   readonly description: Prisma.FieldRef<"Savings", 'String'>
   readonly createdAt: Prisma.FieldRef<"Savings", 'DateTime'>
+  readonly cooperativeId: Prisma.FieldRef<"Savings", 'String'>
 }
     
 
@@ -2143,6 +2380,25 @@ export type SavingsDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Limit how many Savings to delete.
    */
   limit?: number
+}
+
+/**
+ * Savings.cooperative
+ */
+export type Savings$cooperativeArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Cooperative
+   */
+  select?: Prisma.CooperativeSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Cooperative
+   */
+  omit?: Prisma.CooperativeOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CooperativeInclude<ExtArgs> | null
+  where?: Prisma.CooperativeWhereInput
 }
 
 /**

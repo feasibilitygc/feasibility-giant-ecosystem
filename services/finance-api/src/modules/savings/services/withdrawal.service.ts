@@ -22,8 +22,6 @@ import {
 } from '../interfaces/withdrawal.interface';
 import { SavingsTransactionProcessor } from '../../transaction/services/processors/savings-transaction.processor';
 
-import { prisma } from '@/prisma';
-
 class SavingsWithdrawalService {
     private transactionService: TransactionService;
     
