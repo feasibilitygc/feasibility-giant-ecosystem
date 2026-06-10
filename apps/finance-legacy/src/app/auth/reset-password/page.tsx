@@ -19,6 +19,10 @@ export default function ResetPasswordPage() {
     password: '',
     confirmPassword: '',
   });
+  const [fieldErrors, setFieldErrors] = useState({
+    password: '',
+    confirmPassword: '',
+  });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   
@@ -36,19 +40,41 @@ export default function ResetPasswordPage() {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
     setError('');
+    setFieldErrors(prev => ({ ...prev, [name]: '' }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!token) return;
 
-    if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match');
+    let hasValidationError = false;
+    const newFieldErrors = { password: '', confirmPassword: '' };
+
+    if (!formData.password) {
+      newFieldErrors.password = 'Password is required';
+      hasValidationError = true;
+    } else if (formData.password.length < 6) {
+      newFieldErrors.password = 'Password must be at least 6 characters';
+      hasValidationError = true;
+    }
+
+    if (!formData.confirmPassword) {
+      newFieldErrors.confirmPassword = 'Confirm password is required';
+      hasValidationError = true;
+    } else if (formData.password !== formData.confirmPassword) {
+      newFieldErrors.confirmPassword = 'Passwords do not match';
+      hasValidationError = true;
+    }
+
+    if (hasValidationError) {
+      setFieldErrors(newFieldErrors);
+      setError('Please fix the errors below.');
       return;
     }
 
     setLoading(true);
     setError('');
+    setFieldErrors({ password: '', confirmPassword: '' });
 
     try {
       await authApi.resetPassword(token, formData.password, formData.confirmPassword);
@@ -109,6 +135,8 @@ export default function ResetPasswordPage() {
               value={formData.password}
               onChange={handleChange}
               disabled={loading}
+              error={!!fieldErrors.password}
+              helperText={fieldErrors.password}
             />
 
             <TextField
@@ -123,6 +151,8 @@ export default function ResetPasswordPage() {
               value={formData.confirmPassword}
               onChange={handleChange}
               disabled={loading}
+              error={!!fieldErrors.confirmPassword}
+              helperText={fieldErrors.confirmPassword}
             />
 
             <Button

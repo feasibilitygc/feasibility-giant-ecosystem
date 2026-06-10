@@ -43,78 +43,121 @@ export class CooperativeService {
     // Hash the administrator's password
     const hashedPassword = await bcrypt.hash(admin_user.password, 10);
 
-    // 3. Start a database transaction to ensure atomicity
-    const result = await prisma.$transaction(async (tx) => {
-      // Create the cooperative/tenant record
-      const coop = await tx.cooperative.create({
-        data: {
-          name,
-          subdomain,
-          themeConfig: {
-            primary_color: '#1A4F8B', // Default Primary Blue
-            secondary_color: '#1FAF5A', // Default Emerald Green
-            logo_url: null
-          },
-          systemSettings: {
-            allow_self_registration: true,
-            require_mfa: false
-          }
-        }
-      });
+    // Verify admin email/username is unique before starting transaction
+    const existingUser = await prisma.user.findFirst({
+      where: {
+        OR: [
+          { username: admin_user.email },
+          { adminProfile: { emailAddress: admin_user.email } }
+        ]
+      }
+    });
 
-      // Split first and last names for the AdminUserProfile
-      const nameParts = admin_user.name.split(' ');
-      const firstName = nameParts[0] || 'Cooperative';
-      const lastName = nameParts.slice(1).join(' ') || 'Admin';
+    if (existingUser) {
+      throw new ApiError('An administrator user with this email address already exists.', 400);
+    }
 
-      // Create the tenant's admin User record (linked to cooperativeId)
-      // Note: We bypass prisma dynamic scope here because the record is created with cooperativeId explicitly
-      const user = await tx.user.create({
-        data: {
-          username: admin_user.email,
-          password: hashedPassword,
-          isActive: true,
-          isMember: false, // Tenant administrators are staff, not members
-          cooperativeId: coop.id,
-          adminProfile: {
-            create: {
-              firstName,
-              lastName,
-              emailAddress: admin_user.email,
-              phoneNumber: '0' + Math.floor(1000000000 + Math.random() * 9000000000), // Random unique placeholder
-              department: 'Management',
-              position: 'Cooperative Admin',
-              staffId: `ADM-${subdomain.toUpperCase().substring(0, 4)}-001`,
-              isVerified: true,
-              isActive: true
-            }
-          },
-          roleAssignments: {
-            create: {
-              roleId: adminRole.id,
-              isActive: true,
-              assignedAt: new Date()
+    // Verify staffId prefix availability
+    const staffId = `ADM-${subdomain.toUpperCase().substring(0, 4)}-001`;
+    const existingAdminProfile = await prisma.adminUserProfile.findUnique({
+      where: { staffId }
+    });
+
+    if (existingAdminProfile) {
+      throw new ApiError('A cooperative admin profile with this subdomain prefix already exists.', 400);
+    }
+
+    try {
+      // 3. Start a database transaction to ensure atomicity
+      const result = await prisma.$transaction(async (tx) => {
+        // Create the cooperative/tenant record
+        const coop = await tx.cooperative.create({
+          data: {
+            name,
+            subdomain,
+            themeConfig: {
+              primary_color: '#1A4F8B', // Default Primary Blue
+              secondary_color: '#1FAF5A', // Default Emerald Green
+              logo_url: null
+            },
+            systemSettings: {
+              allow_self_registration: true,
+              require_mfa: false
             }
           }
-        }
+        });
+
+        // Split first and last names for the AdminUserProfile
+        const nameParts = admin_user.name.split(' ');
+        const firstName = nameParts[0] || 'Cooperative';
+        const lastName = nameParts.slice(1).join(' ') || 'Admin';
+
+        // Create the tenant's admin User record (linked to cooperativeId)
+        // Note: We bypass prisma dynamic scope here because the record is created with cooperativeId explicitly
+        const user = await tx.user.create({
+          data: {
+            username: admin_user.email,
+            password: hashedPassword,
+            isActive: true,
+            isMember: false, // Tenant administrators are staff, not members
+            cooperativeId: coop.id,
+            adminProfile: {
+              create: {
+                firstName,
+                lastName,
+                emailAddress: admin_user.email,
+                phoneNumber: '0' + Math.floor(1000000000 + Math.random() * 9000000000), // Random unique placeholder
+                department: 'Management',
+                position: 'Cooperative Admin',
+                staffId,
+                isVerified: true,
+                isActive: true
+              }
+            },
+            roleAssignments: {
+              create: {
+                roleId: adminRole.id,
+                isActive: true,
+                assignedAt: new Date()
+              }
+            }
+          }
+        });
+
+        return {
+          cooperative_id: coop.id,
+          subdomain: coop.subdomain,
+          admin_user_id: user.id
+        };
       });
 
       return {
-        cooperative_id: coop.id,
-        subdomain: coop.subdomain,
-        admin_user_id: user.id
+        status: 'success',
+        message: 'Cooperative initialized successfully.',
+        data: {
+          cooperative_id: result.cooperative_id,
+          subdomain: result.subdomain,
+          portal_url: `https://${result.subdomain}.feasibilityfinance.com`
+        }
       };
-    });
+    } catch (error: any) {
+      if (error.code === 'P2002') {
+        const target = error.meta?.target;
+        const targetStr = Array.isArray(target) ? target.join(',') : String(target || '');
 
-    return {
-      status: 'success',
-      message: 'Cooperative initialized successfully.',
-      data: {
-        cooperative_id: result.cooperative_id,
-        subdomain: result.subdomain,
-        portal_url: `https://${result.subdomain}.feasibilityfinance.com`
+        if (targetStr.includes('staffId')) {
+          throw new ApiError('A cooperative admin profile with this subdomain prefix or staff ID already exists.', 400);
+        }
+        if (targetStr.includes('emailAddress') || targetStr.includes('username')) {
+          throw new ApiError('An administrator user with this email address already exists.', 400);
+        }
+        if (targetStr.includes('phoneNumber')) {
+          throw new ApiError('An administrator user with this phone number already exists.', 400);
+        }
+        throw new ApiError('Database unique constraint failed during registration.', 400);
       }
-    };
+      throw error;
+    }
   }
 
   /**

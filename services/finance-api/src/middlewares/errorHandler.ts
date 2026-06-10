@@ -16,15 +16,40 @@ export const errorHandler = (
   res: Response,
   next: NextFunction
 ) => {
-  // Log error with clean format
-  logger.error('Error occurred:', {
+  // Determine if it is a client/operational error (status < 500)
+  let isClientError = false;
+  let statusCode = 500;
+
+  if (err instanceof ApiError) {
+    statusCode = err.statusCode;
+    isClientError = statusCode < 500;
+  } else if (err instanceof ZodError) {
+    statusCode = 400;
+    isClientError = true;
+  } else if (
+    err.name === 'PrismaClientKnownRequestError' || 
+    err.name === 'JsonWebTokenError' || 
+    err.name === 'TokenExpiredError'
+  ) {
+    statusCode = err.name === 'PrismaClientKnownRequestError' ? 400 : 401;
+    isClientError = true;
+  }
+
+  // Log error with appropriate level and detail
+  const logData = {
     type: err.constructor.name,
     message: err.message,
     path: req.path,
     method: req.method,
     timestamp: new Date().toISOString(),
-    stack: process.env.NODE_ENV === 'development' ? err.stack : undefined
-  });
+    ...(isClientError ? {} : { stack: err.stack }) // Exclude stack trace for client-side errors to avoid spamming logs
+  };
+
+  if (isClientError) {
+    logger.warn(`Client Error (${statusCode}): ${err.message}`, logData);
+  } else {
+    logger.error('Unexpected Server Error occurred:', logData);
+  }
 
   // Handle Zod Validation Errors
   if (err instanceof ZodError) {

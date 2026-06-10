@@ -19,13 +19,24 @@ export default function ForgotPasswordPage() {
   const [username, setUsername] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [fieldError, setFieldError] = useState('');
   const [success, setSuccess] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!username.trim()) {
+      setFieldError('Username or email is required');
+      return;
+    } else if (username.trim().length < 3) {
+      setFieldError('Username must be at least 3 characters');
+      return;
+    }
+
     setLoading(true);
     setError('');
+    setFieldError('');
 
     try {
       await authApi.forgotPassword(username);
@@ -82,8 +93,14 @@ export default function ForgotPasswordPage() {
                   autoComplete="username"
                   autoFocus
                   value={username}
-                  onChange={(e) => setUsername(e.target.value)}
+                  onChange={(e) => {
+                    setUsername(e.target.value);
+                    setFieldError('');
+                    setError('');
+                  }}
                   disabled={loading}
+                  error={!!fieldError}
+                  helperText={fieldError}
                 />
 
                 <Button

@@ -24,6 +24,10 @@ export default function LoginForm({ initialError }: LoginFormProps) {
     username: '',
     password: '',
   });
+  const [fieldErrors, setFieldErrors] = useState({
+    username: '',
+    password: '',
+  });
   const [error, setError] = useState(initialError || '');
   const [isLoading, setIsLoading] = useState(false);
   const { login } = useAuth();
@@ -44,12 +48,34 @@ export default function LoginForm({ initialError }: LoginFormProps) {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
     setError(''); // Clear error when user types
+    setFieldErrors((prev) => ({ ...prev, [name]: '' }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.username || !formData.password) {
-      setError('Please enter both username and password');
+    
+    let hasValidationError = false;
+    const newFieldErrors = { username: '', password: '' };
+
+    if (!formData.username.trim()) {
+      newFieldErrors.username = 'Username or email is required';
+      hasValidationError = true;
+    } else if (formData.username.trim().length < 3) {
+      newFieldErrors.username = 'Username must be at least 3 characters';
+      hasValidationError = true;
+    }
+
+    if (!formData.password) {
+      newFieldErrors.password = 'Password is required';
+      hasValidationError = true;
+    } else if (formData.password.length < 6) {
+      newFieldErrors.password = 'Password must be at least 6 characters';
+      hasValidationError = true;
+    }
+
+    if (hasValidationError) {
+      setFieldErrors(newFieldErrors);
+      setError('Please fix the errors below.');
       return;
     }
 
@@ -60,8 +86,6 @@ export default function LoginForm({ initialError }: LoginFormProps) {
       await login(formData.username, formData.password);
     } catch (err: any) {
       console.error('Login error:', err);
-      // const errorMessage = handleLoginError(err)
-      // setError(errorMessage)
       setError(
         err.response?.data?.message || 
         err.message || 
@@ -122,22 +146,6 @@ export default function LoginForm({ initialError }: LoginFormProps) {
         </Alert>
       )}
 
-      {error && (
-                <Alert 
-                    severity="error" 
-                    sx={{ 
-                        mb: 2,
-                        borderRadius: 2,
-                        backgroundColor: alpha(theme.palette.error.main, 0.1),
-                        '& .MuiAlert-icon': {
-                            color: theme.palette.error.main
-                        }
-                    }}
-                >
-                    {error}
-                </Alert>
-            )}
-
       <TextField
         margin="normal"
         required
@@ -150,6 +158,8 @@ export default function LoginForm({ initialError }: LoginFormProps) {
         value={formData.username}
         onChange={handleChange}
         disabled={isLoading}
+        error={!!fieldErrors.username}
+        helperText={fieldErrors.username}
         sx={{
           '& .MuiOutlinedInput-root': {
             borderRadius: 2,
@@ -175,6 +185,8 @@ export default function LoginForm({ initialError }: LoginFormProps) {
         value={formData.password}
         onChange={handleChange}
         disabled={isLoading}
+        error={!!fieldErrors.password}
+        helperText={fieldErrors.password}
         sx={{
           '& .MuiOutlinedInput-root': {
             borderRadius: 2,

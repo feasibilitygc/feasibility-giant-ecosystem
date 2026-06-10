@@ -32,6 +32,7 @@ import {
   RocketLaunch as LaunchIcon,
 } from "@mui/icons-material";
 import { useCooperativeRegistration, type RegisterCooperativeInput } from "@/lib/hooks/cooperative/useCooperativeRegistration";
+import { isValidEmail } from "@/lib/utils/validationUtils";
 
 interface CooperativeFormData {
   name: string;
@@ -90,10 +91,29 @@ export default function RegisterCooperativePage() {
 
     switch (step) {
       case 0:
-        if (!formData.name.trim()) newErrors.name = "Cooperative name is required";
-        if (!formData.registrationNumber.trim()) newErrors.registrationNumber = "Registration number is required";
-        if (!formData.country.trim()) newErrors.country = "Country is required";
-        if (!formData.currency.trim()) newErrors.currency = "Currency symbol/code is required";
+        if (!formData.name.trim()) {
+          newErrors.name = "Cooperative name is required";
+        } else if (formData.name.trim().length < 2) {
+          newErrors.name = "Name must be at least 2 characters";
+        }
+
+        if (!formData.registrationNumber.trim()) {
+          newErrors.registrationNumber = "Registration number is required";
+        } else if (formData.registrationNumber.trim().length < 2) {
+          newErrors.registrationNumber = "Registration number must be at least 2 characters";
+        }
+
+        if (!formData.country.trim()) {
+          newErrors.country = "Country is required";
+        } else if (formData.country.trim().length < 2) {
+          newErrors.country = "Country must be at least 2 characters";
+        }
+
+        if (!formData.currency.trim()) {
+          newErrors.currency = "Currency symbol/code is required";
+        } else if (formData.currency.trim().length < 2) {
+          newErrors.currency = "Currency must be at least 2 characters";
+        }
         break;
       case 1:
         if (!formData.subdomain.trim()) {
@@ -103,12 +123,18 @@ export default function RegisterCooperativePage() {
         }
         break;
       case 2:
-        if (!formData.adminName.trim()) newErrors.adminName = "Administrator name is required";
+        if (!formData.adminName.trim()) {
+          newErrors.adminName = "Administrator name is required";
+        } else if (formData.adminName.trim().length < 2) {
+          newErrors.adminName = "Admin name must be at least 2 characters";
+        }
+
         if (!formData.adminEmail.trim()) {
           newErrors.adminEmail = "Administrator email is required";
-        } else if (!/\S+@\S+\.\S+/.test(formData.adminEmail)) {
+        } else if (!isValidEmail(formData.adminEmail.trim())) {
           newErrors.adminEmail = "Please enter a valid email address";
         }
+
         if (!formData.adminPassword) {
           newErrors.adminPassword = "Password is required";
         } else if (formData.adminPassword.length < 6) {

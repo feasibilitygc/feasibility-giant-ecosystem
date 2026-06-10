@@ -21,6 +21,8 @@ import { useCooperatives } from '@/lib/hooks/cooperative/useCooperatives';
 
 const authApi = new AuthApiService();
 
+import { isValidNigerianNumber } from '@/lib/utils/validationUtils';
+
 interface BiodataVerificationFormProps {
   onStepComplete: () => void;
   /** Pre-selected cooperative ID (e.g. injected by the tenant context on a subdomain) */
@@ -40,6 +42,10 @@ export default function BiodataVerificationForm({
     phoneNumber: '',
     verificationCode: '',
   });
+  const [fieldErrors, setFieldErrors] = useState({
+    phoneNumber: '',
+    verificationCode: '',
+  });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const router = useRouter();
@@ -50,6 +56,7 @@ export default function BiodataVerificationForm({
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
     setError('');
+    setFieldErrors(prev => ({ ...prev, [name]: '' }));
   };
 
   const handleCoopNext = () => {
@@ -63,8 +70,18 @@ export default function BiodataVerificationForm({
 
   const handleVerify = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!formData.phoneNumber.trim()) {
+      setFieldErrors(prev => ({ ...prev, phoneNumber: 'Phone number is required' }));
+      return;
+    } else if (!isValidNigerianNumber(formData.phoneNumber.trim())) {
+      setFieldErrors(prev => ({ ...prev, phoneNumber: 'Please enter a valid Nigerian phone number (e.g. 08031234567 or +2348031234567)' }));
+      return;
+    }
+
     setLoading(true);
     setError('');
+    setFieldErrors({ phoneNumber: '', verificationCode: '' });
     try {
       await authApi.verifyBiodata(formData.phoneNumber);
       setStep('validate');
@@ -77,8 +94,18 @@ export default function BiodataVerificationForm({
 
   const handleValidate = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!formData.verificationCode.trim()) {
+      setFieldErrors(prev => ({ ...prev, verificationCode: 'Verification code is required' }));
+      return;
+    } else if (formData.verificationCode.trim().length < 4) {
+      setFieldErrors(prev => ({ ...prev, verificationCode: 'Verification code must be at least 4 characters' }));
+      return;
+    }
+
     setLoading(true);
     setError('');
+    setFieldErrors({ phoneNumber: '', verificationCode: '' });
     try {
       await authApi.validateOTP(formData.verificationCode);
       // Store selected cooperative for downstream account linking
@@ -177,6 +204,8 @@ export default function BiodataVerificationForm({
           value={formData.verificationCode}
           onChange={handleChange}
           disabled={loading}
+          error={!!fieldErrors.verificationCode}
+          helperText={fieldErrors.verificationCode}
         />
         <Button
           type="submit"
@@ -218,6 +247,8 @@ export default function BiodataVerificationForm({
         value={formData.phoneNumber}
         onChange={handleChange}
         disabled={loading}
+        error={!!fieldErrors.phoneNumber}
+        helperText={fieldErrors.phoneNumber}
       />
       <Button
         type="submit"
