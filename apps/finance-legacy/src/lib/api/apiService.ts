@@ -332,6 +332,14 @@ class ApiService {
     }
   }
 
+  public async forgotPassword(username: string): Promise<any> {
+    return this.post('/auth/forgot-password', { username });
+  }
+
+  public async resetPassword(token: string, password: string, confirmPassword: string): Promise<any> {
+    return this.post('/auth/reset-password', { token, password, confirmPassword });
+  }
+
   public async checkHealth(): Promise<HealthStatus> {
     try {
       const response = await axios.get<HealthStatus>(`${BASE_URL}/health`);
