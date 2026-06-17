@@ -1,10 +1,12 @@
 import bcrypt from 'bcrypt';
 import { prisma } from '@/prisma';
 import { ApiError } from '../../../utils/apiError';
+import { verifyCAC, createProviderSubAccount } from '../../../utils/paymentUtil';
 
 export interface RegisterCooperativeInput {
   name: string;
   registration_number: string;
+  cacNumber?: string;
   country: string;
   currency: string;
   admin_user: {
@@ -13,11 +15,25 @@ export interface RegisterCooperativeInput {
     password: string;
   };
   subdomain: string;
+  settlementBankCode?: string;
+  settlementAccountNumber?: string;
+  splitPercent?: number;
 }
 
 export class CooperativeService {
   async registerCooperative(input: RegisterCooperativeInput) {
-    const { name, registration_number, country, currency, admin_user, subdomain } = input;
+    const { 
+      name, 
+      registration_number, 
+      cacNumber, 
+      country, 
+      currency, 
+      admin_user, 
+      subdomain,
+      settlementBankCode,
+      settlementAccountNumber,
+      splitPercent 
+    } = input;
 
     // 1. Verify subdomain availability (must be unique)
     const existingCooperative = await prisma.cooperative.findUnique({
@@ -67,6 +83,29 @@ export class CooperativeService {
       throw new ApiError('A cooperative admin profile with this subdomain prefix already exists.', 400);
     }
 
+    // Verify CAC before proceeding
+    const resolvedCac = cacNumber || registration_number;
+    const cacCheck = await verifyCAC(resolvedCac, name);
+    if (!cacCheck.success) {
+      throw new ApiError(cacCheck.message || 'CAC business validation failed.', 400);
+    }
+
+    // Call payment provider to generate sub-account code if settlement bank/account info is present
+    let subaccountCode = null;
+    if (settlementBankCode && settlementAccountNumber) {
+      const subAccountResult = await createProviderSubAccount({
+        businessName: name,
+        email: admin_user.email,
+        bankCode: settlementBankCode,
+        accountNumber: settlementAccountNumber,
+        splitPercent: splitPercent || 0.00
+      });
+      if (!subAccountResult.success) {
+        throw new ApiError(subAccountResult.message || 'Sub-account registration failed.', 400);
+      }
+      subaccountCode = subAccountResult.subaccountCode;
+    }
+
     try {
       // 3. Start a database transaction to ensure atomicity
       const result = await prisma.$transaction(async (tx) => {
@@ -75,6 +114,9 @@ export class CooperativeService {
           data: {
             name,
             subdomain,
+            cacNumber: resolvedCac,
+            splitPercent: splitPercent || 0.00,
+            subaccountCode: subaccountCode,
             themeConfig: {
               primary_color: '#1A4F8B', // Default Primary Blue
               secondary_color: '#1FAF5A', // Default Emerald Green
@@ -137,7 +179,8 @@ export class CooperativeService {
         data: {
           cooperative_id: result.cooperative_id,
           subdomain: result.subdomain,
-          portal_url: `https://${result.subdomain}.feasibilityfinance.com`
+          portal_url: `https://${result.subdomain}.feasibilityfinance.com`,
+          subaccount_code: subaccountCode
         }
       };
     } catch (error: any) {
@@ -169,6 +212,9 @@ export class CooperativeService {
         id: true,
         name: true,
         subdomain: true,
+        subaccountCode: true,
+        cacNumber: true,
+        splitPercent: true
       },
       orderBy: { name: 'asc' },
     });
@@ -176,6 +222,64 @@ export class CooperativeService {
     return {
       status: 'success',
       data: cooperatives,
+    };
+  }
+
+  /**
+   * Registers a settlement sub-account post-onboarding for an existing cooperative.
+   */
+  async setupCooperativeSubaccount(cooperativeId: string, input: {
+    settlementBankCode: string;
+    settlementAccountNumber: string;
+    splitPercent?: number;
+  }) {
+    const cooperative = await prisma.cooperative.findUnique({
+      where: { id: cooperativeId }
+    });
+
+    if (!cooperative) {
+      throw new ApiError('Cooperative not found', 404);
+    }
+
+    const splitValue = input.splitPercent !== undefined ? input.splitPercent : Number(cooperative.splitPercent || 0);
+
+    // Get the cooperative's admin email address to send to the payment provider
+    const adminUser = await prisma.user.findFirst({
+      where: { cooperativeId, isMember: false },
+      select: { username: true }
+    });
+
+    const email = adminUser?.username || 'admin@cooperative.com';
+
+    // Request the payment provider API (Monnify/Flutterwave) to register a sub-account code
+    const subAccountResult = await createProviderSubAccount({
+      businessName: cooperative.name,
+      email,
+      bankCode: input.settlementBankCode,
+      accountNumber: input.settlementAccountNumber,
+      splitPercent: splitValue,
+    });
+
+    if (!subAccountResult.success) {
+      throw new ApiError(subAccountResult.message || 'Failed to create subaccount on payment provider', 400);
+    }
+
+    // Save subaccountCode and splitPercent back to Cooperative
+    const updatedCooperative = await prisma.cooperative.update({
+      where: { id: cooperativeId },
+      data: {
+        subaccountCode: subAccountResult.subaccountCode,
+        splitPercent: splitValue
+      }
+    });
+
+    return {
+      status: 'success',
+      message: 'Payment sub-account registered and configured successfully',
+      data: {
+        subaccountCode: updatedCooperative.subaccountCode,
+        splitPercent: Number(updatedCooperative.splitPercent)
+      }
     };
   }
 }

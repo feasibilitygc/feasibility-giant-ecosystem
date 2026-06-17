@@ -18,6 +18,7 @@ import { tokenService } from './token.service';
 import jwt from 'jsonwebtoken';
 import env from '../../../config/env';
 import { redisClient } from '../../../config/redis';
+import { runWithoutIsolation } from '../../../utils/contextStore';
 
 // Type for Prisma transaction
 type PrismaTransaction = Omit<PrismaClient, '$connect' | '$disconnect' | '$on' | '$transaction' | '$use' | '$extends'>;
@@ -40,12 +41,14 @@ export class UserService {
     }
     
     // Check if user already exists
-    const existingUser = await prisma.user.findFirst({
-      where: {
-        OR: [
-          { username: username || undefined }
-        ],
-      },
+    const existingUser = await runWithoutIsolation(async () => {
+      return prisma.user.findFirst({
+        where: {
+          OR: [
+            { username: username || undefined }
+          ],
+        },
+      });
     });
     
     if (existingUser) {
@@ -192,27 +195,29 @@ export class UserService {
     const { username, password, deviceInfo, ipAddress } = input;
     
     // Validate user and credentials
-    const user = await prisma.user.findFirst({
-      where: {
-        OR: [{ username }],
-        isActive: true,
-      },
-      include: {
-        roleAssignments: {
-          where: {
-            isActive: true,
-            OR: [
-              { expiresAt: null },
-              { expiresAt: { gt: new Date() } },
-            ],
-          },
-          include: {
-            role: true,
-          },
+    const user = await runWithoutIsolation(async () => {
+      return prisma.user.findFirst({
+        where: {
+          OR: [{ username }],
+          isActive: true,
         },
-        biodata: true,
-        adminProfile: true,
-      },
+        include: {
+          roleAssignments: {
+            where: {
+              isActive: true,
+              OR: [
+                { expiresAt: null },
+                { expiresAt: { gt: new Date() } },
+              ],
+            },
+            include: {
+              role: true,
+            },
+          },
+          biodata: true,
+          adminProfile: true,
+        },
+      });
     });
     
     if (!user || !user.password) {
@@ -333,11 +338,13 @@ export class UserService {
       const userRoles = userPermissions.roles;
       
       // Check if username is already taken
-      const existingUser = await prisma.user.findFirst({
-        where: {
-          username,
-          id: { not: userId }
-        }
+      const existingUser = await runWithoutIsolation(async () => {
+        return prisma.user.findFirst({
+          where: {
+            username,
+            id: { not: userId }
+          }
+        });
       });
       
       if (existingUser) {
@@ -442,18 +449,20 @@ export class UserService {
         };
       } else {
         // Direct update for SUPER_ADMIN and CHAIRMAN
-        const user = await prisma.user.update({
-          where: { id: userId },
-          data: { username },
-          include: {
-            roleAssignments: {
-              include: {
-                role: true,
+        const user = await runWithoutIsolation(async () => {
+          return prisma.user.update({
+            where: { id: userId },
+            data: { username },
+            include: {
+              roleAssignments: {
+                include: {
+                  role: true,
+                },
               },
+              biodata: true,
+              adminProfile: true,
             },
-            biodata: true,
-            adminProfile: true,
-          },
+          });
         });
         
         // Create notification for direct update
@@ -477,8 +486,10 @@ export class UserService {
   async changePassword(userId: string, input: IChangePasswordInput) {
     const { currentPassword, newPassword } = input;
     
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
+    const user = await runWithoutIsolation(async () => {
+      return prisma.user.findUnique({
+        where: { id: userId },
+      });
     });
     
     if (!user || !user.password) {
@@ -492,9 +503,11 @@ export class UserService {
     
     const hashedPassword = await hash(newPassword, 10);
     
-    await prisma.user.update({
-      where: { id: userId },
-      data: { password: hashedPassword },
+    await runWithoutIsolation(async () => {
+      return prisma.user.update({
+        where: { id: userId },
+        data: { password: hashedPassword },
+      });
     });
     
     // Create notification for password change
@@ -521,22 +534,24 @@ export class UserService {
   }
   
   async getUserPermissions(userId: string): Promise<IUserPermissions> {
-    const user = await prisma.user.findUnique({
-        where: { id: userId },
-        include: {
-            roleAssignments: {
-                where: {
-                    isActive: true,
-                    OR: [
-                        { expiresAt: null },
-                        { expiresAt: { gt: new Date() } },
-                    ],
-                },
-                include: {
-                    role: true,
-                },
-            },
-        },
+    const user = await runWithoutIsolation(async () => {
+      return prisma.user.findUnique({
+          where: { id: userId },
+          include: {
+              roleAssignments: {
+                  where: {
+                      isActive: true,
+                      OR: [
+                          { expiresAt: null },
+                          { expiresAt: { gt: new Date() } },
+                      ],
+                  },
+                  include: {
+                      role: true,
+                  },
+              },
+          },
+      });
     });
 
     if (!user) {
@@ -802,21 +817,23 @@ export class UserService {
   }
   
   async getUserById(userId: string) {
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-      include: {
-        roleAssignments: {
-          include: {
-            role: true,
+    const user = await runWithoutIsolation(async () => {
+      return prisma.user.findUnique({
+        where: { id: userId },
+        include: {
+          roleAssignments: {
+            include: {
+              role: true,
+            },
+          },
+          biodata: true,
+          adminProfile: true,
+          notifications: {
+            where: { isRead: false },
+            orderBy: { createdAt: 'desc' },
           },
         },
-        biodata: true,
-        adminProfile: true,
-        notifications: {
-          where: { isRead: false },
-          orderBy: { createdAt: 'desc' },
-        },
-      },
+      });
     });
     
     if (!user) {

@@ -1,4 +1,5 @@
 import { Response, NextFunction } from 'express';
+import { runWithoutIsolation } from '../../../utils/contextStore';
 import { TransactionService } from '../services/transaction.service';
 import { TransactionQueryService } from '../services/transaction-query.service';
 import { TransactionReportingService } from '../services/transaction-reporting.service';
@@ -109,7 +110,10 @@ export class TransactionController {
         return ApiResponse.badRequest(res, 'Invalid transaction ID format');
       }
       
-      const transaction = await this.queryService.getTransactionById(id);
+      const hasSuperAdminRole = req.user?.roles.some((r: any) => r.name === 'SUPER_ADMIN');
+      const transaction = await (hasSuperAdminRole
+        ? runWithoutIsolation(() => this.queryService.getTransactionById(id))
+        : this.queryService.getTransactionById(id));
       
       // Handle permissions - members can only view their own transactions
       if (!req.user!.isAdmin && transaction?.initiatedBy !== req.user!.id) {
@@ -214,12 +218,20 @@ export class TransactionController {
       // Validate with Zod - ApiError utility will handle any ZodError
       const filters = await transactionQuerySchema.parseAsync(req.query);
       
-      const transactions = await this.queryService.searchTransactions({
-        ...filters,
-        approvedBy: undefined,
-        minAmount: undefined,
-        maxAmount: undefined
-      });
+      const hasSuperAdminRole = req.user?.roles.some((r: any) => r.name === 'SUPER_ADMIN');
+      const transactions = await (hasSuperAdminRole
+        ? runWithoutIsolation(() => this.queryService.searchTransactions({
+            ...filters,
+            approvedBy: undefined,
+            minAmount: undefined,
+            maxAmount: undefined
+          }))
+        : this.queryService.searchTransactions({
+            ...filters,
+            approvedBy: undefined,
+            minAmount: undefined,
+            maxAmount: undefined
+          }));
       
       return ApiResponse.success(
         res, 
@@ -249,12 +261,20 @@ export class TransactionController {
         groupBy: req.query.groupBy
       });
 
-      const summary = await this.reportingService.getTransactionSummary({
-        ...filters,
-        approvedBy: undefined,
-        minAmount: undefined,
-        maxAmount: undefined
-      });
+      const hasSuperAdminRole = req.user?.roles.some((r: any) => r.name === 'SUPER_ADMIN');
+      const summary = await (hasSuperAdminRole
+        ? runWithoutIsolation(() => this.reportingService.getTransactionSummary({
+            ...filters,
+            approvedBy: undefined,
+            minAmount: undefined,
+            maxAmount: undefined
+          }))
+        : this.reportingService.getTransactionSummary({
+            ...filters,
+            approvedBy: undefined,
+            minAmount: undefined,
+            maxAmount: undefined
+          }));
       
       return ApiResponse.success(
         res, 
@@ -307,11 +327,10 @@ export class TransactionController {
         }
       }
       
-      const transactions = await this.queryService.getTransactionsByEntity(
-        entityType, 
-        entityId,
-        pagination
-      );
+      const hasSuperAdminRole = req.user?.roles.some((r: any) => r.name === 'SUPER_ADMIN');
+      const transactions = await (hasSuperAdminRole
+        ? runWithoutIsolation(() => this.queryService.getTransactionsByEntity(entityType, entityId, pagination))
+        : this.queryService.getTransactionsByEntity(entityType, entityId, pagination));
       
       return ApiResponse.success(
         res, 
@@ -342,7 +361,10 @@ export class TransactionController {
         maxAmount: reportOptions.maxAmount || Number.MAX_SAFE_INTEGER // Add default for required maxAmount
       };
       
-      const report = await this.reportingService.generateTransactionReport(reportFilters);
+      const hasSuperAdminRole = req.user?.roles.some((r: any) => r.name === 'SUPER_ADMIN');
+      const report = await (hasSuperAdminRole
+        ? runWithoutIsolation(() => this.reportingService.generateTransactionReport(reportFilters))
+        : this.reportingService.generateTransactionReport(reportFilters));
       
       // If format is specified, generate downloadable file
       if (reportOptions.format && reportOptions.format !== 'json') {
@@ -391,10 +413,10 @@ export class TransactionController {
         limit: z.coerce.number().int().positive().max(100).optional().default(20)
       }).parseAsync(req.query);
       
-      const transactions = await this.queryService.getTransactionsByUser(
-        requestedUserId,
-        pagination
-      );
+      const hasSuperAdminRole = req.user?.roles.some((r: any) => r.name === 'SUPER_ADMIN');
+      const transactions = await (hasSuperAdminRole
+        ? runWithoutIsolation(() => this.queryService.getTransactionsByUser(requestedUserId, pagination))
+        : this.queryService.getTransactionsByUser(requestedUserId, pagination));
       
       return ApiResponse.success(
         res, 
@@ -419,7 +441,10 @@ export class TransactionController {
         ? await transactionModuleSchema.parseAsync(req.query.module)
         : undefined;
       
-      const counts = await this.queryService.getTransactionCountsByStatus(module);
+      const hasSuperAdminRole = req.user?.roles.some((r: any) => r.name === 'SUPER_ADMIN');
+      const counts = await (hasSuperAdminRole
+        ? runWithoutIsolation(() => this.queryService.getTransactionCountsByStatus(module))
+        : this.queryService.getTransactionCountsByStatus(module));
       
       return ApiResponse.success(
         res,
@@ -453,10 +478,16 @@ export class TransactionController {
         return ApiResponse.forbidden(res, 'You do not have permission to view all transactions');
       }
 
-      const transactions = await this.queryService.getAllTransactions({
-        ...pagination,
-        sort,
-      });
+      const hasSuperAdminRole = req.user?.roles.some((r: any) => r.name === 'SUPER_ADMIN');
+      const transactions = await (hasSuperAdminRole
+        ? runWithoutIsolation(() => this.queryService.getAllTransactions({
+            ...pagination,
+            sort,
+          }))
+        : this.queryService.getAllTransactions({
+            ...pagination,
+            sort,
+          }));
 
       return ApiResponse.success(
         res,

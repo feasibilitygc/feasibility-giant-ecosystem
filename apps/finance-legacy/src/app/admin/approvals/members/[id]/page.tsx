@@ -134,11 +134,14 @@ export default function MemberApprovalDetailPage() {
   const typedRequest = request as unknown as MemberRequest;
   const member = typedRequest as unknown as Member;
 
+  // Safe status fallback
+  const membershipStatus = (member.membershipStatus || typedRequest.status) as MembershipStatus;
+
   // Extract member data
   const memberData = member.metadata.biodata || {};
   
   // Check if user can approve (requires Treasurer or Chairman level - Level 2+)
-  const canApprove = checkApprovalLevel(2) && member.membershipStatus === MembershipStatus.PENDING;
+  const canApprove = checkApprovalLevel(2) && membershipStatus === MembershipStatus.PENDING;
   
   // Handle approval
   const handleApprove = () => {
@@ -182,11 +185,11 @@ export default function MemberApprovalDetailPage() {
                 Member Information
               </Typography>
               <Chip 
-                label={member.membershipStatus} 
+                label={membershipStatus} 
                 color={
-                  member.membershipStatus === MembershipStatus.PENDING ? 'warning' :
-                  member.membershipStatus === MembershipStatus.APPROVED ? 'success' :
-                  member.membershipStatus === MembershipStatus.REJECTED ? 'error' : 'default'
+                  membershipStatus === MembershipStatus.PENDING ? 'warning' :
+                  membershipStatus === MembershipStatus.APPROVED ? 'success' :
+                  membershipStatus === MembershipStatus.REJECTED ? 'error' : 'default'
                 }
               />
             </Box>
@@ -452,8 +455,8 @@ export default function MemberApprovalDetailPage() {
           </PermissionGate>
           
           {/* Status info for already processed requests */}
-          {member.membershipStatus !== MembershipStatus.PENDING && (
-            <Paper sx={{ p: 3, mb: 3, bgcolor: member.membershipStatus === MembershipStatus.APPROVED ? 'success.50' : 'error.50' }}>
+          {membershipStatus !== MembershipStatus.PENDING && (
+            <Paper sx={{ p: 3, mb: 3, bgcolor: membershipStatus === MembershipStatus.APPROVED ? 'success.50' : 'error.50' }}>
               <Typography variant="h6" fontWeight={600} gutterBottom>
                 Request Status
               </Typography>
@@ -461,8 +464,8 @@ export default function MemberApprovalDetailPage() {
               
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                 <Chip 
-                  label={member.membershipStatus} 
-                  color={member.membershipStatus === MembershipStatus.APPROVED ? 'success' : 'error'}
+                  label={membershipStatus} 
+                  color={membershipStatus === MembershipStatus.APPROVED ? 'success' : 'error'}
                   sx={{ mr: 1 }}
                 />
                 <Typography>

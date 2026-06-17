@@ -42,20 +42,24 @@ export class SavingsTransactionProcessor implements TransactionProcessor {
    */
   async processTransaction(transaction: Transaction, tx: any): Promise<void> {
     try {
+      logger.info(`SavingsTransactionProcessor.processTransaction: id=${transaction.id}, status=${transaction.status}, type=${transaction.transactionType}`);
       // Skip if not completed
       if (transaction.status !== TransactionStatus.COMPLETED) {
+        logger.info(`SavingsTransactionProcessor: transaction status is not COMPLETED (status: ${transaction.status}). Exiting.`);
         return;
       }
       
+      const client = tx || this.prisma;
+      
       switch (transaction.transactionType) {
         case TransactionType.SAVINGS_DEPOSIT:
-          await this.processSavingsDeposit(transaction);
+          await this.processSavingsDeposit(transaction, client);
           break;
         case TransactionType.SAVINGS_WITHDRAWAL:
-          await this.processSavingsWithdrawal(transaction);
+          await this.processSavingsWithdrawal(transaction, client);
           break;
         case TransactionType.REVERSAL:
-          await this.processReversal(transaction);
+          await this.processReversal(transaction, client);
           break;
       }
     } catch (error) {
@@ -78,10 +82,7 @@ export class SavingsTransactionProcessor implements TransactionProcessor {
       if (previousStatus !== TransactionStatus.COMPLETED && 
           transaction.status === TransactionStatus.COMPLETED) {
         
-        // Process the transaction now that it's completed
-          await this.processTransaction(transaction, null);
-          
-          // Create notification for member
+        // Create notification for member
         if (transaction.savingsId) {
           await this.createNotification(transaction);
         }
@@ -171,7 +172,8 @@ export class SavingsTransactionProcessor implements TransactionProcessor {
   /**
    * Process a savings deposit transaction
    */
-  private async processSavingsDeposit(transaction: Transaction): Promise<void> {
+  private async processSavingsDeposit(transaction: Transaction, prisma: any = this.prisma): Promise<void> {
+    logger.info(`processSavingsDeposit: amount=${transaction.amount?.toString()}, savingsId=${transaction.savingsId}`);
     if (!transaction.amount) {
       return;
     }
@@ -185,9 +187,10 @@ export class SavingsTransactionProcessor implements TransactionProcessor {
     }
     
     // Find the savings record
-    const savings = await this.prisma.savings.findUnique({
+    const savings = await prisma.savings.findUnique({
       where: { id: transaction.savingsId }
     });
+    logger.info(`processSavingsDeposit: resolved savings record = ${JSON.stringify(savings)}`);
     
     if (!savings) {
       throw new TransactionError(
@@ -198,7 +201,7 @@ export class SavingsTransactionProcessor implements TransactionProcessor {
     }
     
     // Update the savings balance
-    await this.prisma.savings.update({
+    await prisma.savings.update({
       where: { id: savings.id },
       data: {
         balance: savings.balance.plus(transaction.amount),
@@ -208,7 +211,7 @@ export class SavingsTransactionProcessor implements TransactionProcessor {
     });
     
     // Update the transaction's balanceAfter field
-    await this.prisma.transaction.update({
+    await prisma.transaction.update({
       where: { id: transaction.id },
       data: {
         balanceAfter: savings.balance.plus(transaction.amount)
@@ -219,7 +222,7 @@ export class SavingsTransactionProcessor implements TransactionProcessor {
   /**
    * Process a savings withdrawal transaction
    */
-  private async processSavingsWithdrawal(transaction: Transaction): Promise<void> {
+  private async processSavingsWithdrawal(transaction: Transaction, prisma: any = this.prisma): Promise<void> {
     if (!transaction.amount || !transaction.savingsId) {
       return;
     }
@@ -228,7 +231,7 @@ export class SavingsTransactionProcessor implements TransactionProcessor {
     const withdrawalAmount = transaction.amount.abs();
     
     // Find the savings record
-    const savings = await this.prisma.savings.findUnique({
+    const savings = await prisma.savings.findUnique({
       where: { id: transaction.savingsId }
     });
     
@@ -251,7 +254,7 @@ export class SavingsTransactionProcessor implements TransactionProcessor {
     
     // Update the savings balance
     const newBalance = savings.balance.minus(withdrawalAmount);
-    await this.prisma.savings.update({
+    await prisma.savings.update({
       where: { id: savings.id },
       data: {
         balance: newBalance,
@@ -260,7 +263,7 @@ export class SavingsTransactionProcessor implements TransactionProcessor {
     });
     
     // Update the transaction's balanceAfter field
-    await this.prisma.transaction.update({
+    await prisma.transaction.update({
       where: { id: transaction.id },
       data: {
         balanceAfter: newBalance
@@ -271,13 +274,13 @@ export class SavingsTransactionProcessor implements TransactionProcessor {
   /**
    * Process a reversal transaction for savings
    */
-  async processReversal(transaction: Transaction): Promise<void> {
+  async processReversal(transaction: Transaction, prisma: any = this.prisma): Promise<void> {
     // Get the original transaction this is reversing
     if (!transaction.parentTxnId) {
       return;
     }
     
-    const originalTx = await this.prisma.transaction.findUnique({
+    const originalTx = await prisma.transaction.findUnique({
       where: { id: transaction.parentTxnId }
     });
     
@@ -286,7 +289,7 @@ export class SavingsTransactionProcessor implements TransactionProcessor {
     }
     
     // Find the savings record
-    const savings = await this.prisma.savings.findUnique({
+    const savings = await prisma.savings.findUnique({
       where: { id: originalTx.savingsId }
     });
     
@@ -298,7 +301,7 @@ export class SavingsTransactionProcessor implements TransactionProcessor {
     if (originalTx.transactionType === TransactionType.SAVINGS_DEPOSIT) {
       const newBalance = savings.balance.minus(originalTx.amount);
       
-      await this.prisma.savings.update({
+      await prisma.savings.update({
         where: { id: savings.id },
         data: {
           balance: newBalance,
@@ -307,7 +310,7 @@ export class SavingsTransactionProcessor implements TransactionProcessor {
       });
       
       // Update the transaction's balanceAfter field
-      await this.prisma.transaction.update({
+      await prisma.transaction.update({
         where: { id: transaction.id },
         data: {
           balanceAfter: newBalance
@@ -320,7 +323,7 @@ export class SavingsTransactionProcessor implements TransactionProcessor {
       const amountToRestore = originalTx.amount.abs(); // Get positive value
       const newBalance = savings.balance.plus(amountToRestore);
       
-      await this.prisma.savings.update({
+      await prisma.savings.update({
         where: { id: savings.id },
         data: {
           balance: newBalance,
@@ -329,7 +332,7 @@ export class SavingsTransactionProcessor implements TransactionProcessor {
       });
       
       // Update the transaction's balanceAfter field
-      await this.prisma.transaction.update({
+      await prisma.transaction.update({
         where: { id: transaction.id },
         data: {
           balanceAfter: newBalance

@@ -169,3 +169,8 @@ export type SystemSettingsHistory = Prisma.SystemSettingsHistoryModel
  * 
  */
 export type Cooperative = Prisma.CooperativeModel
+/**
+ * Model SmsLog
+ * 
+ */
+export type SmsLog = Prisma.SmsLogModel

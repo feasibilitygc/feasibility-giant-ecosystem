@@ -27,6 +27,7 @@ export interface OTPRecord {
   attempts: number;
   maxAttempts: number;
   createdAt: Date;
+  provider?: 'twilio' | 'sms_experience';
 }
 
 

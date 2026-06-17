@@ -45,36 +45,34 @@ async function main() {
 
     // Create initial super admin user if none exists
     const superAdminEmail = 'admin@system.local';
-    const existingSuperAdmin = await prisma.user.findFirst({
-      where: {
-        roleAssignments: {
-          some: {
-            role: {
-              name: 'SUPER_ADMIN'
-            }
-          }
-        }
-      },
+    const existingSuperAdmin = await prisma.user.findUnique({
+      where: { username: 'superadmin' },
       include: {
-        roleAssignments: true,
+        roleAssignments: {
+          include: {
+            role: true
+          }
+        },
         adminProfile: true
       }
     });
 
+    const superAdminRole = await prisma.role.findUnique({
+      where: { name: 'SUPER_ADMIN' }
+    });
+
+    if (!superAdminRole) {
+      throw new Error('SUPER_ADMIN role not found');
+    }
+
+    const hashedPassword = await bcrypt.hash('Admin@1234', 10);
+
     if (!existingSuperAdmin) {
-      const superAdminRole = await prisma.role.findUnique({
-        where: { name: 'SUPER_ADMIN' }
-      });
-
-      if (!superAdminRole) {
-        throw new Error('SUPER_ADMIN role not found');
-      }
-
       // Create super admin user with all required fields
       const user = await prisma.user.create({
         data: {
           username: 'superadmin',
-          password: await bcrypt.hash('Admin@1234', 10),
+          password: hashedPassword,
           isActive: true,
           isMember: false, // Super admin is not a member
           adminProfile: {
@@ -105,12 +103,63 @@ async function main() {
       });
 
       console.log('Created super admin user:', {
-        data: user,
         username: user.username,
-        roles: user.roleAssignments.map(ra => ra.roleId)
+        roles: user.roleAssignments.map(ra => ra.role.name)
       });
     } else {
-      console.log('Super admin user already exists');
+      console.log('Super admin user already exists, ensuring roles and profile are correct...');
+      
+      // Update/reset password and ensure role assignment and admin profile exist
+      await prisma.user.update({
+        where: { id: existingSuperAdmin.id },
+        data: {
+          password: hashedPassword,
+          isActive: true,
+          isMember: false,
+          adminProfile: existingSuperAdmin.adminProfile 
+            ? {
+                update: {
+                  firstName: 'System',
+                  lastName: 'Administrator',
+                  emailAddress: superAdminEmail,
+                  phoneNumber: '00000000000',
+                  department: 'System Administration',
+                  staffId: 'SA001',
+                  position: 'Super Admin',
+                  isVerified: true,
+                  isActive: true
+                }
+              }
+            : {
+                create: {
+                  firstName: 'System',
+                  lastName: 'Administrator',
+                  emailAddress: superAdminEmail,
+                  phoneNumber: '00000000000',
+                  department: 'System Administration',
+                  staffId: 'SA001',
+                  position: 'Super Admin',
+                  isVerified: true,
+                  isActive: true
+                }
+              }
+        }
+      });
+
+      const hasSuperAdminRole = existingSuperAdmin.roleAssignments.some(ra => ra.role.name === 'SUPER_ADMIN');
+      if (!hasSuperAdminRole) {
+        await prisma.userRole.create({
+          data: {
+            userId: existingSuperAdmin.id,
+            roleId: superAdminRole.id,
+            isActive: true,
+            assignedAt: new Date()
+          }
+        });
+        console.log('Assigned SUPER_ADMIN role to existing superadmin user');
+      } else {
+        console.log('SUPER_ADMIN role assignment already exists for superadmin');
+      }
     }
 
     console.log('Database seeding completed successfully');

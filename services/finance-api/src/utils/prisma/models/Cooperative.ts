@@ -20,8 +20,18 @@ export type CooperativeModel = runtime.Types.Result.DefaultSelection<Prisma.$Coo
 
 export type AggregateCooperative = {
   _count: CooperativeCountAggregateOutputType | null
+  _avg: CooperativeAvgAggregateOutputType | null
+  _sum: CooperativeSumAggregateOutputType | null
   _min: CooperativeMinAggregateOutputType | null
   _max: CooperativeMaxAggregateOutputType | null
+}
+
+export type CooperativeAvgAggregateOutputType = {
+  splitPercent: runtime.Decimal | null
+}
+
+export type CooperativeSumAggregateOutputType = {
+  splitPercent: runtime.Decimal | null
 }
 
 export type CooperativeMinAggregateOutputType = {
@@ -29,6 +39,9 @@ export type CooperativeMinAggregateOutputType = {
   name: string | null
   subdomain: string | null
   customDomain: string | null
+  subaccountCode: string | null
+  cacNumber: string | null
+  splitPercent: runtime.Decimal | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -38,6 +51,9 @@ export type CooperativeMaxAggregateOutputType = {
   name: string | null
   subdomain: string | null
   customDomain: string | null
+  subaccountCode: string | null
+  cacNumber: string | null
+  splitPercent: runtime.Decimal | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -47,6 +63,9 @@ export type CooperativeCountAggregateOutputType = {
   name: number
   subdomain: number
   customDomain: number
+  subaccountCode: number
+  cacNumber: number
+  splitPercent: number
   themeConfig: number
   systemSettings: number
   createdAt: number
@@ -55,11 +74,22 @@ export type CooperativeCountAggregateOutputType = {
 }
 
 
+export type CooperativeAvgAggregateInputType = {
+  splitPercent?: true
+}
+
+export type CooperativeSumAggregateInputType = {
+  splitPercent?: true
+}
+
 export type CooperativeMinAggregateInputType = {
   id?: true
   name?: true
   subdomain?: true
   customDomain?: true
+  subaccountCode?: true
+  cacNumber?: true
+  splitPercent?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -69,6 +99,9 @@ export type CooperativeMaxAggregateInputType = {
   name?: true
   subdomain?: true
   customDomain?: true
+  subaccountCode?: true
+  cacNumber?: true
+  splitPercent?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -78,6 +111,9 @@ export type CooperativeCountAggregateInputType = {
   name?: true
   subdomain?: true
   customDomain?: true
+  subaccountCode?: true
+  cacNumber?: true
+  splitPercent?: true
   themeConfig?: true
   systemSettings?: true
   createdAt?: true
@@ -123,6 +159,18 @@ export type CooperativeAggregateArgs<ExtArgs extends runtime.Types.Extensions.In
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: CooperativeAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: CooperativeSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: CooperativeMinAggregateInputType
@@ -153,6 +201,8 @@ export type CooperativeGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inte
   take?: number
   skip?: number
   _count?: CooperativeCountAggregateInputType | true
+  _avg?: CooperativeAvgAggregateInputType
+  _sum?: CooperativeSumAggregateInputType
   _min?: CooperativeMinAggregateInputType
   _max?: CooperativeMaxAggregateInputType
 }
@@ -162,11 +212,16 @@ export type CooperativeGroupByOutputType = {
   name: string
   subdomain: string
   customDomain: string | null
+  subaccountCode: string | null
+  cacNumber: string | null
+  splitPercent: runtime.Decimal
   themeConfig: runtime.JsonValue | null
   systemSettings: runtime.JsonValue | null
   createdAt: Date
   updatedAt: Date
   _count: CooperativeCountAggregateOutputType | null
+  _avg: CooperativeAvgAggregateOutputType | null
+  _sum: CooperativeSumAggregateOutputType | null
   _min: CooperativeMinAggregateOutputType | null
   _max: CooperativeMaxAggregateOutputType | null
 }
@@ -194,6 +249,9 @@ export type CooperativeWhereInput = {
   name?: Prisma.StringFilter<"Cooperative"> | string
   subdomain?: Prisma.StringFilter<"Cooperative"> | string
   customDomain?: Prisma.StringNullableFilter<"Cooperative"> | string | null
+  subaccountCode?: Prisma.StringNullableFilter<"Cooperative"> | string | null
+  cacNumber?: Prisma.StringNullableFilter<"Cooperative"> | string | null
+  splitPercent?: Prisma.DecimalFilter<"Cooperative"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   themeConfig?: Prisma.JsonNullableFilter<"Cooperative">
   systemSettings?: Prisma.JsonNullableFilter<"Cooperative">
   createdAt?: Prisma.DateTimeFilter<"Cooperative"> | Date | string
@@ -205,6 +263,8 @@ export type CooperativeWhereInput = {
   loans?: Prisma.LoanListRelationFilter
   requests?: Prisma.RequestListRelationFilter
   transactions?: Prisma.TransactionListRelationFilter
+  personalSavings?: Prisma.PersonalSavingsListRelationFilter
+  loanTypes?: Prisma.LoanTypeListRelationFilter
 }
 
 export type CooperativeOrderByWithRelationInput = {
@@ -212,6 +272,9 @@ export type CooperativeOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   subdomain?: Prisma.SortOrder
   customDomain?: Prisma.SortOrderInput | Prisma.SortOrder
+  subaccountCode?: Prisma.SortOrderInput | Prisma.SortOrder
+  cacNumber?: Prisma.SortOrderInput | Prisma.SortOrder
+  splitPercent?: Prisma.SortOrder
   themeConfig?: Prisma.SortOrderInput | Prisma.SortOrder
   systemSettings?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -223,16 +286,21 @@ export type CooperativeOrderByWithRelationInput = {
   loans?: Prisma.LoanOrderByRelationAggregateInput
   requests?: Prisma.RequestOrderByRelationAggregateInput
   transactions?: Prisma.TransactionOrderByRelationAggregateInput
+  personalSavings?: Prisma.PersonalSavingsOrderByRelationAggregateInput
+  loanTypes?: Prisma.LoanTypeOrderByRelationAggregateInput
 }
 
 export type CooperativeWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   subdomain?: string
   customDomain?: string
+  subaccountCode?: string
   AND?: Prisma.CooperativeWhereInput | Prisma.CooperativeWhereInput[]
   OR?: Prisma.CooperativeWhereInput[]
   NOT?: Prisma.CooperativeWhereInput | Prisma.CooperativeWhereInput[]
   name?: Prisma.StringFilter<"Cooperative"> | string
+  cacNumber?: Prisma.StringNullableFilter<"Cooperative"> | string | null
+  splitPercent?: Prisma.DecimalFilter<"Cooperative"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   themeConfig?: Prisma.JsonNullableFilter<"Cooperative">
   systemSettings?: Prisma.JsonNullableFilter<"Cooperative">
   createdAt?: Prisma.DateTimeFilter<"Cooperative"> | Date | string
@@ -244,20 +312,27 @@ export type CooperativeWhereUniqueInput = Prisma.AtLeast<{
   loans?: Prisma.LoanListRelationFilter
   requests?: Prisma.RequestListRelationFilter
   transactions?: Prisma.TransactionListRelationFilter
-}, "id" | "subdomain" | "customDomain">
+  personalSavings?: Prisma.PersonalSavingsListRelationFilter
+  loanTypes?: Prisma.LoanTypeListRelationFilter
+}, "id" | "subdomain" | "customDomain" | "subaccountCode">
 
 export type CooperativeOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   subdomain?: Prisma.SortOrder
   customDomain?: Prisma.SortOrderInput | Prisma.SortOrder
+  subaccountCode?: Prisma.SortOrderInput | Prisma.SortOrder
+  cacNumber?: Prisma.SortOrderInput | Prisma.SortOrder
+  splitPercent?: Prisma.SortOrder
   themeConfig?: Prisma.SortOrderInput | Prisma.SortOrder
   systemSettings?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.CooperativeCountOrderByAggregateInput
+  _avg?: Prisma.CooperativeAvgOrderByAggregateInput
   _max?: Prisma.CooperativeMaxOrderByAggregateInput
   _min?: Prisma.CooperativeMinOrderByAggregateInput
+  _sum?: Prisma.CooperativeSumOrderByAggregateInput
 }
 
 export type CooperativeScalarWhereWithAggregatesInput = {
@@ -268,6 +343,9 @@ export type CooperativeScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<"Cooperative"> | string
   subdomain?: Prisma.StringWithAggregatesFilter<"Cooperative"> | string
   customDomain?: Prisma.StringNullableWithAggregatesFilter<"Cooperative"> | string | null
+  subaccountCode?: Prisma.StringNullableWithAggregatesFilter<"Cooperative"> | string | null
+  cacNumber?: Prisma.StringNullableWithAggregatesFilter<"Cooperative"> | string | null
+  splitPercent?: Prisma.DecimalWithAggregatesFilter<"Cooperative"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   themeConfig?: Prisma.JsonNullableWithAggregatesFilter<"Cooperative">
   systemSettings?: Prisma.JsonNullableWithAggregatesFilter<"Cooperative">
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Cooperative"> | Date | string
@@ -279,6 +357,9 @@ export type CooperativeCreateInput = {
   name: string
   subdomain: string
   customDomain?: string | null
+  subaccountCode?: string | null
+  cacNumber?: string | null
+  splitPercent?: runtime.Decimal | runtime.DecimalJsLike | number | string
   themeConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   systemSettings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -290,6 +371,8 @@ export type CooperativeCreateInput = {
   loans?: Prisma.LoanCreateNestedManyWithoutCooperativeInput
   requests?: Prisma.RequestCreateNestedManyWithoutCooperativeInput
   transactions?: Prisma.TransactionCreateNestedManyWithoutCooperativeInput
+  personalSavings?: Prisma.PersonalSavingsCreateNestedManyWithoutCooperativeInput
+  loanTypes?: Prisma.LoanTypeCreateNestedManyWithoutCooperativeInput
 }
 
 export type CooperativeUncheckedCreateInput = {
@@ -297,6 +380,9 @@ export type CooperativeUncheckedCreateInput = {
   name: string
   subdomain: string
   customDomain?: string | null
+  subaccountCode?: string | null
+  cacNumber?: string | null
+  splitPercent?: runtime.Decimal | runtime.DecimalJsLike | number | string
   themeConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   systemSettings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -308,6 +394,8 @@ export type CooperativeUncheckedCreateInput = {
   loans?: Prisma.LoanUncheckedCreateNestedManyWithoutCooperativeInput
   requests?: Prisma.RequestUncheckedCreateNestedManyWithoutCooperativeInput
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutCooperativeInput
+  personalSavings?: Prisma.PersonalSavingsUncheckedCreateNestedManyWithoutCooperativeInput
+  loanTypes?: Prisma.LoanTypeUncheckedCreateNestedManyWithoutCooperativeInput
 }
 
 export type CooperativeUpdateInput = {
@@ -315,6 +403,9 @@ export type CooperativeUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   subdomain?: Prisma.StringFieldUpdateOperationsInput | string
   customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subaccountCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cacNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  splitPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   themeConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   systemSettings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -326,6 +417,8 @@ export type CooperativeUpdateInput = {
   loans?: Prisma.LoanUpdateManyWithoutCooperativeNestedInput
   requests?: Prisma.RequestUpdateManyWithoutCooperativeNestedInput
   transactions?: Prisma.TransactionUpdateManyWithoutCooperativeNestedInput
+  personalSavings?: Prisma.PersonalSavingsUpdateManyWithoutCooperativeNestedInput
+  loanTypes?: Prisma.LoanTypeUpdateManyWithoutCooperativeNestedInput
 }
 
 export type CooperativeUncheckedUpdateInput = {
@@ -333,6 +426,9 @@ export type CooperativeUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   subdomain?: Prisma.StringFieldUpdateOperationsInput | string
   customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subaccountCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cacNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  splitPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   themeConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   systemSettings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -344,6 +440,8 @@ export type CooperativeUncheckedUpdateInput = {
   loans?: Prisma.LoanUncheckedUpdateManyWithoutCooperativeNestedInput
   requests?: Prisma.RequestUncheckedUpdateManyWithoutCooperativeNestedInput
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutCooperativeNestedInput
+  personalSavings?: Prisma.PersonalSavingsUncheckedUpdateManyWithoutCooperativeNestedInput
+  loanTypes?: Prisma.LoanTypeUncheckedUpdateManyWithoutCooperativeNestedInput
 }
 
 export type CooperativeCreateManyInput = {
@@ -351,6 +449,9 @@ export type CooperativeCreateManyInput = {
   name: string
   subdomain: string
   customDomain?: string | null
+  subaccountCode?: string | null
+  cacNumber?: string | null
+  splitPercent?: runtime.Decimal | runtime.DecimalJsLike | number | string
   themeConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   systemSettings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -362,6 +463,9 @@ export type CooperativeUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   subdomain?: Prisma.StringFieldUpdateOperationsInput | string
   customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subaccountCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cacNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  splitPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   themeConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   systemSettings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -373,6 +477,9 @@ export type CooperativeUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   subdomain?: Prisma.StringFieldUpdateOperationsInput | string
   customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subaccountCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cacNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  splitPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   themeConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   systemSettings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -389,10 +496,17 @@ export type CooperativeCountOrderByAggregateInput = {
   name?: Prisma.SortOrder
   subdomain?: Prisma.SortOrder
   customDomain?: Prisma.SortOrder
+  subaccountCode?: Prisma.SortOrder
+  cacNumber?: Prisma.SortOrder
+  splitPercent?: Prisma.SortOrder
   themeConfig?: Prisma.SortOrder
   systemSettings?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type CooperativeAvgOrderByAggregateInput = {
+  splitPercent?: Prisma.SortOrder
 }
 
 export type CooperativeMaxOrderByAggregateInput = {
@@ -400,6 +514,9 @@ export type CooperativeMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   subdomain?: Prisma.SortOrder
   customDomain?: Prisma.SortOrder
+  subaccountCode?: Prisma.SortOrder
+  cacNumber?: Prisma.SortOrder
+  splitPercent?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -409,8 +526,15 @@ export type CooperativeMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   subdomain?: Prisma.SortOrder
   customDomain?: Prisma.SortOrder
+  subaccountCode?: Prisma.SortOrder
+  cacNumber?: Prisma.SortOrder
+  splitPercent?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type CooperativeSumOrderByAggregateInput = {
+  splitPercent?: Prisma.SortOrder
 }
 
 export type CooperativeCreateNestedOneWithoutUsersInput = {
@@ -461,6 +585,22 @@ export type CooperativeUpdateOneWithoutSavingsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.CooperativeUpdateToOneWithWhereWithoutSavingsInput, Prisma.CooperativeUpdateWithoutSavingsInput>, Prisma.CooperativeUncheckedUpdateWithoutSavingsInput>
 }
 
+export type CooperativeCreateNestedOneWithoutPersonalSavingsInput = {
+  create?: Prisma.XOR<Prisma.CooperativeCreateWithoutPersonalSavingsInput, Prisma.CooperativeUncheckedCreateWithoutPersonalSavingsInput>
+  connectOrCreate?: Prisma.CooperativeCreateOrConnectWithoutPersonalSavingsInput
+  connect?: Prisma.CooperativeWhereUniqueInput
+}
+
+export type CooperativeUpdateOneWithoutPersonalSavingsNestedInput = {
+  create?: Prisma.XOR<Prisma.CooperativeCreateWithoutPersonalSavingsInput, Prisma.CooperativeUncheckedCreateWithoutPersonalSavingsInput>
+  connectOrCreate?: Prisma.CooperativeCreateOrConnectWithoutPersonalSavingsInput
+  upsert?: Prisma.CooperativeUpsertWithoutPersonalSavingsInput
+  disconnect?: Prisma.CooperativeWhereInput | boolean
+  delete?: Prisma.CooperativeWhereInput | boolean
+  connect?: Prisma.CooperativeWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CooperativeUpdateToOneWithWhereWithoutPersonalSavingsInput, Prisma.CooperativeUpdateWithoutPersonalSavingsInput>, Prisma.CooperativeUncheckedUpdateWithoutPersonalSavingsInput>
+}
+
 export type CooperativeCreateNestedOneWithoutSharesInput = {
   create?: Prisma.XOR<Prisma.CooperativeCreateWithoutSharesInput, Prisma.CooperativeUncheckedCreateWithoutSharesInput>
   connectOrCreate?: Prisma.CooperativeCreateOrConnectWithoutSharesInput
@@ -475,6 +615,22 @@ export type CooperativeUpdateOneWithoutSharesNestedInput = {
   delete?: Prisma.CooperativeWhereInput | boolean
   connect?: Prisma.CooperativeWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.CooperativeUpdateToOneWithWhereWithoutSharesInput, Prisma.CooperativeUpdateWithoutSharesInput>, Prisma.CooperativeUncheckedUpdateWithoutSharesInput>
+}
+
+export type CooperativeCreateNestedOneWithoutLoanTypesInput = {
+  create?: Prisma.XOR<Prisma.CooperativeCreateWithoutLoanTypesInput, Prisma.CooperativeUncheckedCreateWithoutLoanTypesInput>
+  connectOrCreate?: Prisma.CooperativeCreateOrConnectWithoutLoanTypesInput
+  connect?: Prisma.CooperativeWhereUniqueInput
+}
+
+export type CooperativeUpdateOneWithoutLoanTypesNestedInput = {
+  create?: Prisma.XOR<Prisma.CooperativeCreateWithoutLoanTypesInput, Prisma.CooperativeUncheckedCreateWithoutLoanTypesInput>
+  connectOrCreate?: Prisma.CooperativeCreateOrConnectWithoutLoanTypesInput
+  upsert?: Prisma.CooperativeUpsertWithoutLoanTypesInput
+  disconnect?: Prisma.CooperativeWhereInput | boolean
+  delete?: Prisma.CooperativeWhereInput | boolean
+  connect?: Prisma.CooperativeWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CooperativeUpdateToOneWithWhereWithoutLoanTypesInput, Prisma.CooperativeUpdateWithoutLoanTypesInput>, Prisma.CooperativeUncheckedUpdateWithoutLoanTypesInput>
 }
 
 export type CooperativeCreateNestedOneWithoutLoansInput = {
@@ -530,6 +686,9 @@ export type CooperativeCreateWithoutUsersInput = {
   name: string
   subdomain: string
   customDomain?: string | null
+  subaccountCode?: string | null
+  cacNumber?: string | null
+  splitPercent?: runtime.Decimal | runtime.DecimalJsLike | number | string
   themeConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   systemSettings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -540,6 +699,8 @@ export type CooperativeCreateWithoutUsersInput = {
   loans?: Prisma.LoanCreateNestedManyWithoutCooperativeInput
   requests?: Prisma.RequestCreateNestedManyWithoutCooperativeInput
   transactions?: Prisma.TransactionCreateNestedManyWithoutCooperativeInput
+  personalSavings?: Prisma.PersonalSavingsCreateNestedManyWithoutCooperativeInput
+  loanTypes?: Prisma.LoanTypeCreateNestedManyWithoutCooperativeInput
 }
 
 export type CooperativeUncheckedCreateWithoutUsersInput = {
@@ -547,6 +708,9 @@ export type CooperativeUncheckedCreateWithoutUsersInput = {
   name: string
   subdomain: string
   customDomain?: string | null
+  subaccountCode?: string | null
+  cacNumber?: string | null
+  splitPercent?: runtime.Decimal | runtime.DecimalJsLike | number | string
   themeConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   systemSettings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -557,6 +721,8 @@ export type CooperativeUncheckedCreateWithoutUsersInput = {
   loans?: Prisma.LoanUncheckedCreateNestedManyWithoutCooperativeInput
   requests?: Prisma.RequestUncheckedCreateNestedManyWithoutCooperativeInput
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutCooperativeInput
+  personalSavings?: Prisma.PersonalSavingsUncheckedCreateNestedManyWithoutCooperativeInput
+  loanTypes?: Prisma.LoanTypeUncheckedCreateNestedManyWithoutCooperativeInput
 }
 
 export type CooperativeCreateOrConnectWithoutUsersInput = {
@@ -580,6 +746,9 @@ export type CooperativeUpdateWithoutUsersInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   subdomain?: Prisma.StringFieldUpdateOperationsInput | string
   customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subaccountCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cacNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  splitPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   themeConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   systemSettings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -590,6 +759,8 @@ export type CooperativeUpdateWithoutUsersInput = {
   loans?: Prisma.LoanUpdateManyWithoutCooperativeNestedInput
   requests?: Prisma.RequestUpdateManyWithoutCooperativeNestedInput
   transactions?: Prisma.TransactionUpdateManyWithoutCooperativeNestedInput
+  personalSavings?: Prisma.PersonalSavingsUpdateManyWithoutCooperativeNestedInput
+  loanTypes?: Prisma.LoanTypeUpdateManyWithoutCooperativeNestedInput
 }
 
 export type CooperativeUncheckedUpdateWithoutUsersInput = {
@@ -597,6 +768,9 @@ export type CooperativeUncheckedUpdateWithoutUsersInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   subdomain?: Prisma.StringFieldUpdateOperationsInput | string
   customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subaccountCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cacNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  splitPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   themeConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   systemSettings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -607,6 +781,8 @@ export type CooperativeUncheckedUpdateWithoutUsersInput = {
   loans?: Prisma.LoanUncheckedUpdateManyWithoutCooperativeNestedInput
   requests?: Prisma.RequestUncheckedUpdateManyWithoutCooperativeNestedInput
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutCooperativeNestedInput
+  personalSavings?: Prisma.PersonalSavingsUncheckedUpdateManyWithoutCooperativeNestedInput
+  loanTypes?: Prisma.LoanTypeUncheckedUpdateManyWithoutCooperativeNestedInput
 }
 
 export type CooperativeCreateWithoutBiodataInput = {
@@ -614,6 +790,9 @@ export type CooperativeCreateWithoutBiodataInput = {
   name: string
   subdomain: string
   customDomain?: string | null
+  subaccountCode?: string | null
+  cacNumber?: string | null
+  splitPercent?: runtime.Decimal | runtime.DecimalJsLike | number | string
   themeConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   systemSettings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -624,6 +803,8 @@ export type CooperativeCreateWithoutBiodataInput = {
   loans?: Prisma.LoanCreateNestedManyWithoutCooperativeInput
   requests?: Prisma.RequestCreateNestedManyWithoutCooperativeInput
   transactions?: Prisma.TransactionCreateNestedManyWithoutCooperativeInput
+  personalSavings?: Prisma.PersonalSavingsCreateNestedManyWithoutCooperativeInput
+  loanTypes?: Prisma.LoanTypeCreateNestedManyWithoutCooperativeInput
 }
 
 export type CooperativeUncheckedCreateWithoutBiodataInput = {
@@ -631,6 +812,9 @@ export type CooperativeUncheckedCreateWithoutBiodataInput = {
   name: string
   subdomain: string
   customDomain?: string | null
+  subaccountCode?: string | null
+  cacNumber?: string | null
+  splitPercent?: runtime.Decimal | runtime.DecimalJsLike | number | string
   themeConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   systemSettings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -641,6 +825,8 @@ export type CooperativeUncheckedCreateWithoutBiodataInput = {
   loans?: Prisma.LoanUncheckedCreateNestedManyWithoutCooperativeInput
   requests?: Prisma.RequestUncheckedCreateNestedManyWithoutCooperativeInput
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutCooperativeInput
+  personalSavings?: Prisma.PersonalSavingsUncheckedCreateNestedManyWithoutCooperativeInput
+  loanTypes?: Prisma.LoanTypeUncheckedCreateNestedManyWithoutCooperativeInput
 }
 
 export type CooperativeCreateOrConnectWithoutBiodataInput = {
@@ -664,6 +850,9 @@ export type CooperativeUpdateWithoutBiodataInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   subdomain?: Prisma.StringFieldUpdateOperationsInput | string
   customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subaccountCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cacNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  splitPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   themeConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   systemSettings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -674,6 +863,8 @@ export type CooperativeUpdateWithoutBiodataInput = {
   loans?: Prisma.LoanUpdateManyWithoutCooperativeNestedInput
   requests?: Prisma.RequestUpdateManyWithoutCooperativeNestedInput
   transactions?: Prisma.TransactionUpdateManyWithoutCooperativeNestedInput
+  personalSavings?: Prisma.PersonalSavingsUpdateManyWithoutCooperativeNestedInput
+  loanTypes?: Prisma.LoanTypeUpdateManyWithoutCooperativeNestedInput
 }
 
 export type CooperativeUncheckedUpdateWithoutBiodataInput = {
@@ -681,6 +872,9 @@ export type CooperativeUncheckedUpdateWithoutBiodataInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   subdomain?: Prisma.StringFieldUpdateOperationsInput | string
   customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subaccountCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cacNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  splitPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   themeConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   systemSettings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -691,6 +885,8 @@ export type CooperativeUncheckedUpdateWithoutBiodataInput = {
   loans?: Prisma.LoanUncheckedUpdateManyWithoutCooperativeNestedInput
   requests?: Prisma.RequestUncheckedUpdateManyWithoutCooperativeNestedInput
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutCooperativeNestedInput
+  personalSavings?: Prisma.PersonalSavingsUncheckedUpdateManyWithoutCooperativeNestedInput
+  loanTypes?: Prisma.LoanTypeUncheckedUpdateManyWithoutCooperativeNestedInput
 }
 
 export type CooperativeCreateWithoutSavingsInput = {
@@ -698,6 +894,9 @@ export type CooperativeCreateWithoutSavingsInput = {
   name: string
   subdomain: string
   customDomain?: string | null
+  subaccountCode?: string | null
+  cacNumber?: string | null
+  splitPercent?: runtime.Decimal | runtime.DecimalJsLike | number | string
   themeConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   systemSettings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -708,6 +907,8 @@ export type CooperativeCreateWithoutSavingsInput = {
   loans?: Prisma.LoanCreateNestedManyWithoutCooperativeInput
   requests?: Prisma.RequestCreateNestedManyWithoutCooperativeInput
   transactions?: Prisma.TransactionCreateNestedManyWithoutCooperativeInput
+  personalSavings?: Prisma.PersonalSavingsCreateNestedManyWithoutCooperativeInput
+  loanTypes?: Prisma.LoanTypeCreateNestedManyWithoutCooperativeInput
 }
 
 export type CooperativeUncheckedCreateWithoutSavingsInput = {
@@ -715,6 +916,9 @@ export type CooperativeUncheckedCreateWithoutSavingsInput = {
   name: string
   subdomain: string
   customDomain?: string | null
+  subaccountCode?: string | null
+  cacNumber?: string | null
+  splitPercent?: runtime.Decimal | runtime.DecimalJsLike | number | string
   themeConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   systemSettings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -725,6 +929,8 @@ export type CooperativeUncheckedCreateWithoutSavingsInput = {
   loans?: Prisma.LoanUncheckedCreateNestedManyWithoutCooperativeInput
   requests?: Prisma.RequestUncheckedCreateNestedManyWithoutCooperativeInput
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutCooperativeInput
+  personalSavings?: Prisma.PersonalSavingsUncheckedCreateNestedManyWithoutCooperativeInput
+  loanTypes?: Prisma.LoanTypeUncheckedCreateNestedManyWithoutCooperativeInput
 }
 
 export type CooperativeCreateOrConnectWithoutSavingsInput = {
@@ -748,6 +954,9 @@ export type CooperativeUpdateWithoutSavingsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   subdomain?: Prisma.StringFieldUpdateOperationsInput | string
   customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subaccountCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cacNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  splitPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   themeConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   systemSettings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -758,6 +967,8 @@ export type CooperativeUpdateWithoutSavingsInput = {
   loans?: Prisma.LoanUpdateManyWithoutCooperativeNestedInput
   requests?: Prisma.RequestUpdateManyWithoutCooperativeNestedInput
   transactions?: Prisma.TransactionUpdateManyWithoutCooperativeNestedInput
+  personalSavings?: Prisma.PersonalSavingsUpdateManyWithoutCooperativeNestedInput
+  loanTypes?: Prisma.LoanTypeUpdateManyWithoutCooperativeNestedInput
 }
 
 export type CooperativeUncheckedUpdateWithoutSavingsInput = {
@@ -765,6 +976,9 @@ export type CooperativeUncheckedUpdateWithoutSavingsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   subdomain?: Prisma.StringFieldUpdateOperationsInput | string
   customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subaccountCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cacNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  splitPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   themeConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   systemSettings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -775,6 +989,112 @@ export type CooperativeUncheckedUpdateWithoutSavingsInput = {
   loans?: Prisma.LoanUncheckedUpdateManyWithoutCooperativeNestedInput
   requests?: Prisma.RequestUncheckedUpdateManyWithoutCooperativeNestedInput
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutCooperativeNestedInput
+  personalSavings?: Prisma.PersonalSavingsUncheckedUpdateManyWithoutCooperativeNestedInput
+  loanTypes?: Prisma.LoanTypeUncheckedUpdateManyWithoutCooperativeNestedInput
+}
+
+export type CooperativeCreateWithoutPersonalSavingsInput = {
+  id?: string
+  name: string
+  subdomain: string
+  customDomain?: string | null
+  subaccountCode?: string | null
+  cacNumber?: string | null
+  splitPercent?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  themeConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  systemSettings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutCooperativeInput
+  biodata?: Prisma.BiodataCreateNestedManyWithoutCooperativeInput
+  savings?: Prisma.SavingsCreateNestedManyWithoutCooperativeInput
+  shares?: Prisma.SharesCreateNestedManyWithoutCooperativeInput
+  loans?: Prisma.LoanCreateNestedManyWithoutCooperativeInput
+  requests?: Prisma.RequestCreateNestedManyWithoutCooperativeInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutCooperativeInput
+  loanTypes?: Prisma.LoanTypeCreateNestedManyWithoutCooperativeInput
+}
+
+export type CooperativeUncheckedCreateWithoutPersonalSavingsInput = {
+  id?: string
+  name: string
+  subdomain: string
+  customDomain?: string | null
+  subaccountCode?: string | null
+  cacNumber?: string | null
+  splitPercent?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  themeConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  systemSettings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutCooperativeInput
+  biodata?: Prisma.BiodataUncheckedCreateNestedManyWithoutCooperativeInput
+  savings?: Prisma.SavingsUncheckedCreateNestedManyWithoutCooperativeInput
+  shares?: Prisma.SharesUncheckedCreateNestedManyWithoutCooperativeInput
+  loans?: Prisma.LoanUncheckedCreateNestedManyWithoutCooperativeInput
+  requests?: Prisma.RequestUncheckedCreateNestedManyWithoutCooperativeInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutCooperativeInput
+  loanTypes?: Prisma.LoanTypeUncheckedCreateNestedManyWithoutCooperativeInput
+}
+
+export type CooperativeCreateOrConnectWithoutPersonalSavingsInput = {
+  where: Prisma.CooperativeWhereUniqueInput
+  create: Prisma.XOR<Prisma.CooperativeCreateWithoutPersonalSavingsInput, Prisma.CooperativeUncheckedCreateWithoutPersonalSavingsInput>
+}
+
+export type CooperativeUpsertWithoutPersonalSavingsInput = {
+  update: Prisma.XOR<Prisma.CooperativeUpdateWithoutPersonalSavingsInput, Prisma.CooperativeUncheckedUpdateWithoutPersonalSavingsInput>
+  create: Prisma.XOR<Prisma.CooperativeCreateWithoutPersonalSavingsInput, Prisma.CooperativeUncheckedCreateWithoutPersonalSavingsInput>
+  where?: Prisma.CooperativeWhereInput
+}
+
+export type CooperativeUpdateToOneWithWhereWithoutPersonalSavingsInput = {
+  where?: Prisma.CooperativeWhereInput
+  data: Prisma.XOR<Prisma.CooperativeUpdateWithoutPersonalSavingsInput, Prisma.CooperativeUncheckedUpdateWithoutPersonalSavingsInput>
+}
+
+export type CooperativeUpdateWithoutPersonalSavingsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  subdomain?: Prisma.StringFieldUpdateOperationsInput | string
+  customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subaccountCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cacNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  splitPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  themeConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  systemSettings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutCooperativeNestedInput
+  biodata?: Prisma.BiodataUpdateManyWithoutCooperativeNestedInput
+  savings?: Prisma.SavingsUpdateManyWithoutCooperativeNestedInput
+  shares?: Prisma.SharesUpdateManyWithoutCooperativeNestedInput
+  loans?: Prisma.LoanUpdateManyWithoutCooperativeNestedInput
+  requests?: Prisma.RequestUpdateManyWithoutCooperativeNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutCooperativeNestedInput
+  loanTypes?: Prisma.LoanTypeUpdateManyWithoutCooperativeNestedInput
+}
+
+export type CooperativeUncheckedUpdateWithoutPersonalSavingsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  subdomain?: Prisma.StringFieldUpdateOperationsInput | string
+  customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subaccountCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cacNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  splitPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  themeConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  systemSettings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutCooperativeNestedInput
+  biodata?: Prisma.BiodataUncheckedUpdateManyWithoutCooperativeNestedInput
+  savings?: Prisma.SavingsUncheckedUpdateManyWithoutCooperativeNestedInput
+  shares?: Prisma.SharesUncheckedUpdateManyWithoutCooperativeNestedInput
+  loans?: Prisma.LoanUncheckedUpdateManyWithoutCooperativeNestedInput
+  requests?: Prisma.RequestUncheckedUpdateManyWithoutCooperativeNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutCooperativeNestedInput
+  loanTypes?: Prisma.LoanTypeUncheckedUpdateManyWithoutCooperativeNestedInput
 }
 
 export type CooperativeCreateWithoutSharesInput = {
@@ -782,6 +1102,9 @@ export type CooperativeCreateWithoutSharesInput = {
   name: string
   subdomain: string
   customDomain?: string | null
+  subaccountCode?: string | null
+  cacNumber?: string | null
+  splitPercent?: runtime.Decimal | runtime.DecimalJsLike | number | string
   themeConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   systemSettings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -792,6 +1115,8 @@ export type CooperativeCreateWithoutSharesInput = {
   loans?: Prisma.LoanCreateNestedManyWithoutCooperativeInput
   requests?: Prisma.RequestCreateNestedManyWithoutCooperativeInput
   transactions?: Prisma.TransactionCreateNestedManyWithoutCooperativeInput
+  personalSavings?: Prisma.PersonalSavingsCreateNestedManyWithoutCooperativeInput
+  loanTypes?: Prisma.LoanTypeCreateNestedManyWithoutCooperativeInput
 }
 
 export type CooperativeUncheckedCreateWithoutSharesInput = {
@@ -799,6 +1124,9 @@ export type CooperativeUncheckedCreateWithoutSharesInput = {
   name: string
   subdomain: string
   customDomain?: string | null
+  subaccountCode?: string | null
+  cacNumber?: string | null
+  splitPercent?: runtime.Decimal | runtime.DecimalJsLike | number | string
   themeConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   systemSettings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -809,6 +1137,8 @@ export type CooperativeUncheckedCreateWithoutSharesInput = {
   loans?: Prisma.LoanUncheckedCreateNestedManyWithoutCooperativeInput
   requests?: Prisma.RequestUncheckedCreateNestedManyWithoutCooperativeInput
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutCooperativeInput
+  personalSavings?: Prisma.PersonalSavingsUncheckedCreateNestedManyWithoutCooperativeInput
+  loanTypes?: Prisma.LoanTypeUncheckedCreateNestedManyWithoutCooperativeInput
 }
 
 export type CooperativeCreateOrConnectWithoutSharesInput = {
@@ -832,6 +1162,9 @@ export type CooperativeUpdateWithoutSharesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   subdomain?: Prisma.StringFieldUpdateOperationsInput | string
   customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subaccountCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cacNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  splitPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   themeConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   systemSettings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -842,6 +1175,8 @@ export type CooperativeUpdateWithoutSharesInput = {
   loans?: Prisma.LoanUpdateManyWithoutCooperativeNestedInput
   requests?: Prisma.RequestUpdateManyWithoutCooperativeNestedInput
   transactions?: Prisma.TransactionUpdateManyWithoutCooperativeNestedInput
+  personalSavings?: Prisma.PersonalSavingsUpdateManyWithoutCooperativeNestedInput
+  loanTypes?: Prisma.LoanTypeUpdateManyWithoutCooperativeNestedInput
 }
 
 export type CooperativeUncheckedUpdateWithoutSharesInput = {
@@ -849,6 +1184,9 @@ export type CooperativeUncheckedUpdateWithoutSharesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   subdomain?: Prisma.StringFieldUpdateOperationsInput | string
   customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subaccountCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cacNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  splitPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   themeConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   systemSettings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -859,6 +1197,112 @@ export type CooperativeUncheckedUpdateWithoutSharesInput = {
   loans?: Prisma.LoanUncheckedUpdateManyWithoutCooperativeNestedInput
   requests?: Prisma.RequestUncheckedUpdateManyWithoutCooperativeNestedInput
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutCooperativeNestedInput
+  personalSavings?: Prisma.PersonalSavingsUncheckedUpdateManyWithoutCooperativeNestedInput
+  loanTypes?: Prisma.LoanTypeUncheckedUpdateManyWithoutCooperativeNestedInput
+}
+
+export type CooperativeCreateWithoutLoanTypesInput = {
+  id?: string
+  name: string
+  subdomain: string
+  customDomain?: string | null
+  subaccountCode?: string | null
+  cacNumber?: string | null
+  splitPercent?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  themeConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  systemSettings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutCooperativeInput
+  biodata?: Prisma.BiodataCreateNestedManyWithoutCooperativeInput
+  savings?: Prisma.SavingsCreateNestedManyWithoutCooperativeInput
+  shares?: Prisma.SharesCreateNestedManyWithoutCooperativeInput
+  loans?: Prisma.LoanCreateNestedManyWithoutCooperativeInput
+  requests?: Prisma.RequestCreateNestedManyWithoutCooperativeInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutCooperativeInput
+  personalSavings?: Prisma.PersonalSavingsCreateNestedManyWithoutCooperativeInput
+}
+
+export type CooperativeUncheckedCreateWithoutLoanTypesInput = {
+  id?: string
+  name: string
+  subdomain: string
+  customDomain?: string | null
+  subaccountCode?: string | null
+  cacNumber?: string | null
+  splitPercent?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  themeConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  systemSettings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutCooperativeInput
+  biodata?: Prisma.BiodataUncheckedCreateNestedManyWithoutCooperativeInput
+  savings?: Prisma.SavingsUncheckedCreateNestedManyWithoutCooperativeInput
+  shares?: Prisma.SharesUncheckedCreateNestedManyWithoutCooperativeInput
+  loans?: Prisma.LoanUncheckedCreateNestedManyWithoutCooperativeInput
+  requests?: Prisma.RequestUncheckedCreateNestedManyWithoutCooperativeInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutCooperativeInput
+  personalSavings?: Prisma.PersonalSavingsUncheckedCreateNestedManyWithoutCooperativeInput
+}
+
+export type CooperativeCreateOrConnectWithoutLoanTypesInput = {
+  where: Prisma.CooperativeWhereUniqueInput
+  create: Prisma.XOR<Prisma.CooperativeCreateWithoutLoanTypesInput, Prisma.CooperativeUncheckedCreateWithoutLoanTypesInput>
+}
+
+export type CooperativeUpsertWithoutLoanTypesInput = {
+  update: Prisma.XOR<Prisma.CooperativeUpdateWithoutLoanTypesInput, Prisma.CooperativeUncheckedUpdateWithoutLoanTypesInput>
+  create: Prisma.XOR<Prisma.CooperativeCreateWithoutLoanTypesInput, Prisma.CooperativeUncheckedCreateWithoutLoanTypesInput>
+  where?: Prisma.CooperativeWhereInput
+}
+
+export type CooperativeUpdateToOneWithWhereWithoutLoanTypesInput = {
+  where?: Prisma.CooperativeWhereInput
+  data: Prisma.XOR<Prisma.CooperativeUpdateWithoutLoanTypesInput, Prisma.CooperativeUncheckedUpdateWithoutLoanTypesInput>
+}
+
+export type CooperativeUpdateWithoutLoanTypesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  subdomain?: Prisma.StringFieldUpdateOperationsInput | string
+  customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subaccountCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cacNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  splitPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  themeConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  systemSettings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutCooperativeNestedInput
+  biodata?: Prisma.BiodataUpdateManyWithoutCooperativeNestedInput
+  savings?: Prisma.SavingsUpdateManyWithoutCooperativeNestedInput
+  shares?: Prisma.SharesUpdateManyWithoutCooperativeNestedInput
+  loans?: Prisma.LoanUpdateManyWithoutCooperativeNestedInput
+  requests?: Prisma.RequestUpdateManyWithoutCooperativeNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutCooperativeNestedInput
+  personalSavings?: Prisma.PersonalSavingsUpdateManyWithoutCooperativeNestedInput
+}
+
+export type CooperativeUncheckedUpdateWithoutLoanTypesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  subdomain?: Prisma.StringFieldUpdateOperationsInput | string
+  customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subaccountCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cacNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  splitPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  themeConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  systemSettings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutCooperativeNestedInput
+  biodata?: Prisma.BiodataUncheckedUpdateManyWithoutCooperativeNestedInput
+  savings?: Prisma.SavingsUncheckedUpdateManyWithoutCooperativeNestedInput
+  shares?: Prisma.SharesUncheckedUpdateManyWithoutCooperativeNestedInput
+  loans?: Prisma.LoanUncheckedUpdateManyWithoutCooperativeNestedInput
+  requests?: Prisma.RequestUncheckedUpdateManyWithoutCooperativeNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutCooperativeNestedInput
+  personalSavings?: Prisma.PersonalSavingsUncheckedUpdateManyWithoutCooperativeNestedInput
 }
 
 export type CooperativeCreateWithoutLoansInput = {
@@ -866,6 +1310,9 @@ export type CooperativeCreateWithoutLoansInput = {
   name: string
   subdomain: string
   customDomain?: string | null
+  subaccountCode?: string | null
+  cacNumber?: string | null
+  splitPercent?: runtime.Decimal | runtime.DecimalJsLike | number | string
   themeConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   systemSettings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -876,6 +1323,8 @@ export type CooperativeCreateWithoutLoansInput = {
   shares?: Prisma.SharesCreateNestedManyWithoutCooperativeInput
   requests?: Prisma.RequestCreateNestedManyWithoutCooperativeInput
   transactions?: Prisma.TransactionCreateNestedManyWithoutCooperativeInput
+  personalSavings?: Prisma.PersonalSavingsCreateNestedManyWithoutCooperativeInput
+  loanTypes?: Prisma.LoanTypeCreateNestedManyWithoutCooperativeInput
 }
 
 export type CooperativeUncheckedCreateWithoutLoansInput = {
@@ -883,6 +1332,9 @@ export type CooperativeUncheckedCreateWithoutLoansInput = {
   name: string
   subdomain: string
   customDomain?: string | null
+  subaccountCode?: string | null
+  cacNumber?: string | null
+  splitPercent?: runtime.Decimal | runtime.DecimalJsLike | number | string
   themeConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   systemSettings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -893,6 +1345,8 @@ export type CooperativeUncheckedCreateWithoutLoansInput = {
   shares?: Prisma.SharesUncheckedCreateNestedManyWithoutCooperativeInput
   requests?: Prisma.RequestUncheckedCreateNestedManyWithoutCooperativeInput
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutCooperativeInput
+  personalSavings?: Prisma.PersonalSavingsUncheckedCreateNestedManyWithoutCooperativeInput
+  loanTypes?: Prisma.LoanTypeUncheckedCreateNestedManyWithoutCooperativeInput
 }
 
 export type CooperativeCreateOrConnectWithoutLoansInput = {
@@ -916,6 +1370,9 @@ export type CooperativeUpdateWithoutLoansInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   subdomain?: Prisma.StringFieldUpdateOperationsInput | string
   customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subaccountCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cacNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  splitPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   themeConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   systemSettings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -926,6 +1383,8 @@ export type CooperativeUpdateWithoutLoansInput = {
   shares?: Prisma.SharesUpdateManyWithoutCooperativeNestedInput
   requests?: Prisma.RequestUpdateManyWithoutCooperativeNestedInput
   transactions?: Prisma.TransactionUpdateManyWithoutCooperativeNestedInput
+  personalSavings?: Prisma.PersonalSavingsUpdateManyWithoutCooperativeNestedInput
+  loanTypes?: Prisma.LoanTypeUpdateManyWithoutCooperativeNestedInput
 }
 
 export type CooperativeUncheckedUpdateWithoutLoansInput = {
@@ -933,6 +1392,9 @@ export type CooperativeUncheckedUpdateWithoutLoansInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   subdomain?: Prisma.StringFieldUpdateOperationsInput | string
   customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subaccountCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cacNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  splitPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   themeConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   systemSettings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -943,6 +1405,8 @@ export type CooperativeUncheckedUpdateWithoutLoansInput = {
   shares?: Prisma.SharesUncheckedUpdateManyWithoutCooperativeNestedInput
   requests?: Prisma.RequestUncheckedUpdateManyWithoutCooperativeNestedInput
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutCooperativeNestedInput
+  personalSavings?: Prisma.PersonalSavingsUncheckedUpdateManyWithoutCooperativeNestedInput
+  loanTypes?: Prisma.LoanTypeUncheckedUpdateManyWithoutCooperativeNestedInput
 }
 
 export type CooperativeCreateWithoutRequestsInput = {
@@ -950,6 +1414,9 @@ export type CooperativeCreateWithoutRequestsInput = {
   name: string
   subdomain: string
   customDomain?: string | null
+  subaccountCode?: string | null
+  cacNumber?: string | null
+  splitPercent?: runtime.Decimal | runtime.DecimalJsLike | number | string
   themeConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   systemSettings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -960,6 +1427,8 @@ export type CooperativeCreateWithoutRequestsInput = {
   shares?: Prisma.SharesCreateNestedManyWithoutCooperativeInput
   loans?: Prisma.LoanCreateNestedManyWithoutCooperativeInput
   transactions?: Prisma.TransactionCreateNestedManyWithoutCooperativeInput
+  personalSavings?: Prisma.PersonalSavingsCreateNestedManyWithoutCooperativeInput
+  loanTypes?: Prisma.LoanTypeCreateNestedManyWithoutCooperativeInput
 }
 
 export type CooperativeUncheckedCreateWithoutRequestsInput = {
@@ -967,6 +1436,9 @@ export type CooperativeUncheckedCreateWithoutRequestsInput = {
   name: string
   subdomain: string
   customDomain?: string | null
+  subaccountCode?: string | null
+  cacNumber?: string | null
+  splitPercent?: runtime.Decimal | runtime.DecimalJsLike | number | string
   themeConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   systemSettings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -977,6 +1449,8 @@ export type CooperativeUncheckedCreateWithoutRequestsInput = {
   shares?: Prisma.SharesUncheckedCreateNestedManyWithoutCooperativeInput
   loans?: Prisma.LoanUncheckedCreateNestedManyWithoutCooperativeInput
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutCooperativeInput
+  personalSavings?: Prisma.PersonalSavingsUncheckedCreateNestedManyWithoutCooperativeInput
+  loanTypes?: Prisma.LoanTypeUncheckedCreateNestedManyWithoutCooperativeInput
 }
 
 export type CooperativeCreateOrConnectWithoutRequestsInput = {
@@ -1000,6 +1474,9 @@ export type CooperativeUpdateWithoutRequestsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   subdomain?: Prisma.StringFieldUpdateOperationsInput | string
   customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subaccountCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cacNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  splitPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   themeConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   systemSettings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1010,6 +1487,8 @@ export type CooperativeUpdateWithoutRequestsInput = {
   shares?: Prisma.SharesUpdateManyWithoutCooperativeNestedInput
   loans?: Prisma.LoanUpdateManyWithoutCooperativeNestedInput
   transactions?: Prisma.TransactionUpdateManyWithoutCooperativeNestedInput
+  personalSavings?: Prisma.PersonalSavingsUpdateManyWithoutCooperativeNestedInput
+  loanTypes?: Prisma.LoanTypeUpdateManyWithoutCooperativeNestedInput
 }
 
 export type CooperativeUncheckedUpdateWithoutRequestsInput = {
@@ -1017,6 +1496,9 @@ export type CooperativeUncheckedUpdateWithoutRequestsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   subdomain?: Prisma.StringFieldUpdateOperationsInput | string
   customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subaccountCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cacNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  splitPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   themeConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   systemSettings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1027,6 +1509,8 @@ export type CooperativeUncheckedUpdateWithoutRequestsInput = {
   shares?: Prisma.SharesUncheckedUpdateManyWithoutCooperativeNestedInput
   loans?: Prisma.LoanUncheckedUpdateManyWithoutCooperativeNestedInput
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutCooperativeNestedInput
+  personalSavings?: Prisma.PersonalSavingsUncheckedUpdateManyWithoutCooperativeNestedInput
+  loanTypes?: Prisma.LoanTypeUncheckedUpdateManyWithoutCooperativeNestedInput
 }
 
 export type CooperativeCreateWithoutTransactionsInput = {
@@ -1034,6 +1518,9 @@ export type CooperativeCreateWithoutTransactionsInput = {
   name: string
   subdomain: string
   customDomain?: string | null
+  subaccountCode?: string | null
+  cacNumber?: string | null
+  splitPercent?: runtime.Decimal | runtime.DecimalJsLike | number | string
   themeConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   systemSettings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -1044,6 +1531,8 @@ export type CooperativeCreateWithoutTransactionsInput = {
   shares?: Prisma.SharesCreateNestedManyWithoutCooperativeInput
   loans?: Prisma.LoanCreateNestedManyWithoutCooperativeInput
   requests?: Prisma.RequestCreateNestedManyWithoutCooperativeInput
+  personalSavings?: Prisma.PersonalSavingsCreateNestedManyWithoutCooperativeInput
+  loanTypes?: Prisma.LoanTypeCreateNestedManyWithoutCooperativeInput
 }
 
 export type CooperativeUncheckedCreateWithoutTransactionsInput = {
@@ -1051,6 +1540,9 @@ export type CooperativeUncheckedCreateWithoutTransactionsInput = {
   name: string
   subdomain: string
   customDomain?: string | null
+  subaccountCode?: string | null
+  cacNumber?: string | null
+  splitPercent?: runtime.Decimal | runtime.DecimalJsLike | number | string
   themeConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   systemSettings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -1061,6 +1553,8 @@ export type CooperativeUncheckedCreateWithoutTransactionsInput = {
   shares?: Prisma.SharesUncheckedCreateNestedManyWithoutCooperativeInput
   loans?: Prisma.LoanUncheckedCreateNestedManyWithoutCooperativeInput
   requests?: Prisma.RequestUncheckedCreateNestedManyWithoutCooperativeInput
+  personalSavings?: Prisma.PersonalSavingsUncheckedCreateNestedManyWithoutCooperativeInput
+  loanTypes?: Prisma.LoanTypeUncheckedCreateNestedManyWithoutCooperativeInput
 }
 
 export type CooperativeCreateOrConnectWithoutTransactionsInput = {
@@ -1084,6 +1578,9 @@ export type CooperativeUpdateWithoutTransactionsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   subdomain?: Prisma.StringFieldUpdateOperationsInput | string
   customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subaccountCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cacNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  splitPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   themeConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   systemSettings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1094,6 +1591,8 @@ export type CooperativeUpdateWithoutTransactionsInput = {
   shares?: Prisma.SharesUpdateManyWithoutCooperativeNestedInput
   loans?: Prisma.LoanUpdateManyWithoutCooperativeNestedInput
   requests?: Prisma.RequestUpdateManyWithoutCooperativeNestedInput
+  personalSavings?: Prisma.PersonalSavingsUpdateManyWithoutCooperativeNestedInput
+  loanTypes?: Prisma.LoanTypeUpdateManyWithoutCooperativeNestedInput
 }
 
 export type CooperativeUncheckedUpdateWithoutTransactionsInput = {
@@ -1101,6 +1600,9 @@ export type CooperativeUncheckedUpdateWithoutTransactionsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   subdomain?: Prisma.StringFieldUpdateOperationsInput | string
   customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subaccountCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cacNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  splitPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   themeConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   systemSettings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1111,6 +1613,8 @@ export type CooperativeUncheckedUpdateWithoutTransactionsInput = {
   shares?: Prisma.SharesUncheckedUpdateManyWithoutCooperativeNestedInput
   loans?: Prisma.LoanUncheckedUpdateManyWithoutCooperativeNestedInput
   requests?: Prisma.RequestUncheckedUpdateManyWithoutCooperativeNestedInput
+  personalSavings?: Prisma.PersonalSavingsUncheckedUpdateManyWithoutCooperativeNestedInput
+  loanTypes?: Prisma.LoanTypeUncheckedUpdateManyWithoutCooperativeNestedInput
 }
 
 
@@ -1126,6 +1630,8 @@ export type CooperativeCountOutputType = {
   loans: number
   requests: number
   transactions: number
+  personalSavings: number
+  loanTypes: number
 }
 
 export type CooperativeCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1136,6 +1642,8 @@ export type CooperativeCountOutputTypeSelect<ExtArgs extends runtime.Types.Exten
   loans?: boolean | CooperativeCountOutputTypeCountLoansArgs
   requests?: boolean | CooperativeCountOutputTypeCountRequestsArgs
   transactions?: boolean | CooperativeCountOutputTypeCountTransactionsArgs
+  personalSavings?: boolean | CooperativeCountOutputTypeCountPersonalSavingsArgs
+  loanTypes?: boolean | CooperativeCountOutputTypeCountLoanTypesArgs
 }
 
 /**
@@ -1197,12 +1705,29 @@ export type CooperativeCountOutputTypeCountTransactionsArgs<ExtArgs extends runt
   where?: Prisma.TransactionWhereInput
 }
 
+/**
+ * CooperativeCountOutputType without action
+ */
+export type CooperativeCountOutputTypeCountPersonalSavingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PersonalSavingsWhereInput
+}
+
+/**
+ * CooperativeCountOutputType without action
+ */
+export type CooperativeCountOutputTypeCountLoanTypesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LoanTypeWhereInput
+}
+
 
 export type CooperativeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
   subdomain?: boolean
   customDomain?: boolean
+  subaccountCode?: boolean
+  cacNumber?: boolean
+  splitPercent?: boolean
   themeConfig?: boolean
   systemSettings?: boolean
   createdAt?: boolean
@@ -1214,6 +1739,8 @@ export type CooperativeSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   loans?: boolean | Prisma.Cooperative$loansArgs<ExtArgs>
   requests?: boolean | Prisma.Cooperative$requestsArgs<ExtArgs>
   transactions?: boolean | Prisma.Cooperative$transactionsArgs<ExtArgs>
+  personalSavings?: boolean | Prisma.Cooperative$personalSavingsArgs<ExtArgs>
+  loanTypes?: boolean | Prisma.Cooperative$loanTypesArgs<ExtArgs>
   _count?: boolean | Prisma.CooperativeCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["cooperative"]>
 
@@ -1222,6 +1749,9 @@ export type CooperativeSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   name?: boolean
   subdomain?: boolean
   customDomain?: boolean
+  subaccountCode?: boolean
+  cacNumber?: boolean
+  splitPercent?: boolean
   themeConfig?: boolean
   systemSettings?: boolean
   createdAt?: boolean
@@ -1233,6 +1763,9 @@ export type CooperativeSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   name?: boolean
   subdomain?: boolean
   customDomain?: boolean
+  subaccountCode?: boolean
+  cacNumber?: boolean
+  splitPercent?: boolean
   themeConfig?: boolean
   systemSettings?: boolean
   createdAt?: boolean
@@ -1244,13 +1777,16 @@ export type CooperativeSelectScalar = {
   name?: boolean
   subdomain?: boolean
   customDomain?: boolean
+  subaccountCode?: boolean
+  cacNumber?: boolean
+  splitPercent?: boolean
   themeConfig?: boolean
   systemSettings?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type CooperativeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "subdomain" | "customDomain" | "themeConfig" | "systemSettings" | "createdAt" | "updatedAt", ExtArgs["result"]["cooperative"]>
+export type CooperativeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "subdomain" | "customDomain" | "subaccountCode" | "cacNumber" | "splitPercent" | "themeConfig" | "systemSettings" | "createdAt" | "updatedAt", ExtArgs["result"]["cooperative"]>
 export type CooperativeInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   users?: boolean | Prisma.Cooperative$usersArgs<ExtArgs>
   biodata?: boolean | Prisma.Cooperative$biodataArgs<ExtArgs>
@@ -1259,6 +1795,8 @@ export type CooperativeInclude<ExtArgs extends runtime.Types.Extensions.Internal
   loans?: boolean | Prisma.Cooperative$loansArgs<ExtArgs>
   requests?: boolean | Prisma.Cooperative$requestsArgs<ExtArgs>
   transactions?: boolean | Prisma.Cooperative$transactionsArgs<ExtArgs>
+  personalSavings?: boolean | Prisma.Cooperative$personalSavingsArgs<ExtArgs>
+  loanTypes?: boolean | Prisma.Cooperative$loanTypesArgs<ExtArgs>
   _count?: boolean | Prisma.CooperativeCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type CooperativeIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1274,12 +1812,17 @@ export type $CooperativePayload<ExtArgs extends runtime.Types.Extensions.Interna
     loans: Prisma.$LoanPayload<ExtArgs>[]
     requests: Prisma.$RequestPayload<ExtArgs>[]
     transactions: Prisma.$TransactionPayload<ExtArgs>[]
+    personalSavings: Prisma.$PersonalSavingsPayload<ExtArgs>[]
+    loanTypes: Prisma.$LoanTypePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     name: string
     subdomain: string
     customDomain: string | null
+    subaccountCode: string | null
+    cacNumber: string | null
+    splitPercent: runtime.Decimal
     themeConfig: runtime.JsonValue | null
     systemSettings: runtime.JsonValue | null
     createdAt: Date
@@ -1685,6 +2228,8 @@ export interface Prisma__CooperativeClient<T, Null = never, ExtArgs extends runt
   loans<T extends Prisma.Cooperative$loansArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Cooperative$loansArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LoanPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   requests<T extends Prisma.Cooperative$requestsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Cooperative$requestsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   transactions<T extends Prisma.Cooperative$transactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Cooperative$transactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  personalSavings<T extends Prisma.Cooperative$personalSavingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Cooperative$personalSavingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PersonalSavingsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  loanTypes<T extends Prisma.Cooperative$loanTypesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Cooperative$loanTypesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LoanTypePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1718,6 +2263,9 @@ export interface CooperativeFieldRefs {
   readonly name: Prisma.FieldRef<"Cooperative", 'String'>
   readonly subdomain: Prisma.FieldRef<"Cooperative", 'String'>
   readonly customDomain: Prisma.FieldRef<"Cooperative", 'String'>
+  readonly subaccountCode: Prisma.FieldRef<"Cooperative", 'String'>
+  readonly cacNumber: Prisma.FieldRef<"Cooperative", 'String'>
+  readonly splitPercent: Prisma.FieldRef<"Cooperative", 'Decimal'>
   readonly themeConfig: Prisma.FieldRef<"Cooperative", 'Json'>
   readonly systemSettings: Prisma.FieldRef<"Cooperative", 'Json'>
   readonly createdAt: Prisma.FieldRef<"Cooperative", 'DateTime'>
@@ -2280,6 +2828,54 @@ export type Cooperative$transactionsArgs<ExtArgs extends runtime.Types.Extension
   take?: number
   skip?: number
   distinct?: Prisma.TransactionScalarFieldEnum | Prisma.TransactionScalarFieldEnum[]
+}
+
+/**
+ * Cooperative.personalSavings
+ */
+export type Cooperative$personalSavingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PersonalSavings
+   */
+  select?: Prisma.PersonalSavingsSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PersonalSavings
+   */
+  omit?: Prisma.PersonalSavingsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PersonalSavingsInclude<ExtArgs> | null
+  where?: Prisma.PersonalSavingsWhereInput
+  orderBy?: Prisma.PersonalSavingsOrderByWithRelationInput | Prisma.PersonalSavingsOrderByWithRelationInput[]
+  cursor?: Prisma.PersonalSavingsWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PersonalSavingsScalarFieldEnum | Prisma.PersonalSavingsScalarFieldEnum[]
+}
+
+/**
+ * Cooperative.loanTypes
+ */
+export type Cooperative$loanTypesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the LoanType
+   */
+  select?: Prisma.LoanTypeSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the LoanType
+   */
+  omit?: Prisma.LoanTypeOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LoanTypeInclude<ExtArgs> | null
+  where?: Prisma.LoanTypeWhereInput
+  orderBy?: Prisma.LoanTypeOrderByWithRelationInput | Prisma.LoanTypeOrderByWithRelationInput[]
+  cursor?: Prisma.LoanTypeWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LoanTypeScalarFieldEnum | Prisma.LoanTypeScalarFieldEnum[]
 }
 
 /**

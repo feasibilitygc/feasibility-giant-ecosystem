@@ -9,6 +9,7 @@ import { TokenPayload } from '../modules/user/interfaces/token.interface';
 import { tokenService } from '../modules/user/services/token.service';
 import { redisClient } from '../config/redis';
 import { prisma } from '@/prisma';
+import { runWithoutIsolation } from '../utils/contextStore';
 
 const userService = new UserService();
 
@@ -57,28 +58,37 @@ export const authenticateUser = async (req: Request, res: Response, next: NextFu
         throw new ApiError('Token has been revoked', 401);
       }
 
-      // Get user with roles and permissions
-      const user = await prisma.user.findUnique({
-        where: { id: decoded.userId },
-        include: {
-          roleAssignments: {
-            where: {
-              isActive: true,
-              OR: [
-                { expiresAt: null },
-                { expiresAt: { gt: new Date() } },
-              ],
+      // Get user with roles and permissions (unscoped query to fetch profile first)
+      const user = await runWithoutIsolation(async () => {
+        return prisma.user.findUnique({
+          where: { id: decoded.userId },
+          include: {
+            roleAssignments: {
+              where: {
+                isActive: true,
+                OR: [
+                  { expiresAt: null },
+                  { expiresAt: { gt: new Date() } },
+                ],
+              },
+              include: {
+                role: true,
+              },
             },
-            include: {
-              role: true,
-            },
+            adminProfile: true,
           },
-          adminProfile: true,
-        },
+        });
       });
 
       if (!user || !user.isActive) {
         throw new ApiError('User not found or inactive', 401);
+      }
+
+      // Check tenant isolation: scoped users must match the request's cooperativeId.
+      // Global SUPER_ADMINs (unscoped or with SUPER_ADMIN role) can access any tenant.
+      const hasSuperAdminRole = user.roleAssignments.some(ra => ra.role.name === 'SUPER_ADMIN');
+      if (user.cooperativeId && user.cooperativeId !== req.cooperativeId && !hasSuperAdminRole) {
+        throw new ApiError('Access denied: You do not belong to this cooperative.', 403);
       }
 
       // Get active session - verify against the database source of truth

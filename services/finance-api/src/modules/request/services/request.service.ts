@@ -3,7 +3,8 @@ import {
     RequestType,
     RequestStatus,
     RequestModule,
-    ApprovalStatus
+    ApprovalStatus,
+    MembershipStatus
 } from '@/prisma';
 import { v4 as uuidv4 } from 'uuid';
 import { ApiError } from '../../../utils/apiError';
@@ -469,21 +470,22 @@ class RequestService {
                 // Determine the next approval level and updated status
                 let nextLevel = currentApprovalLevel;
                 let updatedStatus = data.status;
-                let completedAt = null;
+                let completedAt: Date | null = null;
 
                 if (data.status === RequestStatus.REJECTED || data.status === RequestStatus.CANCELLED) {
                     // If rejected or cancelled, no further approval needed
                     completedAt = new Date();
-                } else if (data.status === RequestStatus.APPROVED || 
-                           data.status === RequestStatus.REVIEWED || 
+                } else if (data.status === RequestStatus.APPROVED) {
+                    // If status is APPROVED, mark as completed and set next level to max
+                    completedAt = new Date();
+                    const maxLevel = request.approvalSteps.length > 0 ? Math.max(...request.approvalSteps.map(s => s.level)) : 1;
+                    nextLevel = maxLevel;
+                } else if (data.status === RequestStatus.REVIEWED || 
                            data.status === RequestStatus.IN_REVIEW) {
                     // Move to the next approval level
-                    const maxLevel = Math.max(...request.approvalSteps.map(s => s.level));
+                    const maxLevel = request.approvalSteps.length > 0 ? Math.max(...request.approvalSteps.map(s => s.level)) : 1;
                     if (currentApprovalLevel < maxLevel) {
                         nextLevel = currentApprovalLevel + 1;
-                    } else if (data.status === RequestStatus.APPROVED) {
-                        // If this was the last approval step and status is APPROVED, mark as completed
-                        completedAt = new Date();
                     }
                 } else if (data.status === RequestStatus.COMPLETED) {
                     // Mark as completed
@@ -1087,10 +1089,12 @@ class RequestService {
                 RequestStatus.IN_REVIEW, 
                 RequestStatus.REJECTED,
                 RequestStatus.REVIEWED,
+                RequestStatus.APPROVED,
                 RequestStatus.CANCELLED
             ],
             [RequestStatus.IN_REVIEW]: [
                 RequestStatus.REVIEWED, 
+                RequestStatus.APPROVED,
                 RequestStatus.REJECTED, 
                 RequestStatus.CANCELLED
             ],
@@ -1355,6 +1359,42 @@ class RequestService {
                     });
                 }
                 break;
+            case RequestType.ACCOUNT_CREATION:
+                if (request.biodataId) {
+                    await tx.biodata.update({
+                        where: { id: request.biodataId },
+                        data: {
+                            isApproved: true,
+                            membershipStatus: MembershipStatus.ACTIVE,
+                            updatedAt: new Date()
+                        }
+                    });
+                }
+                break;
+            case RequestType.ACCOUNT_UPDATE:
+                if (request.biodataId) {
+                    const content = typeof request.content === 'string' ? JSON.parse(request.content) : request.content;
+                    if (content && content.changes) {
+                        // Apply updates to member biodata
+                        await tx.biodata.update({
+                            where: { id: request.biodataId },
+                            data: {
+                                ...content.changes,
+                                updatedAt: new Date()
+                            }
+                        });
+                    } else if (content && content.accountInfo && content.currentAccount?.id) {
+                        // Apply updates to member bank account information
+                        await tx.accountInfo.update({
+                            where: { id: content.currentAccount.id },
+                            data: {
+                                ...content.accountInfo,
+                                isVerified: false
+                            }
+                        });
+                    }
+                }
+                break;
             case RequestType.PERSONAL_SAVINGS_CREATION:
                 // Create the personal savings plan when request is approved
                 if (request.content && request.biodataId) {
@@ -1555,6 +1595,59 @@ class RequestService {
                 }
             }
         });
+    }
+
+    /**
+     * Get approval history for a request
+     */
+    async getRequestHistory(requestId: string): Promise<any[]> {
+        try {
+            const approvals = await prisma.requestApproval.findMany({
+                where: { requestId },
+                orderBy: { level: 'asc' },
+                include: {
+                    approver: {
+                        select: {
+                            id: true,
+                            username: true,
+                            adminProfile: {
+                                select: {
+                                    firstName: true,
+                                    lastName: true
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            return approvals.map(approval => {
+                let approverName = 'System';
+                if (approval.approver) {
+                    if (approval.approver.adminProfile) {
+                        approverName = `${approval.approver.adminProfile.firstName} ${approval.approver.adminProfile.lastName}`;
+                    } else if (approval.approver.username) {
+                        approverName = approval.approver.username;
+                    }
+                }
+                
+                return {
+                    id: approval.id,
+                    requestId: approval.requestId,
+                    approverName,
+                    action: approval.status,
+                    comment: approval.notes,
+                    timestamp: approval.updatedAt.toISOString()
+                };
+            });
+        } catch (error) {
+            logger.error('Error fetching request approval history:', error);
+            throw new RequestError(
+                RequestErrorCodes.FETCH_ERROR,
+                'Failed to fetch request approval history',
+                500
+            );
+        }
     }
 }
 

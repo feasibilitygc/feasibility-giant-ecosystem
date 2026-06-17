@@ -1,4 +1,3 @@
-import { prisma } from '@/prisma';
 import { 
     prisma,
     Loan, 
@@ -19,6 +18,12 @@ import { isUUID } from 'validator';
 import logger from '../../../utils/logger';
 import { LoanNotificationService } from './notification.service';
 import { TransactionService } from '../../transaction/services/transaction.service';
+import { 
+    createMonoCustomer, 
+    initiateMonoMandate, 
+    verifyMonoMandate, 
+    triggerMonoDebit 
+} from '../../../utils/paymentUtil';
 // import { LoanSummary } from '../interfaces/loan.interface';
 
 
@@ -492,19 +497,38 @@ async updateLoanStatus(
         
         // 3. Create transaction record for loan disbursement
         if (status === 'DISBURSED') {
+            const cooperative = loan.cooperativeId 
+                ? await tx.cooperative.findUnique({ where: { id: loan.cooperativeId } })
+                : null;
+            const coopName = cooperative ? cooperative.name : 'Platform';
+            const cleanCoopName = coopName.replace(/[^a-zA-Z0-9 -]/g, '').trim().toUpperCase();
+            const statementNarration = `LOAN - ${cleanCoopName} DISB-${loan.id.substring(0, 8).toUpperCase()}`;
+
+            let initiatorUserId = updatedBy;
+            if (!initiatorUserId) {
+                const memberUser = await tx.user.findFirst({
+                    where: { biodataId: loan.member.id }
+                });
+                if (!memberUser) {
+                    throw new ApiError(`User account not found for member/biodata ${loan.member.id}`, 404);
+                }
+                initiatorUserId = memberUser.id;
+            }
+
             await this.transactionService.createTransactionWithTx(tx, {
                 transactionType: TransactionType.LOAN_DISBURSEMENT,
                 module: TransactionModule.LOAN,
                 amount: loan.totalAmount,
                 description: `Loan disbursement for loan #${loan.id}`,
-                initiatedBy: updatedBy || loan.member.id,
+                initiatedBy: initiatorUserId,
                 relatedEntityId: loan.id,
                 relatedEntityType: 'LOAN',
                 autoComplete: true,
                 metadata: {
                     loanType: loan.loanTypeId,
                     disbursementDate: new Date(),
-                    dueDate: loan.paymentSchedules[0]?.dueDate || null
+                    dueDate: loan.paymentSchedules[0]?.dueDate || null,
+                    narration: statementNarration
                 }
             });
         }
@@ -1257,5 +1281,237 @@ async getAllLoans(filters: LoanQueryFilters = {}) {
         throw error;
     }
 }
+
+    /**
+     * Initializes a Mono Direct Debit mandate for a given loan.
+     */
+    async initiateLoanMandate(
+        loanId: string,
+        amount?: number,
+        verificationMethod?: string
+    ): Promise<any> {
+        if (!isUUID(loanId)) {
+            throw new ApiError('Invalid loan ID format', 400);
+        }
+
+        const loan = await this.prisma.loan.findUnique({
+            where: { id: loanId },
+            include: {
+                member: {
+                    include: {
+                        accountInfo: {
+                            include: { bank: true }
+                        }
+                    }
+                }
+            }
+        });
+
+        if (!loan) {
+            throw new ApiError('Loan not found', 404);
+        }
+
+        // Check if there is already an active mandate for this loan
+        const existingMandate = await this.prisma.directDebitMandate.findFirst({
+            where: { loanId, status: { in: ['PENDING', 'ACTIVE', 'APPROVED'] } }
+        });
+
+        if (existingMandate) {
+            return existingMandate;
+        }
+
+        const member = loan.member;
+        const account = member.accountInfo[0];
+        if (!account) {
+            throw new ApiError('Member has no linked bank account information', 400);
+        }
+
+        // 1. Create/Retrieve Mono Customer
+        const customerResult = await createMonoCustomer({
+            email: member.emailAddress,
+            firstName: member.firstName,
+            lastName: member.lastName,
+            phone: member.phoneNumber,
+            address: member.residentialAddress || 'No Address Provided',
+            bvn: account.bvn
+        });
+
+        if (!customerResult.success) {
+            throw new ApiError(`Failed to register customer on Mono: ${customerResult.message}`, 400);
+        }
+
+        // Mandate amount is in kobo (default to loan total outstanding)
+        const mandateAmountKobo = amount 
+            ? Math.round(amount * 100) 
+            : Math.round(Number(loan.remainingBalance) * 100);
+
+        const reference = `MD_LOAN_${uuidv4().substring(0, 18).toUpperCase()}`;
+
+        // 2. Initiate Mandate Link
+        const mandateResult = await initiateMonoMandate({
+            customerId: customerResult.customerId,
+            amount: mandateAmountKobo,
+            reference,
+            accountNumber: account.accountNumber,
+            bankCode: account.bank.code,
+            verificationMethod: verificationMethod || 'selfie_verification'
+        });
+
+        if (!mandateResult.success) {
+            throw new ApiError(`Failed to initiate mandate on Mono: ${mandateResult.message}`, 400);
+        }
+
+        // 3. Save mandate details in database
+        const mandate = await this.prisma.directDebitMandate.create({
+            data: {
+                monoMandateId: mandateResult.mandateId,
+                loanId: loan.id,
+                erpId: loan.erpId,
+                reference,
+                amount: new Decimal(mandateAmountKobo / 100),
+                status: 'PENDING',
+                monoUrl: mandateResult.monoUrl,
+                cooperativeId: loan.cooperativeId
+            }
+        });
+
+        return mandate;
+    }
+
+    /**
+     * Gets the direct debit mandate for a loan, verifying and syncing status with Mono if PENDING.
+     */
+    async getLoanMandate(loanId: string): Promise<any> {
+        if (!isUUID(loanId)) {
+            throw new ApiError('Invalid loan ID format', 400);
+        }
+
+        const mandate = await this.prisma.directDebitMandate.findFirst({
+            where: { loanId },
+            orderBy: { createdAt: 'desc' }
+        });
+
+        if (!mandate) {
+            return null;
+        }
+
+        // If PENDING, sync with Mono
+        if (mandate.status === 'PENDING' && mandate.monoMandateId) {
+            try {
+                const verifyResult = await verifyMonoMandate(mandate.monoMandateId);
+                if (verifyResult.success) {
+                    const statusMapping: Record<string, string> = {
+                        'approved': 'ACTIVE',
+                        'ready-to-debit': 'ACTIVE',
+                        'active': 'ACTIVE',
+                        'rejected': 'REJECTED',
+                        'cancelled': 'CANCELLED'
+                    };
+
+                    const newStatus = statusMapping[verifyResult.status.toLowerCase()];
+                    if (newStatus && newStatus !== mandate.status) {
+                        const updated = await this.prisma.directDebitMandate.update({
+                            where: { id: mandate.id },
+                            data: { status: newStatus }
+                        });
+                        return updated;
+                    }
+                }
+            } catch (error) {
+                logger.error(`Failed to verify/sync Mono mandate: ${mandate.monoMandateId}`, error);
+            }
+        }
+
+        return mandate;
+    }
+
+    /**
+     * Triggers a direct debit sweep for a loan repayment.
+     */
+    async triggerLoanRepaymentSweep(
+        loanId: string,
+        amount?: number
+    ): Promise<any> {
+        if (!isUUID(loanId)) {
+            throw new ApiError('Invalid loan ID format', 400);
+        }
+
+        const mandate = await this.prisma.directDebitMandate.findFirst({
+            where: { loanId, status: 'ACTIVE' }
+        });
+
+        if (!mandate || !mandate.monoMandateId) {
+            throw new ApiError('No active Direct Debit mandate found for this loan. Please link bank account first.', 400);
+        }
+
+        const loan = await this.prisma.loan.findUnique({
+            where: { id: loanId }
+        });
+
+        if (!loan) {
+            throw new ApiError('Loan not found', 404);
+        }
+
+        let debitAmount = amount;
+        if (!debitAmount) {
+            const nextSchedule = await this.prisma.loanSchedule.findFirst({
+                where: { loanId, status: { in: ['PENDING', 'PARTIAL'] } },
+                orderBy: { dueDate: 'asc' }
+            });
+            debitAmount = nextSchedule 
+                ? Number(nextSchedule.expectedAmount) - Number(nextSchedule.paidAmount)
+                : Number(loan.remainingBalance);
+        }
+
+        if (debitAmount <= 0) {
+            throw new ApiError('No outstanding balance or expected repayment amount for sweep', 400);
+        }
+
+        const debitAmountKobo = Math.round(debitAmount * 100);
+        const reference = `DR_REPAY_${uuidv4().substring(0, 18).toUpperCase()}`;
+
+        // Trigger the debit on Mono
+        const debitResult = await triggerMonoDebit(
+            mandate.monoMandateId,
+            debitAmountKobo,
+            reference
+        );
+
+        if (!debitResult.success) {
+            throw new ApiError(`Failed to trigger debit on Mono: ${debitResult.message}`, 400);
+        }
+
+        const memberUser = await this.prisma.user.findFirst({
+            where: { biodataId: loan.memberId }
+        });
+        if (!memberUser) {
+            throw new ApiError(`User account not found for member/biodata ${loan.memberId}`, 404);
+        }
+
+        // Create a pending transaction for tracking the sweep
+        const sweepTransaction = await this.transactionService.createTransaction({
+            transactionType: TransactionType.LOAN_REPAYMENT,
+            module: TransactionModule.LOAN,
+            amount: debitAmount,
+            initiatedBy: memberUser.id,
+            relatedEntityId: loan.id,
+            relatedEntityType: 'LOAN',
+            description: `Mono Direct Debit repayment sweep (Pending clearance) - Ref: ${reference}`,
+            metadata: {
+                sweepReference: reference,
+                monoMandateId: mandate.monoMandateId,
+                monoDebitId: debitResult.debitId,
+                status: debitResult.status
+            }
+        }, false);
+
+        return {
+            message: 'Direct debit sweep initiated',
+            transaction: sweepTransaction,
+            reference,
+            status: debitResult.status
+        };
+    }
 }
+
 

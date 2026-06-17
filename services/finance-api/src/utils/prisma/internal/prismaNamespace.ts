@@ -409,7 +409,8 @@ export const ModelName = {
   Transaction: 'Transaction',
   SystemSettings: 'SystemSettings',
   SystemSettingsHistory: 'SystemSettingsHistory',
-  Cooperative: 'Cooperative'
+  Cooperative: 'Cooperative',
+  SmsLog: 'SmsLog'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -425,7 +426,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "role" | "userRole" | "adminUserProfile" | "accountInfo" | "bank" | "biodata" | "otpVerification" | "savings" | "personalSavingsPlan" | "personalSavings" | "shares" | "loanType" | "loan" | "loanSchedule" | "bulkRepaymentUpload" | "loanRepayment" | "loanStatusHistory" | "request" | "requestApproval" | "notification" | "session" | "transaction" | "systemSettings" | "systemSettingsHistory" | "cooperative"
+    modelProps: "user" | "role" | "userRole" | "adminUserProfile" | "accountInfo" | "bank" | "biodata" | "otpVerification" | "savings" | "personalSavingsPlan" | "personalSavings" | "shares" | "loanType" | "loan" | "loanSchedule" | "bulkRepaymentUpload" | "loanRepayment" | "loanStatusHistory" | "request" | "requestApproval" | "notification" | "session" | "transaction" | "systemSettings" | "systemSettingsHistory" | "cooperative" | "smsLog"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2353,6 +2354,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    SmsLog: {
+      payload: Prisma.$SmsLogPayload<ExtArgs>
+      fields: Prisma.SmsLogFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.SmsLogFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SmsLogPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.SmsLogFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SmsLogPayload>
+        }
+        findFirst: {
+          args: Prisma.SmsLogFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SmsLogPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.SmsLogFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SmsLogPayload>
+        }
+        findMany: {
+          args: Prisma.SmsLogFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SmsLogPayload>[]
+        }
+        create: {
+          args: Prisma.SmsLogCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SmsLogPayload>
+        }
+        createMany: {
+          args: Prisma.SmsLogCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.SmsLogCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SmsLogPayload>[]
+        }
+        delete: {
+          args: Prisma.SmsLogDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SmsLogPayload>
+        }
+        update: {
+          args: Prisma.SmsLogUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SmsLogPayload>
+        }
+        deleteMany: {
+          args: Prisma.SmsLogDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.SmsLogUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.SmsLogUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SmsLogPayload>[]
+        }
+        upsert: {
+          args: Prisma.SmsLogUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SmsLogPayload>
+        }
+        aggregate: {
+          args: Prisma.SmsLogAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSmsLog>
+        }
+        groupBy: {
+          args: Prisma.SmsLogGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SmsLogGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.SmsLogCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SmsLogCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -2568,7 +2643,8 @@ export const PersonalSavingsScalarFieldEnum = {
   currentBalance: 'currentBalance',
   status: 'status',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  cooperativeId: 'cooperativeId'
 } as const
 
 export type PersonalSavingsScalarFieldEnum = (typeof PersonalSavingsScalarFieldEnum)[keyof typeof PersonalSavingsScalarFieldEnum]
@@ -2606,7 +2682,8 @@ export const LoanTypeScalarFieldEnum = {
   maxLoanAmount: 'maxLoanAmount',
   savingsMultiplier: 'savingsMultiplier',
   isActive: 'isActive',
-  requiresApproval: 'requiresApproval'
+  requiresApproval: 'requiresApproval',
+  cooperativeId: 'cooperativeId'
 } as const
 
 export type LoanTypeScalarFieldEnum = (typeof LoanTypeScalarFieldEnum)[keyof typeof LoanTypeScalarFieldEnum]
@@ -2845,6 +2922,9 @@ export const CooperativeScalarFieldEnum = {
   name: 'name',
   subdomain: 'subdomain',
   customDomain: 'customDomain',
+  subaccountCode: 'subaccountCode',
+  cacNumber: 'cacNumber',
+  splitPercent: 'splitPercent',
   themeConfig: 'themeConfig',
   systemSettings: 'systemSettings',
   createdAt: 'createdAt',
@@ -2852,6 +2932,19 @@ export const CooperativeScalarFieldEnum = {
 } as const
 
 export type CooperativeScalarFieldEnum = (typeof CooperativeScalarFieldEnum)[keyof typeof CooperativeScalarFieldEnum]
+
+
+export const SmsLogScalarFieldEnum = {
+  id: 'id',
+  recipient: 'recipient',
+  provider: 'provider',
+  messageStatus: 'messageStatus',
+  errorDetails: 'errorDetails',
+  cooperativeId: 'cooperativeId',
+  createdAt: 'createdAt'
+} as const
+
+export type SmsLogScalarFieldEnum = (typeof SmsLogScalarFieldEnum)[keyof typeof SmsLogScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -3358,6 +3451,7 @@ export type GlobalOmitConfig = {
   systemSettings?: Prisma.SystemSettingsOmit
   systemSettingsHistory?: Prisma.SystemSettingsHistoryOmit
   cooperative?: Prisma.CooperativeOmit
+  smsLog?: Prisma.SmsLogOmit
 }
 
 /* Types for Logging */

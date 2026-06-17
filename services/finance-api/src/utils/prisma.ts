@@ -20,7 +20,7 @@ const globalForPrisma = globalThis as unknown as {
   prisma: any
 }
 
-import { getCooperativeId } from './contextStore';
+import { getCooperativeId, requestContextStore } from './contextStore';
 
 const basePrisma =
   globalForPrisma.prisma ??
@@ -31,13 +31,43 @@ const basePrisma =
       : ['error'],
   });
 
+const SCALAR_FOREIGN_KEYS: Record<string, string[]> = {
+  User: ['biodataId'],
+  Biodata: [],
+  Savings: ['memberId'],
+  Shares: ['memberId', 'savingsId'],
+  Loan: ['memberId', 'loanTypeId'],
+  Request: ['initiatorId', 'assigneeId', 'approverId', 'loanId', 'savingsId', 'biodataId', 'personalSavingsId'],
+  Transaction: ['initiatedBy', 'approvedBy', 'requestId', 'loanId', 'savingsId', 'sharesId', 'personalSavingsId', 'parentTxnId'],
+  PersonalSavings: ['memberId', 'planTypeId'],
+  LoanType: [],
+  DirectDebitMandate: ['loanId'],
+};
+
+function injectCooperativeToCreateData(model: string, data: any, coopId: string) {
+  if (!data) return;
+  if (data.cooperative || data.cooperativeId) {
+    return;
+  }
+  const scalarFKs = SCALAR_FOREIGN_KEYS[model] || [];
+  const hasScalarFK = Object.keys(data).some(key => scalarFKs.includes(key));
+  if (hasScalarFK) {
+    data.cooperativeId = coopId;
+  } else {
+    data.cooperative = { connect: { id: coopId } };
+  }
+}
+
 export const prisma = basePrisma.$extends({
   query: {
     $allModels: {
       async $allOperations({ model, operation, args, query }: { model: string, operation: string, args: any, query: (args: any) => Promise<any> }) {
-        const coopId = getCooperativeId();
-        if (coopId) {
-          const modelsToScope = ['User', 'Biodata', 'Savings', 'Shares', 'Loan', 'Request', 'Transaction'];
+        const store = requestContextStore.getStore();
+        const coopId = store?.cooperativeId;
+        const bypass = store?.bypassTenantIsolation;
+        
+        if (coopId && !bypass) {
+          const modelsToScope = ['User', 'Biodata', 'Savings', 'Shares', 'Loan', 'Request', 'Transaction', 'PersonalSavings', 'LoanType', 'DirectDebitMandate'];
           
           if (modelsToScope.includes(model)) {
             // 1. Scope queries by cooperativeId for read/update/delete operations
@@ -48,7 +78,7 @@ export const prisma = basePrisma.$extends({
             // 2. Inject cooperativeId for create operations
             else if (operation === 'create') {
               (args as any).data = (args as any).data || {};
-              (args as any).data.cooperativeId = coopId;
+              injectCooperativeToCreateData(model, (args as any).data, coopId);
             }
             // 3. Inject cooperativeId for createMany operations
             else if (operation === 'createMany') {
@@ -64,9 +94,7 @@ export const prisma = basePrisma.$extends({
             // 4. Inject cooperativeId for upsert operations
             else if (operation === 'upsert') {
               (args as any).create = (args as any).create || {};
-              (args as any).create.cooperativeId = coopId;
-              (args as any).update = (args as any).update || {};
-              (args as any).update.cooperativeId = coopId;
+              injectCooperativeToCreateData(model, (args as any).create, coopId);
               (args as any).where = (args as any).where || {};
               (args as any).where.cooperativeId = coopId;
             }

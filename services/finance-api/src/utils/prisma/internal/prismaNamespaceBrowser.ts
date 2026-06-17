@@ -76,7 +76,8 @@ export const ModelName = {
   Transaction: 'Transaction',
   SystemSettings: 'SystemSettings',
   SystemSettingsHistory: 'SystemSettingsHistory',
-  Cooperative: 'Cooperative'
+  Cooperative: 'Cooperative',
+  SmsLog: 'SmsLog'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -271,7 +272,8 @@ export const PersonalSavingsScalarFieldEnum = {
   currentBalance: 'currentBalance',
   status: 'status',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  cooperativeId: 'cooperativeId'
 } as const
 
 export type PersonalSavingsScalarFieldEnum = (typeof PersonalSavingsScalarFieldEnum)[keyof typeof PersonalSavingsScalarFieldEnum]
@@ -309,7 +311,8 @@ export const LoanTypeScalarFieldEnum = {
   maxLoanAmount: 'maxLoanAmount',
   savingsMultiplier: 'savingsMultiplier',
   isActive: 'isActive',
-  requiresApproval: 'requiresApproval'
+  requiresApproval: 'requiresApproval',
+  cooperativeId: 'cooperativeId'
 } as const
 
 export type LoanTypeScalarFieldEnum = (typeof LoanTypeScalarFieldEnum)[keyof typeof LoanTypeScalarFieldEnum]
@@ -548,6 +551,9 @@ export const CooperativeScalarFieldEnum = {
   name: 'name',
   subdomain: 'subdomain',
   customDomain: 'customDomain',
+  subaccountCode: 'subaccountCode',
+  cacNumber: 'cacNumber',
+  splitPercent: 'splitPercent',
   themeConfig: 'themeConfig',
   systemSettings: 'systemSettings',
   createdAt: 'createdAt',
@@ -555,6 +561,19 @@ export const CooperativeScalarFieldEnum = {
 } as const
 
 export type CooperativeScalarFieldEnum = (typeof CooperativeScalarFieldEnum)[keyof typeof CooperativeScalarFieldEnum]
+
+
+export const SmsLogScalarFieldEnum = {
+  id: 'id',
+  recipient: 'recipient',
+  provider: 'provider',
+  messageStatus: 'messageStatus',
+  errorDetails: 'errorDetails',
+  cooperativeId: 'cooperativeId',
+  createdAt: 'createdAt'
+} as const
+
+export type SmsLogScalarFieldEnum = (typeof SmsLogScalarFieldEnum)[keyof typeof SmsLogScalarFieldEnum]
 
 
 export const SortOrder = {

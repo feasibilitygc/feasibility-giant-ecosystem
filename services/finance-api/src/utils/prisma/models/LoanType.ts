@@ -53,6 +53,7 @@ export type LoanTypeMinAggregateOutputType = {
   savingsMultiplier: runtime.Decimal | null
   isActive: boolean | null
   requiresApproval: boolean | null
+  cooperativeId: string | null
 }
 
 export type LoanTypeMaxAggregateOutputType = {
@@ -66,6 +67,7 @@ export type LoanTypeMaxAggregateOutputType = {
   savingsMultiplier: runtime.Decimal | null
   isActive: boolean | null
   requiresApproval: boolean | null
+  cooperativeId: string | null
 }
 
 export type LoanTypeCountAggregateOutputType = {
@@ -79,6 +81,7 @@ export type LoanTypeCountAggregateOutputType = {
   savingsMultiplier: number
   isActive: number
   requiresApproval: number
+  cooperativeId: number
   _all: number
 }
 
@@ -110,6 +113,7 @@ export type LoanTypeMinAggregateInputType = {
   savingsMultiplier?: true
   isActive?: true
   requiresApproval?: true
+  cooperativeId?: true
 }
 
 export type LoanTypeMaxAggregateInputType = {
@@ -123,6 +127,7 @@ export type LoanTypeMaxAggregateInputType = {
   savingsMultiplier?: true
   isActive?: true
   requiresApproval?: true
+  cooperativeId?: true
 }
 
 export type LoanTypeCountAggregateInputType = {
@@ -136,6 +141,7 @@ export type LoanTypeCountAggregateInputType = {
   savingsMultiplier?: true
   isActive?: true
   requiresApproval?: true
+  cooperativeId?: true
   _all?: true
 }
 
@@ -236,6 +242,7 @@ export type LoanTypeGroupByOutputType = {
   savingsMultiplier: runtime.Decimal
   isActive: boolean
   requiresApproval: boolean
+  cooperativeId: string | null
   _count: LoanTypeCountAggregateOutputType | null
   _avg: LoanTypeAvgAggregateOutputType | null
   _sum: LoanTypeSumAggregateOutputType | null
@@ -272,7 +279,9 @@ export type LoanTypeWhereInput = {
   savingsMultiplier?: Prisma.DecimalFilter<"LoanType"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   isActive?: Prisma.BoolFilter<"LoanType"> | boolean
   requiresApproval?: Prisma.BoolFilter<"LoanType"> | boolean
+  cooperativeId?: Prisma.UuidNullableFilter<"LoanType"> | string | null
   loans?: Prisma.LoanListRelationFilter
+  cooperative?: Prisma.XOR<Prisma.CooperativeNullableScalarRelationFilter, Prisma.CooperativeWhereInput> | null
 }
 
 export type LoanTypeOrderByWithRelationInput = {
@@ -286,15 +295,18 @@ export type LoanTypeOrderByWithRelationInput = {
   savingsMultiplier?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   requiresApproval?: Prisma.SortOrder
+  cooperativeId?: Prisma.SortOrderInput | Prisma.SortOrder
   loans?: Prisma.LoanOrderByRelationAggregateInput
+  cooperative?: Prisma.CooperativeOrderByWithRelationInput
 }
 
 export type LoanTypeWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  name?: string
+  name_cooperativeId?: Prisma.LoanTypeNameCooperativeIdCompoundUniqueInput
   AND?: Prisma.LoanTypeWhereInput | Prisma.LoanTypeWhereInput[]
   OR?: Prisma.LoanTypeWhereInput[]
   NOT?: Prisma.LoanTypeWhereInput | Prisma.LoanTypeWhereInput[]
+  name?: Prisma.StringFilter<"LoanType"> | string
   description?: Prisma.StringFilter<"LoanType"> | string
   interestRate?: Prisma.DecimalFilter<"LoanType"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   minDuration?: Prisma.IntFilter<"LoanType"> | number
@@ -303,8 +315,10 @@ export type LoanTypeWhereUniqueInput = Prisma.AtLeast<{
   savingsMultiplier?: Prisma.DecimalFilter<"LoanType"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   isActive?: Prisma.BoolFilter<"LoanType"> | boolean
   requiresApproval?: Prisma.BoolFilter<"LoanType"> | boolean
+  cooperativeId?: Prisma.UuidNullableFilter<"LoanType"> | string | null
   loans?: Prisma.LoanListRelationFilter
-}, "id" | "name">
+  cooperative?: Prisma.XOR<Prisma.CooperativeNullableScalarRelationFilter, Prisma.CooperativeWhereInput> | null
+}, "id" | "name_cooperativeId">
 
 export type LoanTypeOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -317,6 +331,7 @@ export type LoanTypeOrderByWithAggregationInput = {
   savingsMultiplier?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   requiresApproval?: Prisma.SortOrder
+  cooperativeId?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.LoanTypeCountOrderByAggregateInput
   _avg?: Prisma.LoanTypeAvgOrderByAggregateInput
   _max?: Prisma.LoanTypeMaxOrderByAggregateInput
@@ -338,6 +353,7 @@ export type LoanTypeScalarWhereWithAggregatesInput = {
   savingsMultiplier?: Prisma.DecimalWithAggregatesFilter<"LoanType"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   isActive?: Prisma.BoolWithAggregatesFilter<"LoanType"> | boolean
   requiresApproval?: Prisma.BoolWithAggregatesFilter<"LoanType"> | boolean
+  cooperativeId?: Prisma.UuidNullableWithAggregatesFilter<"LoanType"> | string | null
 }
 
 export type LoanTypeCreateInput = {
@@ -352,6 +368,7 @@ export type LoanTypeCreateInput = {
   isActive?: boolean
   requiresApproval?: boolean
   loans?: Prisma.LoanCreateNestedManyWithoutLoanTypeInput
+  cooperative?: Prisma.CooperativeCreateNestedOneWithoutLoanTypesInput
 }
 
 export type LoanTypeUncheckedCreateInput = {
@@ -365,6 +382,7 @@ export type LoanTypeUncheckedCreateInput = {
   savingsMultiplier?: runtime.Decimal | runtime.DecimalJsLike | number | string
   isActive?: boolean
   requiresApproval?: boolean
+  cooperativeId?: string | null
   loans?: Prisma.LoanUncheckedCreateNestedManyWithoutLoanTypeInput
 }
 
@@ -380,6 +398,7 @@ export type LoanTypeUpdateInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   requiresApproval?: Prisma.BoolFieldUpdateOperationsInput | boolean
   loans?: Prisma.LoanUpdateManyWithoutLoanTypeNestedInput
+  cooperative?: Prisma.CooperativeUpdateOneWithoutLoanTypesNestedInput
 }
 
 export type LoanTypeUncheckedUpdateInput = {
@@ -393,6 +412,7 @@ export type LoanTypeUncheckedUpdateInput = {
   savingsMultiplier?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   requiresApproval?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  cooperativeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   loans?: Prisma.LoanUncheckedUpdateManyWithoutLoanTypeNestedInput
 }
 
@@ -407,6 +427,7 @@ export type LoanTypeCreateManyInput = {
   savingsMultiplier?: runtime.Decimal | runtime.DecimalJsLike | number | string
   isActive?: boolean
   requiresApproval?: boolean
+  cooperativeId?: string | null
 }
 
 export type LoanTypeUpdateManyMutationInput = {
@@ -433,6 +454,12 @@ export type LoanTypeUncheckedUpdateManyInput = {
   savingsMultiplier?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   requiresApproval?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  cooperativeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type LoanTypeNameCooperativeIdCompoundUniqueInput = {
+  name: string
+  cooperativeId: string
 }
 
 export type LoanTypeCountOrderByAggregateInput = {
@@ -446,6 +473,7 @@ export type LoanTypeCountOrderByAggregateInput = {
   savingsMultiplier?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   requiresApproval?: Prisma.SortOrder
+  cooperativeId?: Prisma.SortOrder
 }
 
 export type LoanTypeAvgOrderByAggregateInput = {
@@ -467,6 +495,7 @@ export type LoanTypeMaxOrderByAggregateInput = {
   savingsMultiplier?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   requiresApproval?: Prisma.SortOrder
+  cooperativeId?: Prisma.SortOrder
 }
 
 export type LoanTypeMinOrderByAggregateInput = {
@@ -480,6 +509,7 @@ export type LoanTypeMinOrderByAggregateInput = {
   savingsMultiplier?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   requiresApproval?: Prisma.SortOrder
+  cooperativeId?: Prisma.SortOrder
 }
 
 export type LoanTypeSumOrderByAggregateInput = {
@@ -493,6 +523,16 @@ export type LoanTypeSumOrderByAggregateInput = {
 export type LoanTypeScalarRelationFilter = {
   is?: Prisma.LoanTypeWhereInput
   isNot?: Prisma.LoanTypeWhereInput
+}
+
+export type LoanTypeListRelationFilter = {
+  every?: Prisma.LoanTypeWhereInput
+  some?: Prisma.LoanTypeWhereInput
+  none?: Prisma.LoanTypeWhereInput
+}
+
+export type LoanTypeOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type LoanTypeCreateNestedOneWithoutLoansInput = {
@@ -509,6 +549,48 @@ export type LoanTypeUpdateOneRequiredWithoutLoansNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.LoanTypeUpdateToOneWithWhereWithoutLoansInput, Prisma.LoanTypeUpdateWithoutLoansInput>, Prisma.LoanTypeUncheckedUpdateWithoutLoansInput>
 }
 
+export type LoanTypeCreateNestedManyWithoutCooperativeInput = {
+  create?: Prisma.XOR<Prisma.LoanTypeCreateWithoutCooperativeInput, Prisma.LoanTypeUncheckedCreateWithoutCooperativeInput> | Prisma.LoanTypeCreateWithoutCooperativeInput[] | Prisma.LoanTypeUncheckedCreateWithoutCooperativeInput[]
+  connectOrCreate?: Prisma.LoanTypeCreateOrConnectWithoutCooperativeInput | Prisma.LoanTypeCreateOrConnectWithoutCooperativeInput[]
+  createMany?: Prisma.LoanTypeCreateManyCooperativeInputEnvelope
+  connect?: Prisma.LoanTypeWhereUniqueInput | Prisma.LoanTypeWhereUniqueInput[]
+}
+
+export type LoanTypeUncheckedCreateNestedManyWithoutCooperativeInput = {
+  create?: Prisma.XOR<Prisma.LoanTypeCreateWithoutCooperativeInput, Prisma.LoanTypeUncheckedCreateWithoutCooperativeInput> | Prisma.LoanTypeCreateWithoutCooperativeInput[] | Prisma.LoanTypeUncheckedCreateWithoutCooperativeInput[]
+  connectOrCreate?: Prisma.LoanTypeCreateOrConnectWithoutCooperativeInput | Prisma.LoanTypeCreateOrConnectWithoutCooperativeInput[]
+  createMany?: Prisma.LoanTypeCreateManyCooperativeInputEnvelope
+  connect?: Prisma.LoanTypeWhereUniqueInput | Prisma.LoanTypeWhereUniqueInput[]
+}
+
+export type LoanTypeUpdateManyWithoutCooperativeNestedInput = {
+  create?: Prisma.XOR<Prisma.LoanTypeCreateWithoutCooperativeInput, Prisma.LoanTypeUncheckedCreateWithoutCooperativeInput> | Prisma.LoanTypeCreateWithoutCooperativeInput[] | Prisma.LoanTypeUncheckedCreateWithoutCooperativeInput[]
+  connectOrCreate?: Prisma.LoanTypeCreateOrConnectWithoutCooperativeInput | Prisma.LoanTypeCreateOrConnectWithoutCooperativeInput[]
+  upsert?: Prisma.LoanTypeUpsertWithWhereUniqueWithoutCooperativeInput | Prisma.LoanTypeUpsertWithWhereUniqueWithoutCooperativeInput[]
+  createMany?: Prisma.LoanTypeCreateManyCooperativeInputEnvelope
+  set?: Prisma.LoanTypeWhereUniqueInput | Prisma.LoanTypeWhereUniqueInput[]
+  disconnect?: Prisma.LoanTypeWhereUniqueInput | Prisma.LoanTypeWhereUniqueInput[]
+  delete?: Prisma.LoanTypeWhereUniqueInput | Prisma.LoanTypeWhereUniqueInput[]
+  connect?: Prisma.LoanTypeWhereUniqueInput | Prisma.LoanTypeWhereUniqueInput[]
+  update?: Prisma.LoanTypeUpdateWithWhereUniqueWithoutCooperativeInput | Prisma.LoanTypeUpdateWithWhereUniqueWithoutCooperativeInput[]
+  updateMany?: Prisma.LoanTypeUpdateManyWithWhereWithoutCooperativeInput | Prisma.LoanTypeUpdateManyWithWhereWithoutCooperativeInput[]
+  deleteMany?: Prisma.LoanTypeScalarWhereInput | Prisma.LoanTypeScalarWhereInput[]
+}
+
+export type LoanTypeUncheckedUpdateManyWithoutCooperativeNestedInput = {
+  create?: Prisma.XOR<Prisma.LoanTypeCreateWithoutCooperativeInput, Prisma.LoanTypeUncheckedCreateWithoutCooperativeInput> | Prisma.LoanTypeCreateWithoutCooperativeInput[] | Prisma.LoanTypeUncheckedCreateWithoutCooperativeInput[]
+  connectOrCreate?: Prisma.LoanTypeCreateOrConnectWithoutCooperativeInput | Prisma.LoanTypeCreateOrConnectWithoutCooperativeInput[]
+  upsert?: Prisma.LoanTypeUpsertWithWhereUniqueWithoutCooperativeInput | Prisma.LoanTypeUpsertWithWhereUniqueWithoutCooperativeInput[]
+  createMany?: Prisma.LoanTypeCreateManyCooperativeInputEnvelope
+  set?: Prisma.LoanTypeWhereUniqueInput | Prisma.LoanTypeWhereUniqueInput[]
+  disconnect?: Prisma.LoanTypeWhereUniqueInput | Prisma.LoanTypeWhereUniqueInput[]
+  delete?: Prisma.LoanTypeWhereUniqueInput | Prisma.LoanTypeWhereUniqueInput[]
+  connect?: Prisma.LoanTypeWhereUniqueInput | Prisma.LoanTypeWhereUniqueInput[]
+  update?: Prisma.LoanTypeUpdateWithWhereUniqueWithoutCooperativeInput | Prisma.LoanTypeUpdateWithWhereUniqueWithoutCooperativeInput[]
+  updateMany?: Prisma.LoanTypeUpdateManyWithWhereWithoutCooperativeInput | Prisma.LoanTypeUpdateManyWithWhereWithoutCooperativeInput[]
+  deleteMany?: Prisma.LoanTypeScalarWhereInput | Prisma.LoanTypeScalarWhereInput[]
+}
+
 export type LoanTypeCreateWithoutLoansInput = {
   id?: string
   name: string
@@ -520,6 +602,7 @@ export type LoanTypeCreateWithoutLoansInput = {
   savingsMultiplier?: runtime.Decimal | runtime.DecimalJsLike | number | string
   isActive?: boolean
   requiresApproval?: boolean
+  cooperative?: Prisma.CooperativeCreateNestedOneWithoutLoanTypesInput
 }
 
 export type LoanTypeUncheckedCreateWithoutLoansInput = {
@@ -533,6 +616,7 @@ export type LoanTypeUncheckedCreateWithoutLoansInput = {
   savingsMultiplier?: runtime.Decimal | runtime.DecimalJsLike | number | string
   isActive?: boolean
   requiresApproval?: boolean
+  cooperativeId?: string | null
 }
 
 export type LoanTypeCreateOrConnectWithoutLoansInput = {
@@ -562,9 +646,136 @@ export type LoanTypeUpdateWithoutLoansInput = {
   savingsMultiplier?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   requiresApproval?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  cooperative?: Prisma.CooperativeUpdateOneWithoutLoanTypesNestedInput
 }
 
 export type LoanTypeUncheckedUpdateWithoutLoansInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  interestRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  minDuration?: Prisma.IntFieldUpdateOperationsInput | number
+  maxDuration?: Prisma.IntFieldUpdateOperationsInput | number
+  maxLoanAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  savingsMultiplier?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  requiresApproval?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  cooperativeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type LoanTypeCreateWithoutCooperativeInput = {
+  id?: string
+  name: string
+  description?: string
+  interestRate: runtime.Decimal | runtime.DecimalJsLike | number | string
+  minDuration: number
+  maxDuration: number
+  maxLoanAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  savingsMultiplier?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  isActive?: boolean
+  requiresApproval?: boolean
+  loans?: Prisma.LoanCreateNestedManyWithoutLoanTypeInput
+}
+
+export type LoanTypeUncheckedCreateWithoutCooperativeInput = {
+  id?: string
+  name: string
+  description?: string
+  interestRate: runtime.Decimal | runtime.DecimalJsLike | number | string
+  minDuration: number
+  maxDuration: number
+  maxLoanAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  savingsMultiplier?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  isActive?: boolean
+  requiresApproval?: boolean
+  loans?: Prisma.LoanUncheckedCreateNestedManyWithoutLoanTypeInput
+}
+
+export type LoanTypeCreateOrConnectWithoutCooperativeInput = {
+  where: Prisma.LoanTypeWhereUniqueInput
+  create: Prisma.XOR<Prisma.LoanTypeCreateWithoutCooperativeInput, Prisma.LoanTypeUncheckedCreateWithoutCooperativeInput>
+}
+
+export type LoanTypeCreateManyCooperativeInputEnvelope = {
+  data: Prisma.LoanTypeCreateManyCooperativeInput | Prisma.LoanTypeCreateManyCooperativeInput[]
+  skipDuplicates?: boolean
+}
+
+export type LoanTypeUpsertWithWhereUniqueWithoutCooperativeInput = {
+  where: Prisma.LoanTypeWhereUniqueInput
+  update: Prisma.XOR<Prisma.LoanTypeUpdateWithoutCooperativeInput, Prisma.LoanTypeUncheckedUpdateWithoutCooperativeInput>
+  create: Prisma.XOR<Prisma.LoanTypeCreateWithoutCooperativeInput, Prisma.LoanTypeUncheckedCreateWithoutCooperativeInput>
+}
+
+export type LoanTypeUpdateWithWhereUniqueWithoutCooperativeInput = {
+  where: Prisma.LoanTypeWhereUniqueInput
+  data: Prisma.XOR<Prisma.LoanTypeUpdateWithoutCooperativeInput, Prisma.LoanTypeUncheckedUpdateWithoutCooperativeInput>
+}
+
+export type LoanTypeUpdateManyWithWhereWithoutCooperativeInput = {
+  where: Prisma.LoanTypeScalarWhereInput
+  data: Prisma.XOR<Prisma.LoanTypeUpdateManyMutationInput, Prisma.LoanTypeUncheckedUpdateManyWithoutCooperativeInput>
+}
+
+export type LoanTypeScalarWhereInput = {
+  AND?: Prisma.LoanTypeScalarWhereInput | Prisma.LoanTypeScalarWhereInput[]
+  OR?: Prisma.LoanTypeScalarWhereInput[]
+  NOT?: Prisma.LoanTypeScalarWhereInput | Prisma.LoanTypeScalarWhereInput[]
+  id?: Prisma.UuidFilter<"LoanType"> | string
+  name?: Prisma.StringFilter<"LoanType"> | string
+  description?: Prisma.StringFilter<"LoanType"> | string
+  interestRate?: Prisma.DecimalFilter<"LoanType"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  minDuration?: Prisma.IntFilter<"LoanType"> | number
+  maxDuration?: Prisma.IntFilter<"LoanType"> | number
+  maxLoanAmount?: Prisma.DecimalFilter<"LoanType"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  savingsMultiplier?: Prisma.DecimalFilter<"LoanType"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  isActive?: Prisma.BoolFilter<"LoanType"> | boolean
+  requiresApproval?: Prisma.BoolFilter<"LoanType"> | boolean
+  cooperativeId?: Prisma.UuidNullableFilter<"LoanType"> | string | null
+}
+
+export type LoanTypeCreateManyCooperativeInput = {
+  id?: string
+  name: string
+  description?: string
+  interestRate: runtime.Decimal | runtime.DecimalJsLike | number | string
+  minDuration: number
+  maxDuration: number
+  maxLoanAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  savingsMultiplier?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  isActive?: boolean
+  requiresApproval?: boolean
+}
+
+export type LoanTypeUpdateWithoutCooperativeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  interestRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  minDuration?: Prisma.IntFieldUpdateOperationsInput | number
+  maxDuration?: Prisma.IntFieldUpdateOperationsInput | number
+  maxLoanAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  savingsMultiplier?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  requiresApproval?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  loans?: Prisma.LoanUpdateManyWithoutLoanTypeNestedInput
+}
+
+export type LoanTypeUncheckedUpdateWithoutCooperativeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  interestRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  minDuration?: Prisma.IntFieldUpdateOperationsInput | number
+  maxDuration?: Prisma.IntFieldUpdateOperationsInput | number
+  maxLoanAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  savingsMultiplier?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  requiresApproval?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  loans?: Prisma.LoanUncheckedUpdateManyWithoutLoanTypeNestedInput
+}
+
+export type LoanTypeUncheckedUpdateManyWithoutCooperativeInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
@@ -619,7 +830,9 @@ export type LoanTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   savingsMultiplier?: boolean
   isActive?: boolean
   requiresApproval?: boolean
+  cooperativeId?: boolean
   loans?: boolean | Prisma.LoanType$loansArgs<ExtArgs>
+  cooperative?: boolean | Prisma.LoanType$cooperativeArgs<ExtArgs>
   _count?: boolean | Prisma.LoanTypeCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["loanType"]>
 
@@ -634,6 +847,8 @@ export type LoanTypeSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   savingsMultiplier?: boolean
   isActive?: boolean
   requiresApproval?: boolean
+  cooperativeId?: boolean
+  cooperative?: boolean | Prisma.LoanType$cooperativeArgs<ExtArgs>
 }, ExtArgs["result"]["loanType"]>
 
 export type LoanTypeSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -647,6 +862,8 @@ export type LoanTypeSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   savingsMultiplier?: boolean
   isActive?: boolean
   requiresApproval?: boolean
+  cooperativeId?: boolean
+  cooperative?: boolean | Prisma.LoanType$cooperativeArgs<ExtArgs>
 }, ExtArgs["result"]["loanType"]>
 
 export type LoanTypeSelectScalar = {
@@ -660,20 +877,27 @@ export type LoanTypeSelectScalar = {
   savingsMultiplier?: boolean
   isActive?: boolean
   requiresApproval?: boolean
+  cooperativeId?: boolean
 }
 
-export type LoanTypeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "interestRate" | "minDuration" | "maxDuration" | "maxLoanAmount" | "savingsMultiplier" | "isActive" | "requiresApproval", ExtArgs["result"]["loanType"]>
+export type LoanTypeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "interestRate" | "minDuration" | "maxDuration" | "maxLoanAmount" | "savingsMultiplier" | "isActive" | "requiresApproval" | "cooperativeId", ExtArgs["result"]["loanType"]>
 export type LoanTypeInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   loans?: boolean | Prisma.LoanType$loansArgs<ExtArgs>
+  cooperative?: boolean | Prisma.LoanType$cooperativeArgs<ExtArgs>
   _count?: boolean | Prisma.LoanTypeCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type LoanTypeIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type LoanTypeIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type LoanTypeIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  cooperative?: boolean | Prisma.LoanType$cooperativeArgs<ExtArgs>
+}
+export type LoanTypeIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  cooperative?: boolean | Prisma.LoanType$cooperativeArgs<ExtArgs>
+}
 
 export type $LoanTypePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "LoanType"
   objects: {
     loans: Prisma.$LoanPayload<ExtArgs>[]
+    cooperative: Prisma.$CooperativePayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -686,6 +910,7 @@ export type $LoanTypePayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     savingsMultiplier: runtime.Decimal
     isActive: boolean
     requiresApproval: boolean
+    cooperativeId: string | null
   }, ExtArgs["result"]["loanType"]>
   composites: {}
 }
@@ -1081,6 +1306,7 @@ readonly fields: LoanTypeFieldRefs;
 export interface Prisma__LoanTypeClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   loans<T extends Prisma.LoanType$loansArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LoanType$loansArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LoanPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  cooperative<T extends Prisma.LoanType$cooperativeArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LoanType$cooperativeArgs<ExtArgs>>): Prisma.Prisma__CooperativeClient<runtime.Types.Result.GetResult<Prisma.$CooperativePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1120,6 +1346,7 @@ export interface LoanTypeFieldRefs {
   readonly savingsMultiplier: Prisma.FieldRef<"LoanType", 'Decimal'>
   readonly isActive: Prisma.FieldRef<"LoanType", 'Boolean'>
   readonly requiresApproval: Prisma.FieldRef<"LoanType", 'Boolean'>
+  readonly cooperativeId: Prisma.FieldRef<"LoanType", 'String'>
 }
     
 
@@ -1374,6 +1601,10 @@ export type LoanTypeCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extens
    */
   data: Prisma.LoanTypeCreateManyInput | Prisma.LoanTypeCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LoanTypeIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1444,6 +1675,10 @@ export type LoanTypeUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extens
    * Limit how many LoanTypes to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LoanTypeIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1534,6 +1769,25 @@ export type LoanType$loansArgs<ExtArgs extends runtime.Types.Extensions.Internal
   take?: number
   skip?: number
   distinct?: Prisma.LoanScalarFieldEnum | Prisma.LoanScalarFieldEnum[]
+}
+
+/**
+ * LoanType.cooperative
+ */
+export type LoanType$cooperativeArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Cooperative
+   */
+  select?: Prisma.CooperativeSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Cooperative
+   */
+  omit?: Prisma.CooperativeOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CooperativeInclude<ExtArgs> | null
+  where?: Prisma.CooperativeWhereInput
 }
 
 /**

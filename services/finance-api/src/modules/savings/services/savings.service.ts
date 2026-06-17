@@ -1,4 +1,4 @@
-import { prisma, Prisma, AccountStatus, Savings } from '@/prisma';
+import { prisma, Prisma, AccountStatus, Savings, PrismaClient } from '@/prisma';
 import { Decimal } from '@/utils/prisma';
 import { ApiError } from '../../../utils/apiError';
 import logger from '../../../utils/logger';
