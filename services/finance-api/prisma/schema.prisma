@@ -4,7 +4,7 @@
 // Get a free hosted Postgres database in seconds: `npx create-db`
 
 generator client {
-  provider = "prisma-client"
+  provider = "prisma-client-js"
   output   = "../src/utils/prisma"
 }
 
@@ -242,10 +242,12 @@ model PersonalSavings {
   updatedAt      DateTime              @updatedAt
 
   // Relationships
-  member       Biodata             @relation(fields: [memberId], references: [id])
-  planType     PersonalSavingsPlan @relation(fields: [planTypeId], references: [id])
-  transactions Transaction[]
-  requests     Request[]
+  member        Biodata             @relation(fields: [memberId], references: [id])
+  planType      PersonalSavingsPlan @relation(fields: [planTypeId], references: [id])
+  transactions  Transaction[]
+  requests      Request[]
+  cooperativeId String?             @db.Uuid
+  cooperative   Cooperative?        @relation(fields: [cooperativeId], references: [id])
 
   @@index([memberId, erpId])
   @@index([planTypeId])
@@ -286,7 +288,7 @@ model Shares {
 // Enhanced Loan Types
 model LoanType {
   id                String  @id @default(uuid()) @db.Uuid
-  name              String  @unique
+  name              String
   description       String  @default("")
   interestRate      Decimal @map("interest_rate")
   minDuration       Int     @map("min_duration")
@@ -296,6 +298,10 @@ model LoanType {
   isActive          Boolean @default(true)
   requiresApproval  Boolean @default(true)
   loans             Loan[]
+  cooperativeId     String? @db.Uuid
+  cooperative       Cooperative? @relation(fields: [cooperativeId], references: [id])
+
+  @@unique([name, cooperativeId])
 }
 
 // Enhanced Loan Management
@@ -339,6 +345,7 @@ model Loan {
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
   Transaction Transaction[]
+  directDebitMandates DirectDebitMandate[]
 
   savingsSnapshot Json? // Store savings state at loan creation
 
@@ -648,18 +655,24 @@ model Cooperative {
   name           String
   subdomain      String            @unique
   customDomain   String?           @unique
+  subaccountCode String?           @unique // Mapped subaccount code from payment provider
+  cacNumber      String?           // CAC Registration Number
+  splitPercent   Decimal           @default(0.00) @db.Decimal(5, 2) // SaaS split percentage
   themeConfig    Json?             // { primary_color: string, secondary_color: string, logo_url: string }
   systemSettings Json?             // { allow_self_registration: boolean, require_mfa: boolean }
   createdAt      DateTime          @default(now())
   updatedAt      DateTime          @updatedAt
 
-  users          User[]
-  biodata        Biodata[]
-  savings        Savings[]
-  shares         Shares[]
-  loans          Loan[]
-  requests       Request[]
-  transactions   Transaction[]
+  users           User[]
+  biodata         Biodata[]
+  savings         Savings[]
+  shares          Shares[]
+  loans           Loan[]
+  requests        Request[]
+  transactions    Transaction[]
+  personalSavings PersonalSavings[]
+  loanTypes       LoanType[]
+  directDebitMandates DirectDebitMandate[]
 }
 
 // Enums with proper formatting
@@ -826,4 +839,35 @@ enum PersonalSavingsStatus {
   CLOSED
   SUSPENDED
   PENDING
+}
+
+// Sms dispatch logs for audit & billing
+model SmsLog {
+  id            String            @id @default(uuid()) @db.Uuid
+  recipient     String
+  provider      String            // TWILIO, SMS_EXPERIENCE
+  messageStatus String            // SENT, FAILED
+  errorDetails  String?
+  cooperativeId String?           @db.Uuid
+  createdAt     DateTime          @default(now())
+}
+
+model DirectDebitMandate {
+  id             String      @id @default(uuid()) @db.Uuid
+  monoMandateId  String?     @unique // Mandate ID returned by Mono
+  loanId         String      @db.Uuid
+  loan           Loan        @relation(fields: [loanId], references: [id])
+  erpId          String
+  reference      String      @unique
+  amount         Decimal     @db.Decimal(15, 2)
+  status         String      @default("PENDING") // PENDING, APPROVED, ACTIVE, REJECTED, CANCELLED
+  monoUrl        String?     // Widget URL for authorization
+  cooperativeId  String?     @db.Uuid
+  cooperative    Cooperative? @relation(fields: [cooperativeId], references: [id])
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+
+  @@index([loanId])
+  @@index([erpId])
+  @@index([cooperativeId])
 }

@@ -8,6 +8,7 @@ import { prisma } from '@/prisma';
 export const registerCooperativeSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
   registration_number: z.string().min(2, 'Registration number is required'),
+  cacNumber: z.string().optional(),
   country: z.string().min(2, 'Country is required'),
   currency: z.string().min(2, 'Currency is required'),
   admin_user: z.object({
@@ -15,7 +16,16 @@ export const registerCooperativeSchema = z.object({
     email: z.string().email('Invalid admin email address'),
     password: z.string().min(6, 'Password must be at least 6 characters')
   }),
-  subdomain: z.string().regex(/^[a-z0-9-]+$/, 'Subdomain must contain only lowercase letters, numbers, or dashes')
+  subdomain: z.string().regex(/^[a-z0-9-]+$/, 'Subdomain must contain only lowercase letters, numbers, or dashes'),
+  settlementBankCode: z.string().optional(),
+  settlementAccountNumber: z.string().optional(),
+  splitPercent: z.number().min(0).max(100).optional(),
+});
+
+export const setupSubaccountSchema = z.object({
+  settlementBankCode: z.string().min(1, 'Bank code is required'),
+  settlementAccountNumber: z.string().min(10, 'Account number must be 10 digits').max(10, 'Account number must be 10 digits'),
+  splitPercent: z.number().min(0).max(100).optional(),
 });
 
 export class CooperativeController {
@@ -33,6 +43,24 @@ export class CooperativeController {
     } catch (error) {
       if (error instanceof z.ZodError) {
         return ApiResponse.badRequest(res, 'Invalid registration input format');
+      }
+      next(error);
+    }
+  }
+
+  async setupSubaccount(req: Request, res: Response, next: NextFunction) {
+    try {
+      const coopId = req.cooperativeId;
+      if (!coopId) {
+        throw new ApiError('Cooperative ID could not be resolved from context', 400);
+      }
+
+      const validatedData = setupSubaccountSchema.parse(req.body);
+      const result = await this.cooperativeService.setupCooperativeSubaccount(coopId, validatedData);
+      return res.status(200).json(result);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return ApiResponse.badRequest(res, 'Invalid sub-account input format');
       }
       next(error);
     }

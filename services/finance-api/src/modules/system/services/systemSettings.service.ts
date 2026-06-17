@@ -73,25 +73,84 @@ export class SystemSettingsService {
             // Ensure system user exists
             const systemUserId = await this.ensureSystemUser();
 
-            // Check if DEFAULT_SHARE_AMOUNT exists
-            const shareAmount = await this.prisma.systemSettings.findUnique({
-                where: { key: 'DEFAULT_SHARE_AMOUNT' }
-            });
-
-            // If it doesn't exist, create it
-            if (!shareAmount) {
-                await this.prisma.systemSettings.create({
-                    data: {
-                        key: 'DEFAULT_SHARE_AMOUNT',
-                        value: JSON.stringify(3000),
-                        type: 'number',
-                        group: 'SHARES',
-                        description: 'Default monthly share amount',
-                        createdBy: systemUserId // Use actual UUID here
-                    }
+            // Helper to check and create default setting
+            const ensureSetting = async (
+                key: string,
+                value: any,
+                type: string,
+                group: string,
+                description: string
+            ) => {
+                const existing = await this.prisma.systemSettings.findUnique({
+                    where: { key }
                 });
-                logger.info('Initialized DEFAULT_SHARE_AMOUNT setting');
-            }
+                if (!existing) {
+                    await this.prisma.systemSettings.create({
+                        data: {
+                            key,
+                            value: JSON.stringify(value),
+                            type,
+                            group,
+                            description,
+                            createdBy: systemUserId
+                        }
+                    });
+                    logger.info(`Initialized ${key} setting`);
+                }
+            };
+
+            await ensureSetting('DEFAULT_SHARE_AMOUNT', 3000, 'number', 'SHARES', 'Default monthly share amount');
+            
+            await ensureSetting('GENERAL_SETTINGS', {
+                organizationName: 'Cooperative Banking System',
+                organizationShortName: 'CoopBank',
+                contactEmail: 'admin@coopbank.com',
+                contactPhone: '+2348000000000',
+                address: '123 Main Street, Lagos, Nigeria',
+                logoUrl: '',
+                websiteUrl: '',
+                enableMemberRegistration: true,
+                enablePublicWebsite: true
+            }, 'object', 'GENERAL', 'General system-wide settings');
+
+            await ensureSetting('SECURITY_SETTINGS', {
+                passwordMinLength: 8,
+                passwordRequiresLowercase: true,
+                passwordRequiresUppercase: true,
+                passwordRequiresNumbers: true,
+                passwordRequiresSymbols: true,
+                mfaEnabled: false,
+                sessionTimeout: 30,
+                sessionTimeoutUnit: 'minutes',
+                loginAttempts: 5,
+                lockoutDuration: 15
+            }, 'object', 'SECURITY', 'Security policies and settings');
+
+            await ensureSetting('NOTIFICATION_SETTINGS', {
+                enableEmailNotifications: true,
+                enableSmsNotifications: true,
+                enablePushNotifications: true,
+                notifyOnNewMembers: true,
+                notifyOnLoanRequests: true,
+                notifyOnLoanApprovals: true,
+                notifyOnDepositConfirmations: true,
+                dailyDigest: false,
+                weeklyReport: false,
+                monthlyStatement: true
+            }, 'object', 'NOTIFICATION', 'Notification preferences and settings');
+
+            await ensureSetting('ADVANCED_SETTINGS', {
+                maintenanceMode: false,
+                debugMode: false,
+                logLevel: 'info',
+                apiTimeout: 30000,
+                cacheExpiration: 3600,
+                maxUploadSize: 5,
+                backupFrequency: 'daily',
+                allowDataExport: true,
+                enableApiLogs: true
+            }, 'object', 'ADVANCED', 'Advanced developer/system settings');
+
         } catch (error) {
             logger.error('Error initializing system settings:', error);
             throw new ApiError('Failed to initialize system settings', 500);

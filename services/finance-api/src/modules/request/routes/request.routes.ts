@@ -53,6 +53,12 @@ router.get(
     controller.getAllRequests.bind(controller) as RouteHandler
 );
 
+// Get request approval history
+router.get(
+    '/:id/history',
+    controller.getRequestHistory.bind(controller) as RouteHandler
+);
+
 // Get a single request by ID
 router.get(
     '/:id',

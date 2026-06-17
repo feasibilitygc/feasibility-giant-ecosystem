@@ -240,6 +240,30 @@ export class RequestController {
             }
         }
     }
+
+    /**
+     * Get approval history for a request
+     * @route GET /api/requests/:id/history
+     */
+    public async getRequestHistory(req: AuthenticatedRequest, res: Response, next: NextFunction) {
+        try {
+            const { id } = requestIdSchema.parse(req.params);
+            
+            const history = await RequestService.getRequestHistory(id);
+            
+            ApiResponse.success(res, 'Request approval history retrieved successfully', history);
+        } catch (error) {
+            logger.error('Error fetching request approval history:', error);
+            
+            if (error instanceof z.ZodError) {
+                next(new ApiError('Validation error', 400, error.errors));
+            } else if (error instanceof RequestError) {
+                next(new ApiError(error.message, error.statusCode));
+            } else {
+                next(error);
+            }
+        }
+    }
 }
 
 export default new RequestController();

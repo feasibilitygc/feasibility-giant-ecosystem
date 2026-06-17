@@ -8,7 +8,7 @@ import logger from '../../../utils/logger';
  * Service for validating transaction data
  */
 export class TransactionValidatorUtils {
-  static prisma: any;
+  static prisma: any = prisma;
   /**
    * Validate transaction data based on its type
    * @param data Transaction data to validate

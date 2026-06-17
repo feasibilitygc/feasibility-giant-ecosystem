@@ -13,6 +13,10 @@ import logger from '../../../utils/logger';
 export class TransactionReportingService {
   prisma: any;
 
+  constructor() {
+    this.prisma = prisma;
+  }
+
   /**
    * Get comprehensive transaction summary
    * @param filters Summary filters

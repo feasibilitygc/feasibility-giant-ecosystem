@@ -4,7 +4,7 @@ import { LoanCalculationResult, PaymentScheduleEntry } from '../interfaces/loan-
 import { ApiError } from '../../../utils/apiError';
 
 export class CalculatorService {
-    prisma: any;
+    prisma: any = prisma;
 
     async calculateLoan(
         loanTypeId: string,

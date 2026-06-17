@@ -141,4 +141,24 @@ router.get(
     controller.getEnhancedLoansSummary.bind(controller) as unknown as RouteHandler
 );
 
+// Direct Debit routes
+router.post(
+    '/:id/mandate',
+    checkPermission('INITIATE_LOAN'),
+    controller.initiateLoanMandate.bind(controller) as RouteHandler
+);
+
+router.get(
+    '/:id/mandate',
+    checkPermission('VIEW_LOANS'),
+    controller.getLoanMandate.bind(controller) as RouteHandler
+);
+
+router.post(
+    '/:id/mandate/debit',
+    checkPermission('PROCESS_LOANS_REPAYMENT'),
+    authorizeRoles(['ADMIN', 'TREASURER', 'SUPER_ADMIN']),
+    controller.triggerRepaymentSweep.bind(controller) as RouteHandler
+);
+
 export default router;

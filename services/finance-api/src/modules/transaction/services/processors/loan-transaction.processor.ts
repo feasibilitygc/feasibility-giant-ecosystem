@@ -40,7 +40,11 @@ export class LoanTransactionProcessor implements TransactionProcessor {
   /**
    * Process a loan transaction
    */
-  async processTransaction(transaction: Transaction): Promise<void> {
+  async processTransaction(transaction: Transaction, tx?: any): Promise<void> {
+    const originalPrisma = this.prisma;
+    if (tx) {
+      this.prisma = tx;
+    }
     try {
       // Skip if not completed
       if (transaction.status !== TransactionStatus.COMPLETED) {
@@ -71,6 +75,8 @@ export class LoanTransactionProcessor implements TransactionProcessor {
         500,
         error as Error
       );
+    } finally {
+      this.prisma = originalPrisma;
     }
   }
   
@@ -83,8 +89,7 @@ export class LoanTransactionProcessor implements TransactionProcessor {
       if (previousStatus !== TransactionStatus.COMPLETED && 
           transaction.status === TransactionStatus.COMPLETED) {
         
-        // Process the transaction now that it's completed
-        await this.processTransaction(transaction);
+        // Already processed by updateTransactionStatus, do nothing here
       }
     } catch (error) {
       logger.error(`Error handling status change for loan transaction ${transaction.id}:`, error);

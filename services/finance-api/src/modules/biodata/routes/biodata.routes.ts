@@ -34,7 +34,7 @@ router.use(authenticateUser);
 // Public routes (require only authentication)
 router.get('/',
     checkPermission('VIEW_MEMBERS'),
-    authorizeRoles(['ADMIN', 'CHAIRMAN', 'SUOER_ADMIN']),
+    authorizeRoles(['ADMIN', 'CHAIRMAN', 'SUPER_ADMIN']),
     biodataController.getBiodata.bind(biodataController)
 );
 router.get('/:id', 
@@ -49,7 +49,7 @@ router.post('/:id/account-info',
 
 // Admin routes
 router.post('/', 
-    authorizeRoles(['ADMIN', 'CHAIRMAN', 'SUOER_ADMIN']),
+    authorizeRoles(['ADMIN', 'CHAIRMAN', 'SUPER_ADMIN']),
     // checkApprovalLevel(1), 
     checkPermission('CREATE_MEMBERS'),
     biodataController.createBiodata.bind(biodataController)

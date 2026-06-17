@@ -8,6 +8,7 @@ import { TokenPayload, TokenPair, SessionMetadata } from '../interfaces/token.in
 import { hash, compare } from 'bcrypt';
 
 import { prisma } from '@/prisma';
+import { runWithoutIsolation } from '../../../utils/contextStore';
 
 class TokenService {
     // Read expiry times from environment variables
@@ -200,22 +201,24 @@ class TokenService {
                 return null;
             }
 
-            // Get user data to generate new access token
-            const user = await prisma.user.findUnique({
-                where: { id: decoded.userId },
-                include: {
-                    biodata: true,
-                    roleAssignments: {
-                        include: {
-                            role: {
-                                select: {
-                                    name: true,
-                                    permissions: true
+            // Get user data to generate new access token (unscoped query)
+            const user = await runWithoutIsolation(async () => {
+                return prisma.user.findUnique({
+                    where: { id: decoded.userId },
+                    include: {
+                        biodata: true,
+                        roleAssignments: {
+                            include: {
+                                role: {
+                                    select: {
+                                        name: true,
+                                        permissions: true
+                                    }
                                 }
                             }
                         }
                     }
-                }
+                });
             });
 
             if (!user || !user.roleAssignments) {

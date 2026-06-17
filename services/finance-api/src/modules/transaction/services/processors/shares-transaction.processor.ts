@@ -40,7 +40,11 @@ export class SharesTransactionProcessor implements TransactionProcessor {
   /**
    * Process a shares transaction
    */
-  async processTransaction(transaction: Transaction): Promise<void> {
+  async processTransaction(transaction: Transaction, tx?: any): Promise<void> {
+    const originalPrisma = this.prisma;
+    if (tx) {
+      this.prisma = tx;
+    }
     try {
       // Skip if not completed
       if (transaction.status !== TransactionStatus.COMPLETED) {
@@ -69,6 +73,8 @@ export class SharesTransactionProcessor implements TransactionProcessor {
         500,
         error as Error
       );
+    } finally {
+      this.prisma = originalPrisma;
     }
   }
   
@@ -80,9 +86,6 @@ export class SharesTransactionProcessor implements TransactionProcessor {
       // Only handle transitions to COMPLETED status
       if (previousStatus !== TransactionStatus.COMPLETED && 
           transaction.status === TransactionStatus.COMPLETED) {
-        
-        // Process the transaction now that it's completed
-        await this.processTransaction(transaction);
         
         // Create notification for the user if we have a sharesId
         if (transaction.sharesId) {

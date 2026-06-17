@@ -31,14 +31,27 @@ app.use(cors({
             return;
         }
         
-        // Allow localhost development origins (including subdomains and ports)
-        if (origin.match(/^https?:\/\/localhost(:\d+)?$/) || origin.match(/^https?:\/\/[a-z0-9-]+\.localhost(:\d+)?$/)) {
+        // Allow localhost and 127.0.0.1 development origins (including subdomains and ports, case-insensitive)
+        if (
+            origin.match(/^https?:\/\/localhost(:\d+)?$/i) || 
+            origin.match(/^https?:\/\/[a-z0-9-]+\.localhost(:\d+)?$/i) ||
+            origin.match(/^https?:\/\/127\.0\.0\.1(:\d+)?$/i) ||
+            origin.match(/^https?:\/\/[a-z0-9-]+\.127\.0\.0\.1(:\d+)?$/i)
+        ) {
+            callback(null, true);
+            return;
+        }
+
+        // Allow private/local network IP ranges (e.g., 10.x.x.x, 192.168.x.x, 172.16.x.x to 172.31.x.x, including subdomains and ports, case-insensitive)
+        if (
+            origin.match(/^https?:\/\/(?:[a-z0-9-]+\.)*(?:10|192\.168|172\.(?:1[6-9]|2\d|3[01]))\.\d+\.\d+(?::\d+)?$/i)
+        ) {
             callback(null, true);
             return;
         }
         
         // Allow feasibilityfinance.com origins
-        if (origin.match(/^https?:\/\/(?:[a-z0-9-]+\.)?feasibilityfinance\.com$/)) {
+        if (origin.match(/^https?:\/\/(?:[a-z0-9-]+\.)?feasibilityfinance\.com$/i)) {
             callback(null, true);
             return;
         }
@@ -54,7 +67,8 @@ app.use(cors({
             return;
         }
         
-        callback(new Error('Not allowed by CORS'));
+        logger.warn(`Unexpected Server Error occurred: Not allowed by CORS. Blocked Origin: ${origin}`);
+        callback(new Error(`Not allowed by CORS: ${origin}`));
     },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],

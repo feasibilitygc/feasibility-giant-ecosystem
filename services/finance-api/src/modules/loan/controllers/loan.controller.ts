@@ -293,6 +293,51 @@ export class LoanController {
             next(error);
         }
     }
+
+    // Initialize Direct Debit Mandate
+    async initiateLoanMandate(req: AuthenticatedRequest, res: Response, next: NextFunction) {
+        try {
+            const { id } = req.params;
+            const { amount, verificationMethod } = req.body;
+            const mandate = await this.loanService.initiateLoanMandate(
+                id as string,
+                amount ? Number(amount) : undefined,
+                verificationMethod as string
+            );
+            return ApiResponse.success(res, 'Direct debit mandate initiated successfully', mandate);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    // Get Direct Debit Mandate Status
+    async getLoanMandate(req: AuthenticatedRequest, res: Response, next: NextFunction) {
+        try {
+            const { id } = req.params;
+            const mandate = await this.loanService.getLoanMandate(id as string);
+            if (!mandate) {
+                return ApiResponse.success(res, 'No mandate found for this loan', null);
+            }
+            return ApiResponse.success(res, 'Mandate retrieved successfully', mandate);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    // Trigger repayment sweep
+    async triggerRepaymentSweep(req: AuthenticatedRequest, res: Response, next: NextFunction) {
+        try {
+            const { id } = req.params;
+            const { amount } = req.body;
+            const result = await this.loanService.triggerLoanRepaymentSweep(
+                id as string,
+                amount ? Number(amount) : undefined
+            );
+            return ApiResponse.success(res, 'Repayment sweep initiated successfully', result);
+        } catch (error) {
+            next(error);
+        }
+    }
 }
 
 export default new LoanController();

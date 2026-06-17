@@ -10,6 +10,10 @@ import { TransactionWithDetails } from '../interfaces/transaction.interface';
  */
 export class TransactionQueryService {
   prisma: any;
+
+  constructor() {
+    this.prisma = prisma;
+  }
   
   /**
    * Search for transactions with filtering and pagination
@@ -340,7 +344,7 @@ export class TransactionQueryService {
    */
   private formatTransactionOutput(transaction: any): TransactionWithDetails {
     // Format initiator information
-    let initiator = undefined;
+    let initiator: any = undefined;
     if (transaction.initiator) {
       initiator = {
         id: transaction.initiator.id,
@@ -352,7 +356,7 @@ export class TransactionQueryService {
     }
     
     // Format approver information
-    let approver = undefined;
+    let approver: any = undefined;
     if (transaction.approver) {
       approver = {
         id: transaction.approver.id,

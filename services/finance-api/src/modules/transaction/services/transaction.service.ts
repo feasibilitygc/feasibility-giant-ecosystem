@@ -33,6 +33,11 @@ import { TransactionValidatorUtils } from '../utils/transaction-validator.utils'
 */
 export class TransactionService {
   prisma: any;
+
+  constructor() {
+    this.prisma = prisma;
+  }
+
   /**
   * Create a new transaction
   * 
@@ -81,6 +86,7 @@ export class TransactionService {
       
       // Get the appropriate processor for this transaction type
       const processor = TransactionProcessorFactory.getProcessor(data.transactionType);
+      logger.info(`Resolved processor class: ${processor.constructor.name} for type: ${data.transactionType}`);
       
       // Additional processor-specific validation if needed
       const isValid = await processor.validateTransaction(data);
@@ -119,6 +125,7 @@ export class TransactionService {
         
         // Process the transaction if it's auto-completed
         if (autoComplete) {
+          logger.info(`Executing processTransaction on processor ${processor.constructor.name} for transaction ${transaction.id}`);
           await processor.processTransaction(transaction, tx);
         }
         

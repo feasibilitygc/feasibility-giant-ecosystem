@@ -3,8 +3,6 @@ import { prisma } from '@/prisma';
 import path from 'path';
 import fs from 'fs';
 
-import { prisma } from '@/prisma';
-
 export class SavingsBackupService {
     static async exportSavingsToExcel(): Promise<string> {
         try {
