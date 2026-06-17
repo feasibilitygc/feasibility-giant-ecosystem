@@ -7,7 +7,8 @@ async function runTest() {
   console.log('--- STARTING COOPERATIVE REGISTRATION & SCOPING TEST ---');
   
   const service = new CooperativeService();
-  const testSubdomain = `test-coop-${Date.now()}`;
+  const randomPrefix = Math.random().toString(36).substring(2, 6);
+  const testSubdomain = `${randomPrefix}-coop-${Date.now()}`;
   
   try {
     // 1. Register a new cooperative (This runs outside HTTP context, so prisma is unscoped)

@@ -49,6 +49,7 @@ import SuccessStep from "@/components/organisms/auth/registration/success-step"
 import { useMemberRegistration, type MemberRegistrationData } from "@/lib/hooks/member/useMemberRegistration"
 import { getFieldDisplayName } from "@/lib/utils/errorUtils"
 import { useCooperatives } from "@/lib/hooks/cooperative/useCooperatives"
+import { isValidEmail, isValidNigerianNumber } from "@/lib/utils/validationUtils"
 
 interface FormData {
   // Personal Information
@@ -161,20 +162,40 @@ export default function RegisterPage() {
         if (!formData.dateOfEmployment) newErrors.dateOfEmployment = "Date of employment is required"
         break
       case 3:
-        if (!formData.emailAddress.trim()) newErrors.emailAddress = "Email address is required"
-        if (!formData.phoneNumber.trim()) newErrors.phoneNumber = "Phone number is required"
-        if (!formData.residentialAddress.trim()) newErrors.residentialAddress = "Residential address is required"
-        if (formData.emailAddress && !/\S+@\S+\.\S+/.test(formData.emailAddress)) {
+        if (!formData.emailAddress.trim()) {
+          newErrors.emailAddress = "Email address is required"
+        } else if (!isValidEmail(formData.emailAddress.trim())) {
           newErrors.emailAddress = "Please enter a valid email address"
+        }
+
+        if (!formData.phoneNumber.trim()) {
+          newErrors.phoneNumber = "Phone number is required"
+        } else if (!isValidNigerianNumber(formData.phoneNumber.trim())) {
+          newErrors.phoneNumber = "Please enter a valid Nigerian phone number (e.g. 08031234567 or +2348031234567)"
+        }
+
+        if (!formData.residentialAddress.trim()) {
+          newErrors.residentialAddress = "Residential address is required"
         }
         break
       case 4:
-        if (!formData.nextOfKin.trim()) newErrors.nextOfKin = "Next of kin name is required"
-        if (!formData.relationshipOfNextOfKin.trim()) newErrors.relationshipOfNextOfKin = "Relationship is required"
-        if (!formData.nextOfKinPhoneNumber.trim())
+        if (!formData.nextOfKin.trim()) {
+          newErrors.nextOfKin = "Next of kin name is required"
+        }
+
+        if (!formData.relationshipOfNextOfKin.trim()) {
+          newErrors.relationshipOfNextOfKin = "Relationship is required"
+        }
+
+        if (!formData.nextOfKinPhoneNumber.trim()) {
           newErrors.nextOfKinPhoneNumber = "Next of kin phone number is required"
-        if (!formData.nextOfKinEmailAddress.trim()) newErrors.nextOfKinEmailAddress = "Next of kin email is required"
-        if (formData.nextOfKinEmailAddress && !/\S+@\S+\.\S+/.test(formData.nextOfKinEmailAddress)) {
+        } else if (!isValidNigerianNumber(formData.nextOfKinPhoneNumber.trim())) {
+          newErrors.nextOfKinPhoneNumber = "Please enter a valid Nigerian phone number (e.g. 08031234567 or +2348031234567)"
+        }
+
+        if (!formData.nextOfKinEmailAddress.trim()) {
+          newErrors.nextOfKinEmailAddress = "Next of kin email is required"
+        } else if (!isValidEmail(formData.nextOfKinEmailAddress.trim())) {
           newErrors.nextOfKinEmailAddress = "Please enter a valid email address"
         }
         break
